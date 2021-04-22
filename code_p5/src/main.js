@@ -1,4 +1,4 @@
-// Author: Amay Kataria
+// Author: Amay Kataria & Christine Shallenberg
 // Date: 04/21/2020
 // Description: Entry file for this p5 sketch. 
 
