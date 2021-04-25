@@ -1,6 +1,7 @@
-// Author: Amay Kataria & Christine Shallenberg
+// Name: main.js
+// Author: Amay Kataria. 
 // Date: 04/21/2020
-// Description: Entry file for this p5 sketch. 
+// Description: Entry file for javascript. 
 
 
 // Setup BleUART service. 
@@ -51,24 +52,8 @@ function gotCharacteristics(error, characteristics) {
   myTxCharacteristic = characteristics[0]; 
   myRxCharacteristic = characteristics[1];
   myBLE.startNotifications(myRxCharacteristic, handleNotifications, 'string');
-
-  // TODO: Once we receive the characteristics, we register for notifications on the receive characteristics
 }
  
-    // for(let i = 0; i < characteristics.length; i++){
-  //  if(rxCharacteristic ==characteristics[i].uuid){
-  //   myCharacteristic = characteristics[i];
-  //   myBLE.startNotifications(myCharacteristic, handleNotifications,'string');
-  //  }else if (txCharacteristic ==characteristics[i].uuid){
-  //    myTxCharacteristic = characteristics[i];
-  //  } 
-  // Start notifications on the first characteristic by passing the characteristic
-  // And a callback function to handle notifications
-  //myBLE.startNotifications(myCharacteristic, handleNotifications);
-  // You can also pass in the dataType
-  // Options: 'unit8', 'uint16', 'uint32', 'int8', 'int16', 'int32', 'float32', 'float64', 'string'
-  // myBLE.startNotifications(myCharacteristic, handleNotifications, 'string');
-
 function handleNotifications(data) {
   console.log(data);
 }

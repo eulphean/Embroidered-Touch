@@ -16,6 +16,7 @@ void setup()
 }
 
 void loop() {
+    // Start transmitting only when a connection is developed. 
     if (BLE::isConnected) {
       for (int i = 0; i < touchSensors.length(); i++) {
         // Reqest filtered data. 
