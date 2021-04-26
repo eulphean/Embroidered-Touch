@@ -2,7 +2,7 @@
 // Author: Amay Kataria. 
 // Date: 04/21/2020
 // Description: Class responsible for everything related to bluetooth communication with Arduino. 
-// It also stores all the s
+// Receives a callback function in its constructor that gets called after sensor data is parsed. 
 
 // UART service & characteristic description. 
 const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
@@ -45,7 +45,7 @@ class BLE {
 
     
     // NT-V,V,V,V,V....V
-    // N - sensor index, T - data type, V - line value
+    // N-sensor index, T-data type, V-line value
     // Parse sensor data based on the above format in which 
     // the data is sent from the arduino. 
     handleIncomingData(data) {
