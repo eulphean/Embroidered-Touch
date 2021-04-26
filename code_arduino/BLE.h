@@ -20,6 +20,7 @@ class BLE {
     BLEDis bledis;
     // Uart over ble
     BLEUart bleuart; 
+    
   public: 
     // Defined here but declared outside the class. 
     static boolean isConnected; 
@@ -81,18 +82,6 @@ class BLE {
       Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds  
     }
 
-    static void uartCallback(uint16_t conn_handle) {
-//      String fullstring = "";
-//      // Or make an uint8_t array. 
-//      while(bleuart.available()) {
-//        uint8_t c; 
-//        c = (uint8_t) bleuart.read();
-//        fullstring+=(char)ch; 
-//      }
-//      Serial.println(fullstring);
-    }
-
-
     static void connect_callback(uint16_t conn_handle){
       // Get the reference to current connection
       BLEConnection* connection = Bluefruit.Connection(conn_handle);
@@ -114,6 +103,20 @@ class BLE {
       Serial.println("BLE Advertising!");
 
       BLE::isConnected = false; 
+    }
+
+    
+    // NOTE: Unused code. This is a callback, which is kicked in when 
+    // uart receives data from P5. 
+    static void uartCallback(uint16_t conn_handle) {
+//      String fullstring = "";
+//      // Or make an uint8_t array. 
+//      while(bleuart.available()) {
+//        uint8_t c; 
+//        c = (uint8_t) bleuart.read();
+//        fullstring+=(char)ch; 
+//      }
+//      Serial.println(fullstring);
     }
 };
 

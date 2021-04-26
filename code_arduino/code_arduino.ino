@@ -1,7 +1,7 @@
 #include "BLE.h"
 #include "Touch.h"
 
-Touch touchSensors;
+Touch touchChipsets;
 BLE gridBle; 
 void setup()
 {
@@ -12,22 +12,22 @@ void setup()
   Serial.println("-------------------------------------\n");
 
   gridBle.init();
-  touchSensors.init();
+  touchChipsets.init();
 }
 
 void loop() {
     // Start transmitting only when a connection is developed. 
     if (BLE::isConnected) {
-      for (int i = 0; i < touchSensors.length(); i++) {
+      for (int i = 0; i < touchChipsets.length(); i++) {
         // Reqest filtered data. 
-        char *bufPtr = touchSensors.getFilteredData(i, 'f'); 
-        gridBle.transmit(bufPtr, touchSensors.bufferLength()); 
+        char *bleBuffer = touchChipsets.getFilteredData(i, 'f'); 
+        gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
         delay(50); // Don't overwhelm the stream
       }
     }
 
   // To enable arduino senssor logs, uncomment below. 
-  //touchSensors.localDebug(0,6,11);
+  //touchChips.localDebug(0,6,11);
 }
 
 //  #if CFG_DEBUG
