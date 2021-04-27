@@ -9,6 +9,7 @@
     <style> body {padding: 0; margin: 0; } </style>
     <script type="text/javascript" src="Library/p5.min.js"></script>
     <script type="text/javascript" src="Library/p5.ble.js"></script>
+    <script type="text/javascript" src="Library/input-knob.umd.js"></script>
     <script type="text/javascript" src="Library/p5.sound.min.js"></script>
     <script type="text/javascript" src="Library/p5.dom.min.js"></script>
     <script type="text/javascript" src="Library/quicksettings.js"></script>
@@ -39,7 +40,7 @@
       <div id='chipset-container'>
         <div class='chipset-title-container'>
           <div class="title chipset-title">MPR121 Chipset 0</div>
-          <div class="indicator chip-status"></div>
+          <div id="chipstatus-0" class="indicator"></div>
         </div>
         <div id="chipset-0" class="chipset-table-container">
           <div class="chipset-table">
@@ -89,18 +90,42 @@
           </div>
           <div id="cutoff-knob-0" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <div class="table-cell v0"></div>
-            <div class="table-cell v1"></div>
-            <div class="table-cell v2"></div>
-            <div class="table-cell v3"></div>
-            <div class="table-cell v4"></div>
-            <div class="table-cell v5"></div>
-            <div class="table-cell v6"></div>
-            <div class="table-cell v7"></div>
-            <div class="table-cell v8"></div>
-            <div class="table-cell v9"></div>
-            <div class="table-cell v10"></div>
-            <div class="table-cell v11"></div>
+            <input-knob class="v0" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v1" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v2" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v3" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v4" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v5" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v6" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v7" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v8" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v9" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v10" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v11" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
           </div>
           <div id="cutoff-val-0" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -139,7 +164,7 @@
       <div id='chipset-container'>
         <div class='chipset-title-container'>
           <div class="title chipset-title">MPR121 Chipset 1</div>
-          <div class="indicator chip-status"></div>
+          <div id="chipstatus-1" class="indicator"></div>
         </div>
         <div id="chipset-1" class="chipset-table-container">
           <div class="chipset-table">
@@ -189,18 +214,42 @@
           </div>
           <div id="cutoff-knob-1" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <div class="table-cell v0"></div>
-            <div class="table-cell v1"></div>
-            <div class="table-cell v2"></div>
-            <div class="table-cell v3"></div>
-            <div class="table-cell v4"></div>
-            <div class="table-cell v5"></div>
-            <div class="table-cell v6"></div>
-            <div class="table-cell v7"></div>
-            <div class="table-cell v8"></div>
-            <div class="table-cell v9"></div>
-            <div class="table-cell v10"></div>
-            <div class="table-cell v11"></div>
+            <input-knob class="v0" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v1" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v2" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v3" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v4" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v5" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v6" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v7" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v8" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v9" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v10" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v11" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
           </div>
           <div id="cutoff-val-1" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -239,7 +288,7 @@
       <div id='chipset-container'>
         <div class='chipset-title-container'>
           <div class="title chipset-title">MPR121 Chipset 2</div>
-          <div class="indicator chip-status"></div>
+          <div id="chipstatus-2" class="indicator"></div>
         </div>
         <div id="chipset-2" class="chipset-table-container">
           <div class="chipset-table">
@@ -289,18 +338,42 @@
           </div>
           <div id="cutoff-knob-2" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <div class="table-cell v0"></div>
-            <div class="table-cell v1"></div>
-            <div class="table-cell v2"></div>
-            <div class="table-cell v3"></div>
-            <div class="table-cell v4"></div>
-            <div class="table-cell v5"></div>
-            <div class="table-cell v6"></div>
-            <div class="table-cell v7"></div>
-            <div class="table-cell v8"></div>
-            <div class="table-cell v9"></div>
-            <div class="table-cell v10"></div>
-            <div class="table-cell v11"></div>
+            <input-knob class="v0" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v1" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v2" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v3" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v4" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v5" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v6" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v7" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v8" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v9" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v10" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v11" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
           </div>
           <div id="cutoff-val-2" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -339,7 +412,7 @@
       <div id='chipset-container'>
         <div class='chipset-title-container'>
           <div class="title chipset-title">MPR121 Chipset 3</div>
-          <div class="indicator chip-status"></div>
+          <div id="chipstatus-3" class="indicator"></div>
         </div>
         <div id="chipset-3" class="chipset-table-container">
           <div class="chipset-table">
@@ -389,18 +462,42 @@
           </div>
           <div id="cutoff-knob-3" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <div class="table-cell v0"></div>
-            <div class="table-cell v1"></div>
-            <div class="table-cell v2"></div>
-            <div class="table-cell v3"></div>
-            <div class="table-cell v4"></div>
-            <div class="table-cell v5"></div>
-            <div class="table-cell v6"></div>
-            <div class="table-cell v7"></div>
-            <div class="table-cell v8"></div>
-            <div class="table-cell v9"></div>
-            <div class="table-cell v10"></div>
-            <div class="table-cell v11"></div>
+            <input-knob class="v0" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v1" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v2" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v3" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v4" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v5" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v6" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v7" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v8" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v9" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v10" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
+            <input-knob class="v11" value="150" scale="20" min="50" max="250">
+              <div class="mark">I</div>
+            </input-knob>
           </div>
           <div id="cutoff-val-3" class="chipset-table">
             <div class="table-cell table-title">Value</div>

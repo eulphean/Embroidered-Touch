@@ -94,7 +94,7 @@ body {
     border-radius: var(--big);
 }
 .indicator-active {
-    background-color: var(--active);
+    background-color: var(--active) !important;
 }
 
 /* Chipset values container styles. */
@@ -153,4 +153,35 @@ body {
     border-radius: var(--huge);
     width: var(--huge);
     height: var(--huge);
+}
+
+/* Cutoff knob styles */
+.knob-cell {
+
+}
+
+input-knob {
+    margin: var(--verySmall);
+    margin-bottom: var(--extraBig);
+    padding: var(--verySmall);
+    background-color: var(--dryPink);
+    width: var(--huge);
+    height: var(--huge);
+    border-radius: var(--massive);
+    text-align: center;
+}
+
+input-knob::part(rotator) {
+    box-sizing: border-box;
+    border: 2px solid  var(--deepPurple);
+    background: var(--dryPink);
+    width: var(--huge);
+    height: var(--huge);
+    border-radius: var(--massive);
+}
+
+.mark {
+    text-align: center;
+    font-size: var(--small);
+    color: var(--deepPurple);
 }

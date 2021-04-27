@@ -19,7 +19,8 @@ function draw() {
 
 function initChipsets() {
   for (let i = 0; i < numChipsets; i++) {
-    chipsets.push(new Chipset()); 
+    // Chipset index. 
+    chipsets.push(new Chipset(i)); 
   }
 }
 

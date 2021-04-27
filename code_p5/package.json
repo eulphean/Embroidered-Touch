@@ -11,5 +11,8 @@
   "devDependencies": {
     "browser-sync": "^2.26.14",
     "gulp": "^4.0.2"
+  },
+  "dependencies": {
+    "input-knob": "0.0.11"
   }
 }
