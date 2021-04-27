@@ -1,6 +1,6 @@
 // Name: Chipsets.js
 // Author: Amay Kataria. 
-// Date: 04/21/2020
+// Date: 04/21/2021
 // Description: Class responsible for storing information related to a chipset. 
 
 const numSensors = 12; // Num sensors on each chip. 

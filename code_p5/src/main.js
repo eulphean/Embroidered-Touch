@@ -1,6 +1,6 @@
 // Name: main.js
 // Author: Amay Kataria. 
-// Date: 04/21/2020
+// Date: 04/21/2021
 // Description: Entry file for javascript. 
 
 let bluetooth; // Bluetooth handler. 
@@ -13,14 +13,14 @@ function setup() {
   initChipsets(); 
 
   // Setup the canvas and buttons. 
-  createCanvas(600, 400);
-  textSize(20);
-  textAlign(CENTER, CENTER);
+  // createCanvas(600, 400);
+  // textSize(20);
+  // textAlign(CENTER, CENTER);
   
-  const connectButton = createButton('Connect and Start Notifications')
-  connectButton.mousePressed(connectBluetooth);
-  const stopButton = createButton('Stop Notifications')
-  stopButton.mousePressed(stopNotifications);
+  // const connectButton = createButton('Connect and Start Notifications')
+  // connectButton.mousePressed(connectBluetooth);
+  // const stopButton = createButton('Stop Notifications')
+  // stopButton.mousePressed(stopNotifications);
 }
 
 function draw() {

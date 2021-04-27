@@ -1,6 +1,6 @@
 // Name: Bluetooth.js
 // Author: Amay Kataria. 
-// Date: 04/21/2020
+// Date: 04/21/2021
 // Description: Class responsible for everything related to bluetooth communication with Arduino. 
 // Receives a callback function in its constructor that gets called after sensor data is parsed. 
 
