@@ -10,29 +10,11 @@ const numChipsets = 4;
 function setup() {
   bluetooth = new BLE(assignChipsetData); 
   chipsets = []; 
-  initChipsets(); 
-
-  // Setup the canvas and buttons. 
-  // createCanvas(600, 400);
-  // textSize(20);
-  // textAlign(CENTER, CENTER);
-  
-  // const connectButton = createButton('Connect and Start Notifications')
-  // connectButton.mousePressed(connectBluetooth);
-  // const stopButton = createButton('Stop Notifications')
-  // stopButton.mousePressed(stopNotifications);
+  initChipsets();  
 }
 
 function draw() {
   // Update the UI with sensor data. 
-}
-
-function connectBluetooth() {
-  bluetooth.connect(); 
-}
-
-function stopNotifications() {
-  bluetooth.stop(); 
 }
 
 function initChipsets() {
@@ -40,6 +22,7 @@ function initChipsets() {
     chipsets.push(new Chipset()); 
   }
 }
+
 // chipsetIdx: int: 0 - numChipsets
 // sensorDataType: char: b: base, f: filtered
 // sensorData: array: 0-11

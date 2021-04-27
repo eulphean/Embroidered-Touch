@@ -4,10 +4,10 @@
 // Description: Class responsible for storing information related to a chipset. 
 
 const numSensors = 12; // Num sensors on each chip. 
-
 class Chipset {
     constructor() {
         this.sensors = [];
+        this.chipsetClass = '.chipset-container-'
         this.initSensors();
     }
 

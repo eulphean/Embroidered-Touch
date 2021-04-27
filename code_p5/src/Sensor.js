@@ -17,4 +17,10 @@ class Sensor {
             this.filteredVal = sensorVal;
         }
     }
+
+    draw() {
+        // If visible, update the Ui with the values. 
+        // Update the UI with the values.
+        // Update the UI with the values. 
+    }
 }

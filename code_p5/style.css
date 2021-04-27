@@ -26,19 +26,24 @@
     --veryHuge: 40px;
     --lessMassive: 44px;
     --massive: 48px;
-    --veryMassive: 52px
+    --veryMassive: 52px;
+    --blockHeight: 500px; 
 }
   
 body {
     width: 100%;
     height: 100%;
     background-color: var(--bgColor);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #container {
     display: flex;
     flex-direction: column;
     font-family: var(--segoeText);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Navbar styles.  */
@@ -76,11 +81,20 @@ body {
     font-family: var(--segoeText);
     font-size: var(--lessBig);
 }
+.button:hover {background-color: var(--deepPurple)}
+.button:active {
+  background-color: var(--fadedPink);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
 .indicator {
     width: var(--extraBig);
     height: var(--extraBig);
     background-color: var(--inactive);
     border-radius: var(--big);
+}
+.indicator-active {
+    background-color: var(--active);
 }
 
 /* Chipset values container styles. */
@@ -90,7 +104,8 @@ body {
     color: var(--textColor);
     background-color: var(--fadedPink);
     width: 100%;
-    height: 600px;
+    height: var(--blockHeight);
+    margin-top: var(--verySmall);
 }
 .chipset-title-container {
     display: flex;

@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="style.css"/> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grid Instrument</title>
-    <style> body {padding: 0; margin: 0; overflow: hidden} </style>
+    <style> body {padding: 0; margin: 0; } </style>
     <script type="text/javascript" src="Library/p5.min.js"></script>
     <script type="text/javascript" src="Library/p5.ble.js"></script>
     <script type="text/javascript" src="Library/p5.sound.min.js"></script>
@@ -35,12 +35,13 @@
         </div>
         <div class='indicator ble-status'></div>
       </div>
+      <!-- Start of chipset container 0 -->
       <div id='chipset-container'>
         <div class='chipset-title-container'>
           <div class="title chipset-title">MPR121 Chipset 0</div>
           <div class="indicator chip-status"></div>
         </div>
-        <div class="chipset-table-container">
+        <div id="chipset-0" class="chipset-table-container">
           <div class="chipset-table">
             <div class="table-cell table-title">Sensor</div>
             <div class="table-cell v0">0</div>
@@ -56,7 +57,7 @@
             <div class="table-cell v10">10</div>
             <div class="table-cell v11">11</div>
           </div>
-          <div class="chipset-table filtered-values">
+          <div id="filtered-val-0" class="chipset-table">
             <div class="table-cell table-title">Filtered</div>
             <div class="table-cell v0">000</div>
             <div class="table-cell v1">000</div>
@@ -71,7 +72,7 @@
             <div class="table-cell v10">000</div>
             <div class="table-cell v11">000</div>
           </div>
-          <div class="chipset-table base-values">
+          <div id="base-val-0" class="chipset-table">
             <div class="table-cell table-title">Base</div>
             <div class="table-cell v0"></div>
             <div class="table-cell v1"></div>
@@ -86,7 +87,7 @@
             <div class="table-cell v10"></div>
             <div class="table-cell v11"></div>
           </div>
-          <div class="chipset-table cutoff-values">
+          <div id="cutoff-knob-0" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
             <div class="table-cell v0"></div>
             <div class="table-cell v1"></div>
@@ -101,8 +102,8 @@
             <div class="table-cell v10"></div>
             <div class="table-cell v11"></div>
           </div>
-          <div class="chipset-table cutoff-values">
-            <div class="table-cell table-title">Cutoff</div>
+          <div id="cutoff-val-0" class="chipset-table">
+            <div class="table-cell table-title">Value</div>
             <div class="table-cell v0">000</div>
             <div class="table-cell v1">000</div>
             <div class="table-cell v2">000</div>
@@ -116,7 +117,7 @@
             <div class="table-cell v10">000</div>
             <div class="table-cell v11">000</div>
           </div>
-          <div class="chipset-table touch-indicator">
+          <div id="touch-indicator-0" class="chipset-table">
             <div class="table-cell table-title">Touch</div>
             <div class="table-indicator v0"></div>
             <div class="table-indicator v1"></div>
@@ -132,7 +133,308 @@
             <div class="table-indicator v11"></div>
           </div>
         </div>
-      </div>
+      </div> 
+      <!-- End of chipset container 0 -->
+      <!-- Start of chipset container 1 -->
+      <div id='chipset-container'>
+        <div class='chipset-title-container'>
+          <div class="title chipset-title">MPR121 Chipset 1</div>
+          <div class="indicator chip-status"></div>
+        </div>
+        <div id="chipset-0" class="chipset-table-container">
+          <div class="chipset-table">
+            <div class="table-cell table-title">Sensor</div>
+            <div class="table-cell v0">0</div>
+            <div class="table-cell v1">1</div>
+            <div class="table-cell v2">2</div>
+            <div class="table-cell v3">3</div>
+            <div class="table-cell v4">4</div>
+            <div class="table-cell v5">5</div>
+            <div class="table-cell v6">6</div>
+            <div class="table-cell v7">7</div>
+            <div class="table-cell v8">8</div>
+            <div class="table-cell v9">9</div>
+            <div class="table-cell v10">10</div>
+            <div class="table-cell v11">11</div>
+          </div>
+          <div id="filtered-val-0" class="chipset-table">
+            <div class="table-cell table-title">Filtered</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="base-val-0" class="chipset-table">
+            <div class="table-cell table-title">Base</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-knob-0" class="chipset-table">
+            <div class="table-cell table-title">Cutoff</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-val-0" class="chipset-table">
+            <div class="table-cell table-title">Value</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="touch-indicator-0" class="chipset-table">
+            <div class="table-cell table-title">Touch</div>
+            <div class="table-indicator v0"></div>
+            <div class="table-indicator v1"></div>
+            <div class="table-indicator v2"></div>
+            <div class="table-indicator v3"></div>
+            <div class="table-indicator v4"></div>
+            <div class="table-indicator v5"></div>
+            <div class="table-indicator v6"></div>
+            <div class="table-indicator v7"></div>
+            <div class="table-indicator v8"></div>
+            <div class="table-indicator v9"></div>
+            <div class="table-indicator v10"></div>
+            <div class="table-indicator v11"></div>
+          </div>
+        </div>
+      </div> 
+      <!-- End of chipset container 1 -->
+      <!-- Start of chipset container 2 -->
+      <div id='chipset-container'>
+        <div class='chipset-title-container'>
+          <div class="title chipset-title">MPR121 Chipset 2</div>
+          <div class="indicator chip-status"></div>
+        </div>
+        <div id="chipset-0" class="chipset-table-container">
+          <div class="chipset-table">
+            <div class="table-cell table-title">Sensor</div>
+            <div class="table-cell v0">0</div>
+            <div class="table-cell v1">1</div>
+            <div class="table-cell v2">2</div>
+            <div class="table-cell v3">3</div>
+            <div class="table-cell v4">4</div>
+            <div class="table-cell v5">5</div>
+            <div class="table-cell v6">6</div>
+            <div class="table-cell v7">7</div>
+            <div class="table-cell v8">8</div>
+            <div class="table-cell v9">9</div>
+            <div class="table-cell v10">10</div>
+            <div class="table-cell v11">11</div>
+          </div>
+          <div id="filtered-val-0" class="chipset-table">
+            <div class="table-cell table-title">Filtered</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="base-val-0" class="chipset-table">
+            <div class="table-cell table-title">Base</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-knob-0" class="chipset-table">
+            <div class="table-cell table-title">Cutoff</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-val-0" class="chipset-table">
+            <div class="table-cell table-title">Value</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="touch-indicator-0" class="chipset-table">
+            <div class="table-cell table-title">Touch</div>
+            <div class="table-indicator v0"></div>
+            <div class="table-indicator v1"></div>
+            <div class="table-indicator v2"></div>
+            <div class="table-indicator v3"></div>
+            <div class="table-indicator v4"></div>
+            <div class="table-indicator v5"></div>
+            <div class="table-indicator v6"></div>
+            <div class="table-indicator v7"></div>
+            <div class="table-indicator v8"></div>
+            <div class="table-indicator v9"></div>
+            <div class="table-indicator v10"></div>
+            <div class="table-indicator v11"></div>
+          </div>
+        </div>
+      </div> 
+      <!-- End of chipset container 2 -->
+      <!-- Start of chipset container 3 -->
+      <div id='chipset-container'>
+        <div class='chipset-title-container'>
+          <div class="title chipset-title">MPR121 Chipset 3</div>
+          <div class="indicator chip-status"></div>
+        </div>
+        <div id="chipset-0" class="chipset-table-container">
+          <div class="chipset-table">
+            <div class="table-cell table-title">Sensor</div>
+            <div class="table-cell v0">0</div>
+            <div class="table-cell v1">1</div>
+            <div class="table-cell v2">2</div>
+            <div class="table-cell v3">3</div>
+            <div class="table-cell v4">4</div>
+            <div class="table-cell v5">5</div>
+            <div class="table-cell v6">6</div>
+            <div class="table-cell v7">7</div>
+            <div class="table-cell v8">8</div>
+            <div class="table-cell v9">9</div>
+            <div class="table-cell v10">10</div>
+            <div class="table-cell v11">11</div>
+          </div>
+          <div id="filtered-val-0" class="chipset-table">
+            <div class="table-cell table-title">Filtered</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="base-val-0" class="chipset-table">
+            <div class="table-cell table-title">Base</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-knob-0" class="chipset-table">
+            <div class="table-cell table-title">Cutoff</div>
+            <div class="table-cell v0"></div>
+            <div class="table-cell v1"></div>
+            <div class="table-cell v2"></div>
+            <div class="table-cell v3"></div>
+            <div class="table-cell v4"></div>
+            <div class="table-cell v5"></div>
+            <div class="table-cell v6"></div>
+            <div class="table-cell v7"></div>
+            <div class="table-cell v8"></div>
+            <div class="table-cell v9"></div>
+            <div class="table-cell v10"></div>
+            <div class="table-cell v11"></div>
+          </div>
+          <div id="cutoff-val-0" class="chipset-table">
+            <div class="table-cell table-title">Value</div>
+            <div class="table-cell v0">000</div>
+            <div class="table-cell v1">000</div>
+            <div class="table-cell v2">000</div>
+            <div class="table-cell v3">000</div>
+            <div class="table-cell v4">000</div>
+            <div class="table-cell v5">000</div>
+            <div class="table-cell v6">000</div>
+            <div class="table-cell v7">000</div>
+            <div class="table-cell v8">000</div>
+            <div class="table-cell v9">000</div>
+            <div class="table-cell v10">000</div>
+            <div class="table-cell v11">000</div>
+          </div>
+          <div id="touch-indicator-0" class="chipset-table">
+            <div class="table-cell table-title">Touch</div>
+            <div class="table-indicator v0"></div>
+            <div class="table-indicator v1"></div>
+            <div class="table-indicator v2"></div>
+            <div class="table-indicator v3"></div>
+            <div class="table-indicator v4"></div>
+            <div class="table-indicator v5"></div>
+            <div class="table-indicator v6"></div>
+            <div class="table-indicator v7"></div>
+            <div class="table-indicator v8"></div>
+            <div class="table-indicator v9"></div>
+            <div class="table-indicator v10"></div>
+            <div class="table-indicator v11"></div>
+          </div>
+        </div>
+      </div> 
+      <!-- End of chipset container 3 -->
     </div>
   </body>
 </html>
