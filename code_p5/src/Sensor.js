@@ -21,13 +21,25 @@ class Sensor {
         this.baseVal = '';
         this.cutoffVal = '';
         this.touchIndicator = '';
+
+        // p5 sound object. 
         this.tone = ''; 
+
+        // Is this unused. 
+        this.isSensorUnused = false; 
 
         this.parseUI(); 
         this.setTone(); 
     }
 
     parseUI() {
+        // Sensor index title node. 
+        let chipsetSensorNode = this.parentTrees['sensors'];
+        this.sensorNode = select(this.valueClass, chipsetSensorNode);
+        if (this.sensorNode.hasClass(unusedSensorClass)) {
+            this.isSensorUnused = true;
+        }
+
         // Filtered value node. 
         let filteredNode = this.parentTrees['filtered'];
         this.filteredVal = select(this.valueClass, filteredNode);
@@ -40,7 +52,7 @@ class Sensor {
         let touchIndicatorNode = this.parentTrees['indicator'];
         this.touchIndicator = select(this.valueClass, touchIndicatorNode);
 
-        // Cutoff
+        // Cutoff knob. 
         let cutoffKnobNode = this.parentTrees['cutoffknob'];
         this.cutoffSlider = select(this.valueClass, cutoffKnobNode);
         this.cutoffSlider.attribute('min', sliderMin);
@@ -49,27 +61,20 @@ class Sensor {
         this.cutoffSlider.attribute('step', sliderStep);
         this.cutoffSlider.elt.addEventListener('input', this.updateCutoffTextVal.bind(this));
 
+        // Cutoff text input.
         let cutoffValTextNode = this.parentTrees['cutoffval'];
         this.cutoffTextVal = select(this.valueClass, cutoffValTextNode);
         this.cutoffTextVal.value(this.cutoffSlider.value());
         this.cutoffTextVal.elt.addEventListener('input', this.updateCutoffSliderVal.bind(this));
-
-        let sensorsNode = this.parentTrees['sensors'];
-        this.sensorNode = select(this.valueClass, sensorsNode);
-        
-        // Debug logs. 
-        // console.log(this.sensorNode);
     }
 
     setTone() {
-        if (this.sensorNode.hasClass(unusedSensorClass)) {
-            this.tone = 'NOT APPLICABLE';
+        // Don't assign a sound for an unused sensor line. 
+        if (this.isSensorUnused) {
+            this.tone = 'NA';
         } else {
             this.tone = audio.assignTone();
         }
-        
-        // Debug logs. 
-        // console.log(this.tone);
     }
 
     updateCutoffSliderVal() {
@@ -81,21 +86,42 @@ class Sensor {
     }
 
     setData(sensorDataType, sensorVal) {
-        if (sensorDataType === 'b') {
-            this.baseVal.html(sensorVal);
-        } else if (sensorDataType === 'f') {
-            this.filteredVal.html(sensorVal);
+        if (!this.isSensorUnused) {
+            if (sensorDataType === 'b') {
+                this.baseVal.html(sensorVal);
+            } else if (sensorDataType === 'f') {
+                this.filteredVal.html(sensorVal);
+            }
         }
     }
 
     update() {
-        let cutoffVal = parseInt(this.cutoffTextVal.value());
-        let filteredVal = parseInt(this.filteredVal.html());
+        if (!this.isSensorUnused) {
+            let cutoffVal = parseInt(this.cutoffTextVal.value());
+            let filteredVal = parseInt(this.filteredVal.html());
+    
+            if (filteredVal <= cutoffVal) {
+                this.touchIndicator.addClass(activeSensorClass);
+                this.handleSound('play');
+            } else {
+                this.touchIndicator.removeClass(activeSensorClass);
+                this.handleSound('stop');
+            }
+        }
+    }
 
-        if (filteredVal <= cutoffVal) {
-            this.touchIndicator.addClass(activeSensorClass);
-        } else {
-            this.touchIndicator.removeClass(activeSensorClass);
+    handleSound(command) {
+        if (command === 'play') {
+            if (!this.tone.isPlaying()) {
+                this.tone.setVolume(0.5); // SHOULD COME FROM THE gui
+                this.tone.play(); 
+                this.tone.loop();          }
+        } 
+
+        if (command === 'stop') {
+            if (this.tone.isPlaying()) {
+                this.tone.stop();
+            }
         }
     }
 }
