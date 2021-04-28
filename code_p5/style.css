@@ -27,7 +27,8 @@
     --lessMassive: 44px;
     --massive: 48px;
     --veryMassive: 52px;
-    --blockHeight: 500px; 
+    --blockHeight: 550px; 
+    --sliderHeight: 96px
 }
   
 body {
@@ -105,7 +106,7 @@ body {
     background-color: var(--fadedPink);
     width: 100%;
     height: var(--blockHeight);
-    margin-top: var(--verySmall);
+    margin-top: var(--small);
 }
 .chipset-title-container {
     display: flex;
@@ -130,15 +131,18 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    align-items: center;
 }
 .table-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: var(--verySmall);
     margin-bottom: var(--extraBig);
     padding: var(--verySmall);
     background-color: var(--dryPink);
     width: var(--huge);
     border-radius: var(--verySmall);
-    text-align: center;
 }
 .table-title {
     background-color: var(--deepPurple);
@@ -155,33 +159,36 @@ body {
     height: var(--huge);
 }
 
-/* Cutoff knob styles */
-.knob-cell {
-
-}
-
-input-knob {
+/* Cutoff slider styles.  */
+.slider-cell {
+    display: flex;
+    justify-content: center;
     margin: var(--verySmall);
-    margin-bottom: var(--extraBig);
+    margin-top: var(--extraBig);
+    margin-bottom: var(--veryHuge);
     padding: var(--verySmall);
-    background-color: var(--dryPink);
     width: var(--huge);
     height: var(--huge);
-    border-radius: var(--massive);
-    text-align: center;
 }
 
-input-knob::part(rotator) {
-    box-sizing: border-box;
-    border: 2px solid  var(--deepPurple);
+.slider {
+    -webkit-appearance: none;
+    width: var(--sliderHeight);
+    height: var(--big);
     background: var(--dryPink);
-    width: var(--huge);
-    height: var(--huge);
-    border-radius: var(--massive);
-}
-
-.mark {
-    text-align: center;
-    font-size: var(--small);
-    color: var(--deepPurple);
-}
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    transform: rotate(90deg);
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--small);
+    height: var(--small);
+    background: var(--deepPurple);
+    cursor: pointer;
+  }
+  

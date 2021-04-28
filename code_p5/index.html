@@ -9,7 +9,6 @@
     <style> body {padding: 0; margin: 0; } </style>
     <script type="text/javascript" src="Library/p5.min.js"></script>
     <script type="text/javascript" src="Library/p5.ble.js"></script>
-    <script type="text/javascript" src="Library/input-knob.umd.js"></script>
     <script type="text/javascript" src="Library/p5.sound.min.js"></script>
     <script type="text/javascript" src="Library/p5.dom.min.js"></script>
     <script type="text/javascript" src="Library/quicksettings.js"></script>
@@ -90,42 +89,18 @@
           </div>
           <div id="cutoff-knob-0" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <input-knob class="v0" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v1" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v2" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v3" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v4" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v5" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v6" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v7" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v8" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v9" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v10" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v11" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
+            <div class="slider-cell"><input class="slider v0" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v1" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v2" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v3" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v4" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v5" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v6" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v7" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v8" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v9" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v10" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v11" type="range" min="1" max="100" value="50"></div>
           </div>
           <div id="cutoff-val-0" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -214,42 +189,18 @@
           </div>
           <div id="cutoff-knob-1" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <input-knob class="v0" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v1" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v2" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v3" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v4" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v5" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v6" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v7" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v8" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v9" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v10" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v11" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
+            <div class="slider-cell"><input class="slider v0" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v1" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v2" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v3" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v4" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v5" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v6" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v7" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v8" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v9" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v10" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v11" type="range" min="1" max="100" value="50"></div>
           </div>
           <div id="cutoff-val-1" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -338,42 +289,18 @@
           </div>
           <div id="cutoff-knob-2" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <input-knob class="v0" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v1" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v2" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v3" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v4" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v5" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v6" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v7" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v8" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v9" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v10" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v11" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
+            <div class="slider-cell"><input class="slider v0" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v1" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v2" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v3" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v4" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v5" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v6" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v7" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v8" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v9" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v10" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v11" type="range" min="1" max="100" value="50"></div>
           </div>
           <div id="cutoff-val-2" class="chipset-table">
             <div class="table-cell table-title">Value</div>
@@ -462,42 +389,18 @@
           </div>
           <div id="cutoff-knob-3" class="chipset-table">
             <div class="table-cell table-title">Cutoff</div>
-            <input-knob class="v0" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v1" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v2" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v3" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v4" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v5" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v6" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v7" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v8" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v9" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v10" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
-            <input-knob class="v11" value="150" scale="20" min="50" max="250">
-              <div class="mark">I</div>
-            </input-knob>
+            <div class="slider-cell"><input class="slider v0" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v1" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v2" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v3" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v4" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v5" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v6" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v7" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v8" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v9" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v10" type="range" min="1" max="100" value="50"></div>
+            <div class="slider-cell"><input class="slider v11" type="range" min="1" max="100" value="50"></div>
           </div>
           <div id="cutoff-val-3" class="chipset-table">
             <div class="table-cell table-title">Value</div>
