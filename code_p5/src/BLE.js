@@ -16,7 +16,7 @@ const bleIndicator = '.ble-status';
 const activeBle = 'indicator-active'; // Note: Class to be added doesn't need .
 
 class BLE {
-    constructor(parseChipsetData, stopCallback) {
+    constructor(parseChipsetData) {
         this.myBLE = new p5ble();
         this.myRxCharacteristic = '';
         this.myTxCharacteristic = '';
@@ -50,7 +50,6 @@ class BLE {
         if (this.myRxCharacteristic !== '') {
             this.myBLE.stopNotifications(this.myRxCharacteristic);
             this.bleStatus.removeClass(activeBle);
-            this.stopCallback();
         } else {
             console.warn("BLE: Not initialized."); 
         }

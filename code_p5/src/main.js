@@ -16,7 +16,7 @@ function setup() {
   setCurrentTime();
 
   // Bluetooth connection and interface. 
-  bluetooth = new BLE(assignChipsetData, stopCallback); 
+  bluetooth = new BLE(assignChipsetData); 
   
   // Chipset interface and sensor data. 
   chipsets = []; 
@@ -53,12 +53,4 @@ function assignChipsetData(chipsetIdx, sensorDataType, sensorData) {
 function setCurrentTime() {
   let a = new Date();
   dateTime.html(a);
-}
-
-function stopCallback() {
-  // Called when stream is stopped. 
-  for (let i = 0; i < numChipsets; i++) {
-    console.log(i);
-    chipsets[i].clearStatus();
-  }
 }
