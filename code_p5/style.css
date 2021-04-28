@@ -60,7 +60,7 @@ body {
 .title {
     padding-left: var(--veryBig);
 }
-.datetime {
+#datetime {
     padding-right: var(--veryBig);
 }
 

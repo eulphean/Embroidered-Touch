@@ -5,12 +5,25 @@
 
 let bluetooth; // Bluetooth handler. 
 let chipsets;  // Array of all chipsets. 
+let dateTime; 
 const numChipsets = 4; 
 
+let datetimeID = "#datetime";
+
 function setup() {
-  bluetooth = new BLE(assignChipsetData); 
+  // Date time interface. 
+  dateTime = select(datetimeID);
+  setCurrentTime();
+
+  // Bluetooth connection and interface. 
+  bluetooth = new BLE(assignChipsetData, stopCallback); 
+  
+  // Chipset interface and sensor data. 
   chipsets = []; 
   initChipsets();  
+
+  // Update current time. 
+  setInterval(setCurrentTime, 1000); 
 }
 
 function draw() {
@@ -35,4 +48,17 @@ function initChipsets() {
 // sensorData: array: 0-11
 function assignChipsetData(chipsetIdx, sensorDataType, sensorData) {
   chipsets[chipsetIdx].setData(sensorDataType, sensorData); 
+}
+
+function setCurrentTime() {
+  let a = new Date();
+  dateTime.html(a);
+}
+
+function stopCallback() {
+  // Called when stream is stopped. 
+  for (let i = 0; i < numChipsets; i++) {
+    console.log(i);
+    chipsets[i].clearStatus();
+  }
 }

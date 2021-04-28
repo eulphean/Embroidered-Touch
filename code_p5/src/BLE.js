@@ -16,16 +16,16 @@ const bleIndicator = '.ble-status';
 const activeBle = 'indicator-active'; // Note: Class to be added doesn't need .
 
 class BLE {
-    constructor(parseChipsetData) {
+    constructor(parseChipsetData, stopCallback) {
         this.myBLE = new p5ble();
         this.myRxCharacteristic = '';
         this.myTxCharacteristic = '';
         this.callbackData = parseChipsetData;
         this.bleStatus = '';
-        this.isReceivingData = false; 
         
         // Setup the bluetooth interface. 
         this.readInterface(); 
+        this.stopCallback = stopCallback;
     }
 
     readInterface() {
@@ -50,7 +50,7 @@ class BLE {
         if (this.myRxCharacteristic !== '') {
             this.myBLE.stopNotifications(this.myRxCharacteristic);
             this.bleStatus.removeClass(activeBle);
-            this.isReceivingData = false; 
+            this.stopCallback();
         } else {
             console.warn("BLE: Not initialized."); 
         }
@@ -68,7 +68,6 @@ class BLE {
         this.myBLE.startNotifications(this.myRxCharacteristic, this.handleIncomingData.bind(this), 'string');
 
         this.bleStatus.addClass(activeBle);
-        this.isReceivingData = true; 
         console.log("BLE: Successfully paired. Ready to communicate.")
     }
 

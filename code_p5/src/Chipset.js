@@ -4,6 +4,8 @@
 // Description: Class responsible for storing information related to a chipset. 
 
 const numSensors = 12; // Num sensors on each chip. 
+const activeChipsetClass = 'indicator-active';
+
 class Chipset {
     constructor(chipsetIdx) {
         this.sensors = [];
@@ -51,5 +53,13 @@ class Chipset {
         for (let i = 0; i < numSensors; i++) {
             this.sensors[i].setData(sensorDataType, sensorData[i]); 
         }
+
+        if (!this.chipstatusIndicator.hasClass(activeChipsetClass)) {
+            this.chipstatusIndicator.addClass(activeChipsetClass);
+        }
+    }
+
+    clearStatus() {
+        this.chipstatusIndicator.removeClass(activeChipsetClass);
     }
 }
