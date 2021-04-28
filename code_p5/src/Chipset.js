@@ -8,6 +8,7 @@ const numSensors = 12; // Num sensors on each chip.
 class Chipset {
     constructor(chipsetIdx) {
         this.sensors = [];
+        this.sensorsID = "#sensors-" + chipsetIdx; // Sensor indexes. 
         this.filteredValID = "#filtered-val-" + chipsetIdx; // Filtered values.
         this.baseValID = "#base-val-" + chipsetIdx; // Base values.
         this.cutoffKnobID = "#cutoff-knob-" + chipsetIdx; // Cutoff knobs. 
@@ -27,16 +28,14 @@ class Chipset {
     }
 
     populateUITrees() {
-        // When this chip receives data the first time, turn this on. 
-        this.chipstatusIndicator = select(this.chipStatusID);
-
         // These are trees to be forwarded to sensors. 
         this.interfaceTrees = {
             'filtered' : select(this.filteredValID),
             'base' : select(this.baseValID),
             'cutoffknob' : select(this.cutoffKnobID),
             'cutoffval' : select(this.cutoffValID),
-            'indicator' : select(this.touchIndicatorID)
+            'indicator' : select(this.touchIndicatorID),
+            'sensors' : select(this.sensorsID)
         }
     }
 

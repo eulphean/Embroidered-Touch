@@ -4,6 +4,7 @@
 // Description: Class responsible for storing information related to a chipset. 
 
 const activeSensorClass = 'indicator-active';
+const unusedSensorClass = 'unused-sensor';
 
 const sliderMin = 50; 
 const sliderMax = 250;
@@ -20,8 +21,10 @@ class Sensor {
         this.baseVal = '';
         this.cutoffVal = '';
         this.touchIndicator = '';
+        this.tone = ''; 
 
         this.parseUI(); 
+        this.setTone(); 
     }
 
     parseUI() {
@@ -50,6 +53,23 @@ class Sensor {
         this.cutoffTextVal = select(this.valueClass, cutoffValTextNode);
         this.cutoffTextVal.value(this.cutoffSlider.value());
         this.cutoffTextVal.elt.addEventListener('input', this.updateCutoffSliderVal.bind(this));
+
+        let sensorsNode = this.parentTrees['sensors'];
+        this.sensorNode = select(this.valueClass, sensorsNode);
+        
+        // Debug logs. 
+        // console.log(this.sensorNode);
+    }
+
+    setTone() {
+        if (this.sensorNode.hasClass(unusedSensorClass)) {
+            this.tone = 'NOT APPLICABLE';
+        } else {
+            this.tone = audio.assignTone();
+        }
+        
+        // Debug logs. 
+        // console.log(this.tone);
     }
 
     updateCutoffSliderVal() {

@@ -5,10 +5,16 @@
 
 let bluetooth; // Bluetooth handler. 
 let chipsets;  // Array of all chipsets. 
-let dateTime; 
-const numChipsets = 4; 
+let dateTime; // Datetime node in the tree. 
+let audio; // Audio handler. 
 
-let datetimeID = "#datetime";
+const numChipsets = 4; 
+const datetimeID = "#datetime";
+
+// Preload all audio files. 
+function preload() {
+  audio = new Audio(); 
+}
 
 function setup() {
   // Date time interface. 

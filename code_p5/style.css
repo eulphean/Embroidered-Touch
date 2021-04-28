@@ -199,3 +199,8 @@ body {
     font-size: var(--lessBig);
     text-align: center;
 }
+
+/* Unused sensor styles*/
+.unused-sensor {
+    background-color: var(--deepPurple) !important; 
+}
