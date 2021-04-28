@@ -5,7 +5,7 @@
 
 const activeSensorClass = 'indicator-active';
 
-const sliderMin = 0; 
+const sliderMin = 50; 
 const sliderMax = 250;
 const sliderStep = 1; 
 class Sensor {
@@ -23,6 +23,7 @@ class Sensor {
 
         this.parseUI(); 
     }
+
     parseUI() {
         // Filtered value node. 
         let filteredNode = this.parentTrees['filtered'];
@@ -36,36 +37,45 @@ class Sensor {
         let touchIndicatorNode = this.parentTrees['indicator'];
         this.touchIndicator = select(this.valueClass, touchIndicatorNode);
 
-
         // Cutoff
         let cutoffKnobNode = this.parentTrees['cutoffknob'];
         this.cutoffSlider = select(this.valueClass, cutoffKnobNode);
         this.cutoffSlider.attribute('min', sliderMin);
         this.cutoffSlider.attribute('max', sliderMax);
-        this.cutoffSlider.attribute('value', 100); // TODO: Read this value from a JSON (save recurring values)
+        this.cutoffSlider.attribute('value', 150); // TODO: Read this value from a JSON (save recurring values)
         this.cutoffSlider.attribute('step', sliderStep);
-        this.cutoffSlider.elt.addEventListener('input', this.updateCutoffVal.bind(this));
+        this.cutoffSlider.elt.addEventListener('input', this.updateCutoffTextVal.bind(this));
 
-        let cutoffValNode = this.parentTrees['cutoffval'];
-        this.cutoffVal = select(this.valueClass, cutoffValNode);
-        this.cutoffVal.html(this.cutoffSlider.value());
+        let cutoffValTextNode = this.parentTrees['cutoffval'];
+        this.cutoffTextVal = select(this.valueClass, cutoffValTextNode);
+        this.cutoffTextVal.value(this.cutoffSlider.value());
+        this.cutoffTextVal.elt.addEventListener('input', this.updateCutoffSliderVal.bind(this));
     }
 
-    updateCutoffVal() {
-        this.cutoffVal.html(this.cutoffSlider.value());
+    updateCutoffSliderVal() {
+        this.cutoffSlider.value(this.cutoffTextVal.value());
+    }
+
+    updateCutoffTextVal() {
+        this.cutoffTextVal.value(this.cutoffSlider.value());
     }
 
     setData(sensorDataType, sensorVal) {
-        // if (sensorDataType === 'b') {
-        //     this.baseVal = sensorVal;
-        // } else if (sensorDataType === 'f') {
-        //     this.filteredVal = sensorVal;
-        // }
+        if (sensorDataType === 'b') {
+            this.baseVal.html(sensorVal);
+        } else if (sensorDataType === 'f') {
+            this.filteredVal.html(sensorVal);
+        }
     }
 
-    draw() {
-        // If visible, update the Ui with the values. 
-        // Update the UI with the values.
-        // Update the UI with the values. 
+    update() {
+        let cutoffVal = parseInt(this.cutoffTextVal.value());
+        let filteredVal = parseInt(this.filteredVal.html());
+
+        if (filteredVal <= cutoffVal) {
+            this.touchIndicator.addClass(activeSensorClass);
+        } else {
+            this.touchIndicator.removeClass(activeSensorClass);
+        }
     }
 }

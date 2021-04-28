@@ -19,6 +19,13 @@ class Chipset {
         this.initSensors();
     }
 
+    update() {
+        for (let i = 0; i < numSensors; i++) {
+            // Sensor index, parent nodes. 
+            this.sensors[i].update();
+        }
+    }
+
     populateUITrees() {
         // When this chip receives data the first time, turn this on. 
         this.chipstatusIndicator = select(this.chipStatusID);

@@ -14,7 +14,13 @@ function setup() {
 }
 
 function draw() {
-  // Update the UI with sensor data. 
+  if (bluetooth.isReceivingData) {
+    // Update all sensors to check for cuttoff values. 
+    for (let i = 0; i < numChipsets; i++) {
+      // Chipset index. 
+      chipsets[i].update();
+    }
+  }
 }
 
 function initChipsets() {
