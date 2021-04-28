@@ -59,12 +59,16 @@ class Touch {
 
         // NT-V,V,V,V,V....V
         // N - sensor index, T - data type, V - line value
-        char *getFilteredData(uint8_t chipsetIdx, char sensorDataType) {
+        char *getSensorData(uint8_t chipsetIdx, char sensorDataType) {
           String dataString = ""; 
           dataString = dataString + String(chipsetIdx) + sensorDataType + "-"; 
           uint8_t v; 
           for (uint8_t i = minSensorIdx; i <= maxSensorIdx; i++) {
-            v = chipsets[chipsetIdx].filteredData(i); 
+            if (sensorDataType == 'f') {
+              v = chipsets[chipsetIdx].filteredData(i);  
+            } else {
+              v = chipsets[chipsetIdx].baselineData(i); 
+            }
             dataString += v; 
             if (i != maxSensorIdx) {
               dataString += ","; 

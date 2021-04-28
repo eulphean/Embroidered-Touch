@@ -20,7 +20,9 @@ void loop() {
     if (BLE::isConnected) {
       for (int i = 0; i < touchChipsets.length(); i++) {
         // Reqest filtered data. 
-        char *bleBuffer = touchChipsets.getFilteredData(i, 'f'); 
+        char *bleBuffer = touchChipsets.getSensorData(i, 'f'); 
+        gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize());
+        bleBuffer = touchChipsets.getSensorData(i, 'b');
         gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
         delay(50); // Don't overwhelm the stream
       }
