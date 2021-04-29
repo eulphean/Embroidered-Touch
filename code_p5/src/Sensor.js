@@ -10,6 +10,12 @@ const sliderMin = 0;
 const sliderMax = 200;
 const sliderStep = 1; 
 const defaultValue = 100;
+
+// Default sound properties. 
+const defaultVolume = 0.5; 
+const maxVolume = 20.0;
+const interpolationRate = 0.0005;
+ 
 class Sensor {
     constructor(sensorIdx, interfaceTrees) {
         this.parentTrees = interfaceTrees; 
@@ -25,6 +31,7 @@ class Sensor {
 
         // p5 sound object. 
         this.tone = ''; 
+        this.currentVolume = defaultVolume; 
 
         // Is this unused. 
         this.isSensorUnused = false; 
@@ -114,14 +121,22 @@ class Sensor {
     handleSound(command) {
         if (command === 'play') {
             if (!this.tone.isPlaying()) {
-                this.tone.setVolume(0.5); // SHOULD COME FROM THE gui
+                this.tone.setVolume(this.currentVolume); // SHOULD COME FROM THE gui
                 this.tone.play(); 
-                this.tone.loop();          }
+                this.tone.loop();          
+            }
+
+            if (this.tone.isPlaying()) {
+                this.currentVolume = this.interpolate(this.currentVolume, maxVolume, interpolationRate);
+                this.tone.setVolume(this.currentVolume);
+                console.log(this.currentVolume);
+            }
         } 
 
         if (command === 'stop') {
             if (this.tone.isPlaying()) {
                 this.tone.stop();
+                this.currentVolume = defaultVolume;
             }
         }
     }
@@ -129,5 +144,9 @@ class Sensor {
     setSensorValue(val) {
         this.cutoffSlider.value(val);
         this.cutoffTextVal.value(val);
+    }
+
+    interpolate(a, b, f){
+        return a + f * (b - a);
     }
 }
