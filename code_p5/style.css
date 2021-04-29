@@ -226,3 +226,6 @@ body {
 .slider-title {
     font-size: var(--small);
 }
+.b-send {
+    margin-left: var(--lessSmall);
+}

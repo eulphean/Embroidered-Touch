@@ -83,6 +83,27 @@ class Touch {
         uint8_t bleBufferSize() {
           return bleBufferLength;
         }
+
+        void resetChipset(uint8_t chipsetIdx) {
+          Adafruit_MPR121 chipset = chipsets[chipsetIdx];
+          uint8_t addr = addresses[chipsetIdx];
+          chipset.begin(addr); 
+          if (!chipset.begin(addr)) {
+            Serial.println("MPR121 Error: Chipset not found");
+          } else {
+            String msg = "MPR121#";
+            msg += chipsetIdx + " successfully reset.";
+            Serial.println(msg);
+          }
+        }
+
+        void updateSensitivity(uint8_t chipsetIdx, uint8_t thresh, uint8_t rel) {
+          Adafruit_MPR121 chipset = chipsets[chipsetIdx];
+          chipset.setThresholds(thresh, rel); 
+          String msg = "MPR121#";
+          msg += chipsetIdx + " successfully set Threshold and Release values.";
+          Serial.println(msg);
+        }
         
         // chipsetIdx: 0-3
         // minLine (sensor line on the chip): >= 0

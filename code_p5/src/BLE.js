@@ -89,4 +89,14 @@ class BLE {
 
         this.callbackData(chipsetIdx, sensorDataType, sensorData);
     }
+
+    // Data buffer must be uint88Array data type of javascript.
+    sendBuffer(dataBuffer) {
+        if (this.myTxCharacteristic !== '') {
+            this.myTxCharacteristic.writeValue(dataBuffer);
+            console.log('BLE: Buffer sent');
+        } else {
+            console.warn('BLE: Ensure Bluetooth is connected.');
+        }
+    }
 }

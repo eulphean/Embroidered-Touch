@@ -130,6 +130,16 @@ void loop()
       //ch = (uint8_t) bleuart.read();
       //Serial.println(ch);
       //Serial.println("Something received");
+
+      // Receiving utf-8 string
+      //      String fullstring = "";
+//      // Or make an uint8_t array. 
+//      while(bleuart.available()) {
+//        uint8_t c; 
+//        c = (uint8_t) bleuart.read();
+//        fullstring+=(char)ch; 
+//      }
+//      Serial.println(fullstring);
   //}
 }
 

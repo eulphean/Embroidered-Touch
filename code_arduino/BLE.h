@@ -14,16 +14,20 @@
 #define _BV(bit) (1 << (bit)) 
 #endif
 
+// Size of the RX buffer from p5.js [chipsetIdx, command, val, val]
+const uint8_t buffSize = 4; 
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
     BLEDis bledis;
-    // Uart over ble
-    BLEUart bleuart; 
-    
+
   public: 
     // Defined here but declared outside the class. 
     static boolean isConnected; 
+    static boolean hasReceivedData; 
+    // UART over BLE
+    static BLEUart bleuart; 
+    static uint8_t rxBuffer[buffSize];
     
     BLE() {}
     
@@ -50,10 +54,10 @@ class BLE {
       bledis.begin();
 
       // Configure and start BLE Uart service. 
-      bleuart.begin(); 
+      BLE::bleuart.begin(); 
 
       // Setup callback function when data received. 
-      bleuart.setRxCallback(uartCallback); 
+      BLE::bleuart.setRxCallback(uartCallback); 
 
       // Setup the advertising packet(s)
       startAdv();
@@ -61,7 +65,7 @@ class BLE {
     }
 
     void transmit(char *buf, uint8_t bufLength) {
-      bleuart.write(buf, bufLength); 
+      BLE::bleuart.write(buf, bufLength); 
     }
 
     void startAdv() {
@@ -70,7 +74,7 @@ class BLE {
       Bluefruit.Advertising.addTxPower();
 
       // Include bleuart 1280bit uuid
-      Bluefruit.Advertising.addService(bleuart);
+      Bluefruit.Advertising.addService(BLE::bleuart);
 
       // Include Name.
       Bluefruit.Advertising.addName();
@@ -104,22 +108,29 @@ class BLE {
 
       BLE::isConnected = false; 
     }
-
     
     // NOTE: Unused code. This is a callback, which is kicked in when 
     // uart receives data from P5. 
     static void uartCallback(uint16_t conn_handle) {
-//      String fullstring = "";
-//      // Or make an uint8_t array. 
-//      while(bleuart.available()) {
-//        uint8_t c; 
-//        c = (uint8_t) bleuart.read();
-//        fullstring+=(char)ch; 
-//      }
-//      Serial.println(fullstring);
+      Serial.println("Payload received:");
+      uint8_t i = 0; 
+
+      // Pack all the data in rxBuffer
+      while (BLE::bleuart.available()) {
+        uint8_t ch;
+        ch = (uint8_t) BLE::bleuart.read();
+        BLE::rxBuffer[i] = ch; 
+        i++;
+        Serial.println(ch);
+      }
+      BLE::hasReceivedData = true; 
     }
 };
 
+// Definition of static variables. 
 boolean BLE::isConnected = false; 
+BLEUart BLE::bleuart;
+uint8_t BLE::rxBuffer[buffSize];
+boolean BLE::hasReceivedData = false; 
 
 #endif

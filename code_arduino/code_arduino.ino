@@ -3,6 +3,9 @@
 
 Touch touchChipsets;
 BLE gridBle; 
+
+const uint8_t RESET_COMMAND = 0; 
+const uint8_t SENSITIVITY_COMMAND = 1;
 void setup()
 {
   Serial.begin(115200);
@@ -26,6 +29,26 @@ void loop() {
         gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
         delay(50); // Don't overwhelm the stream
       }
+      Serial.println("Sending data");
+    }
+
+    if (BLE::hasReceivedData) {
+      uint8_t chipsetIdx = BLE::rxBuffer[0]; 
+      uint8_t command = BLE::rxBuffer[1]; 
+      uint8_t threshold = BLE::rxBuffer[2];
+      uint8_t release = BLE::rxBuffer[3];
+
+      if (command == RESET_COMMAND) {
+        touchChipsets.resetChipset(chipsetIdx); 
+        delay(3000);
+      }
+
+      if (command == SENSITIVITY_COMMAND) {
+        touchChipsets.updateSensitivity(chipsetIdx, threshold, release); 
+      }
+
+      // Mark the flag dirty so we can read the next payload. 
+      BLE::hasReceivedData = false; 
     }
 
   // To enable arduino senssor logs, uncomment below. 

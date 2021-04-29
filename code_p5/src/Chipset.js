@@ -4,6 +4,11 @@
 // Description: Class responsible for storing information related to a chipset. 
 
 const numSensors = 12; // Num sensors on each chip. 
+
+// Commands for send buffer.
+const RESET_COMMAND = 0; 
+const SENSITIVITY_COMMAND = 1; 
+
 class Chipset {
     constructor(chipsetIdx) {
         this.sensors = [];
@@ -18,6 +23,10 @@ class Chipset {
         // Populate interface nodes first, then initialize sensor nodes. 
         this.populateUITrees(); 
         this.initSensors();
+
+        // Initialize a send bufffer for chipset controls. 
+        this.sendBuffer = new Uint8Array(4); // [chipindex, command, value, value]
+        this.sendBuffer[0] = chipsetIdx;
     }
 
     update() {
@@ -45,6 +54,7 @@ class Chipset {
         this.thresholdInput = select(".i0", this.chipsetControls); 
         this.releaseSlider = select(".s1", this.chipsetControls); 
         this.releaseInput  = select(".i1", this.chipsetControls); 
+        this.sendButton = select(".b-send", this.chipsetControls);
 
         this.setupChipsetControls();         
     }
@@ -69,6 +79,7 @@ class Chipset {
 
         // Assign callbacks.
         this.resetButton.mousePressed(this.onReset.bind(this));
+        this.sendButton.mousePressed(this.onSend.bind(this));
 
         // Slider input changes. 
         this.thresholdSlider.elt.addEventListener('input', this.handleThresholdSlider.bind(this));
@@ -80,22 +91,34 @@ class Chipset {
     }
 
     onReset() {
+        this.sendBuffer[1] = RESET_COMMAND; 
+        bluetooth.sendBuffer(this.sendBuffer);
+    }
 
+    onSend() {
+        this.sendBuffer[1] = SENSITIVITY_COMMAND;
+        this.sendBuffer[2] = this.thresholdInput.value();
+        this.sendBuffer[3] = this.releaseInput.value();
+        bluetooth.sendBuffer(this.sendBuffer);
     }
 
     handleThresholdSlider() {
-        this.thresholdInput.value(this.thresholdSlider.value()); 
+        let v = this.thresholdSlider.value(); 
+        this.thresholdInput.value(v); 
     }
 
     handleThresholdTextInput() {
-        this.thresholdSlider.value(this.thresholdInput.value());
+        let v = this.thresholdInput.value(); 
+        this.thresholdSlider.value(v);
     }
 
     handleReleaseSlider() {
-        this.releaseInput.value(this.releaseSlider.value());
+        let v = this.releaseSlider.value(); 
+        this.releaseInput.value(v);
     }
 
     handleReleaseTextInput() {
-        this.releaseSlider.value(this.releaseInput.value());
+        let v = this.releaseInput.value(); 
+        this.releaseSlider.value(v);
     }
 }
