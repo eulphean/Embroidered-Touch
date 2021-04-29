@@ -8,6 +8,8 @@ const numSensors = 12; // Num sensors on each chip.
 // Commands for send buffer.
 const RESET_COMMAND = 0; 
 const SENSITIVITY_COMMAND = 1; 
+const defaultThreshold = 12;
+const defaultRelease = 6; 
 
 class Chipset {
     constructor(chipsetIdx) {
@@ -93,6 +95,13 @@ class Chipset {
     onReset() {
         this.sendBuffer[1] = RESET_COMMAND; 
         bluetooth.sendBuffer(this.sendBuffer);
+
+        // Reset sliders and text inputs to default value. 
+        this.thresholdInput.value(defaultThreshold);
+        this.thresholdSlider.value(defaultThreshold);
+
+        this.releaseInput.value(defaultRelease);
+        this.releaseSlider.value(defaultRelease);
     }
 
     onSend() {

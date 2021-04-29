@@ -6,9 +6,10 @@
 const activeSensorClass = 'indicator-active';
 const unusedSensorClass = 'unused-sensor';
 
-const sliderMin = 50; 
-const sliderMax = 250;
+const sliderMin = 0; 
+const sliderMax = 200;
 const sliderStep = 1; 
+const defaultValue = 100;
 class Sensor {
     constructor(sensorIdx, interfaceTrees) {
         this.parentTrees = interfaceTrees; 
@@ -57,7 +58,7 @@ class Sensor {
         this.cutoffSlider = select(this.valueClass, cutoffKnobNode);
         this.cutoffSlider.attribute('min', sliderMin);
         this.cutoffSlider.attribute('max', sliderMax);
-        this.cutoffSlider.attribute('value', 150); // TODO: Read this value from a JSON (save recurring values)
+        this.cutoffSlider.attribute('value', 100); // TODO: Read this value from a JSON (save recurring values)
         this.cutoffSlider.attribute('step', sliderStep);
         this.cutoffSlider.elt.addEventListener('input', this.updateCutoffTextVal.bind(this));
 

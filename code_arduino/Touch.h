@@ -91,10 +91,13 @@ class Touch {
           if (!chipset.begin(addr)) {
             Serial.println("MPR121 Error: Chipset not found");
           } else {
-            String msg = "MPR121#";
-            msg += chipsetIdx + " successfully reset.";
+            String msg = "MPR121# ";
+            msg += String(chipsetIdx) + " successfully reset.";
             Serial.println(msg);
           }
+
+          // NOTE: Assign the chip back to the array. 
+          chipsets[chipsetIdx] = chipset;
         }
 
         void updateSensitivity(uint8_t chipsetIdx, uint8_t thresh, uint8_t rel) {

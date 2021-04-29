@@ -94,7 +94,7 @@ class BLE {
     sendBuffer(dataBuffer) {
         if (this.myTxCharacteristic !== '') {
             this.myTxCharacteristic.writeValue(dataBuffer);
-            console.log('BLE: Buffer sent');
+            console.log('BLE: Buffer sent: ' + dataBuffer);
         } else {
             console.warn('BLE: Ensure Bluetooth is connected.');
         }
