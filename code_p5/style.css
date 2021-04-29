@@ -74,8 +74,8 @@ body {
 }
 .button {
     background-color: var(--dryPink);
-    padding: var(--lessBig);
-    margin-right: var(--small);
+    padding: var(--lessSmall);
+    margin-right: var(--big);
     border: none;
     border-radius: var(--lessSmall);
     color: var(--textColor);
@@ -112,20 +112,20 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     padding-top: var(--big);
     padding-right: var(--big);
     padding-left: var(--extraSmall);
 }
 .chipset-title {
     font-size: var(--veryBig);
+    margin-right: var(--veryBig);
 }
 
 /* Chipset table container styles. */
 .chipset-table-container {
    display: flex;
    flex-direction: column;
-   margin-top: var(--massive);
+   margin-top: var(--huge);
 }
 .chipset-table {
     display: flex;
@@ -199,8 +199,30 @@ body {
     font-size: var(--lessBig);
     text-align: center;
 }
-
 /* Unused sensor styles*/
 .unused-sensor {
     background-color: var(--deepPurple) !important; 
+}
+
+/* Chipset interactive buttons / interface styles.  */
+.chipset-control-group {
+    display: flex;
+    flex-direction: row;
+}
+.horizontal-slider {
+    transform: rotate(0deg);
+}
+.chipsetInput {
+    background-color: var(--dryPink);
+    margin-left: var(--small);
+    border-radius: var(--verySmall);
+    margin-right: var(--small);
+}
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.slider-title {
+    font-size: var(--small);
 }
