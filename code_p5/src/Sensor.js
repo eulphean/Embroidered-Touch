@@ -1,7 +1,7 @@
 // Name: Sensor.js
 // Author: Amay Kataria. 
 // Date: 04/21/2021
-// Description: Class responsible for storing information related to a chipset. 
+// Description: Stores and operates on all the sensor related information for each chipset. 
 
 const activeSensorClass = 'indicator-active';
 const unusedSensorClass = 'unused-sensor';
@@ -20,7 +20,7 @@ class Sensor {
         // Pointer to the dom node that holds these values. 
         this.filteredVal = '';
         this.baseVal = '';
-        this.cutoffVal = '';
+        this.cutoffTextVal = '';
         this.touchIndicator = '';
 
         // p5 sound object. 
@@ -124,5 +124,10 @@ class Sensor {
                 this.tone.stop();
             }
         }
+    }
+
+    setSensorValue(val) {
+        this.cutoffSlider.value(val);
+        this.cutoffTextVal.value(val);
     }
 }

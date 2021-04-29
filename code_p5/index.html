@@ -18,6 +18,7 @@
     <script type="text/javascript" src="src/Chipset.js"></script>
     <script type="text/javascript" src="src/Sensor.js"></script>
     <script type="text/javascript" src="src/Audio.js"></script>
+    <script type="text/javascript" src="src/Data.js"></script>
   </head>
   <body>  
     <div id='container'>
@@ -35,6 +36,11 @@
           <button class='button b-stop'>Stop Receiving</button>
         </div>
         <div class='indicator ble-status'></div>
+      </div>
+      <div id='jsoncontrols'>
+        <button class='button b-savejson'>Save Data</button>
+        <button class='button b-loadjson'>Load Data</button>
+        <input type="file" id="file-input" />
       </div>
       <!-- Start of chipset container 0 -->
       <div id='chipset-container'>

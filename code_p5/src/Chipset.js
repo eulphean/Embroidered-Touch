@@ -1,7 +1,7 @@
 // Name: Chipsets.js
 // Author: Amay Kataria. 
 // Date: 04/21/2021
-// Description: Class responsible for storing information related to a chipset. 
+// Description: Class responsible for storing information related to a MPR121 chipset and all the interactive controls. 
 
 const numSensors = 12; // Num sensors on each chip. 
 
@@ -129,5 +129,10 @@ class Chipset {
     handleReleaseTextInput() {
         let v = this.releaseInput.value(); 
         this.releaseSlider.value(v);
+    }
+
+    setSensorVal(sensorIdx, val) {
+        let sensor = this.sensors[sensorIdx];
+        sensor.setSensorVal(val);
     }
 }

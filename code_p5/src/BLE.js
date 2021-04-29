@@ -1,8 +1,9 @@
-// Name: Bluetooth.js
+// Name: BLE.js
 // Author: Amay Kataria. 
 // Date: 04/21/2021
 // Description: Class responsible for everything related to bluetooth communication with Arduino. 
-// Receives a callback function in its constructor that gets called after sensor data is parsed. 
+// Receives a callback function in its constructor that gets called after sensor data from the 
+// Arduino is parsed.
 
 // UART service & characteristic description. 
 const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";

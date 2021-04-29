@@ -1,19 +1,21 @@
 // Name: main.js
 // Author: Amay Kataria. 
 // Date: 04/21/2021
-// Description: Entry file for javascript. 
+// Description: Entry file for this application. This initializes everything. 
 
 let bluetooth; // Bluetooth handler. 
 let chipsets;  // Array of all chipsets. 
 let dateTime; // Datetime node in the tree. 
 let audio; // Audio handler. 
-
+let json; // JSON handler. 
+let j_json; 
 const numChipsets = 4; 
 const datetimeID = "#datetime";
 
 // Preload all audio files. 
 function preload() {
   audio = new Audio(); 
+  json = new Data();
 }
 
 function setup() {

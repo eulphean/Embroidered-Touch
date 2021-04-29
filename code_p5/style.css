@@ -70,7 +70,9 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: var(--big);
+    padding-left: var(--big);
+    padding-right: var(--big);
+    margin-top: var(--big);
 }
 .button {
     background-color: var(--dryPink);
@@ -228,4 +230,13 @@ body {
 }
 .b-send {
     margin-left: var(--lessSmall);
+}
+/* JSON Controls. */
+#jsoncontrols {
+    padding-left: var(--big);
+    margin-top: var(--small);
+    margin-bottom: var(--small);
+}
+#file-input {
+    display: none;
 }
