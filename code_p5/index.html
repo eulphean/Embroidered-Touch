@@ -13,6 +13,7 @@
     <script type="text/javascript" src="Library/p5.dom.min.js"></script>
     <script type="text/javascript" src="Library/quicksettings.js"></script>
     <script type="text/javascript" src="Library/p5.gui.js"></script>
+    <script type="text/javascript" src="Library/input-knob.js"></script>
     <script type="text/javascript" src="src/main.js"></script>
     <script type="text/javascript" src="src/BLE.js"></script>
     <script type="text/javascript" src="src/Chipset.js"></script>
@@ -137,6 +138,193 @@
             <div class="table-cell"><input class="input-val v9" type="text" /></div>
             <div class="table-cell"><input class="input-val v10" type="text" /></div>
             <div class="table-cell"><input class="input-val v11" type="text" /></div>
+          </div>
+          <div id="adsr-val-0" class="chipset-table">
+            <div class="table-cell table-title adsr-layout">
+              <div>Attack</div>
+              <div>Decay</div>
+              <div>Release</div>
+            </div>
+            <div class='knob-collection v0'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde">
+                <input type="range" class="input-knob rotary-knob attackTime"  data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v0">0.0</div>
+            </div>
+            <div class='knob-collection v1'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v1">0.0</div>
+            </div>
+            <div class='knob-collection v2'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v2">0.0</div>
+            </div>
+            <div class='knob-collection v3'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v3">0.0</div>
+            </div>
+            <div class='knob-collection v4'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel"data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v4">0.0</div>
+            </div>
+            <div class='knob-collection v5'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v5">0.0</div>
+            </div>
+            <div class='knob-collection v6'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v6">0.0</div>
+            </div>
+            <div class='knob-collection v7'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v7">0.0</div>
+            </div>
+            <div class='knob-collection v8'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v8">0.0</div>
+            </div>
+            <div class='knob-collection v9'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde" />
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde" />
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v9">0.0</div>
+            </div>
+            <div class='knob-collection v10'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel" data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v10">0.0</div>
+            </div>
+            <div class='knob-collection v11'>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob attackLevel" data-bgcolor="#34ebde"/>
+                <input type="range" class="input-knob rotary-knob attackTime" data-bgcolor="#34ebde"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob decayLevel" data-bgcolor="#6633e8"/> 
+                <input type="range" class="input-knob rotary-knob decayTime" data-bgcolor="#6633e8"/>
+              </div>
+              <div class='knob-row'>
+                <input type="range" class="input-knob rotary-knob releaseLevel"data-bgcolor="#fff700"/>
+                <input type="range" class="input-knob rotary-knob releaseTime" data-bgcolor="#fff700"/>
+              </div>
+              <div class="knob-val v11">0.0</div>
+            </div>
           </div>
           <div id="touch-indicator-0" class="chipset-table">
             <div class="table-cell table-title">Touch</div>

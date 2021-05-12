@@ -27,7 +27,8 @@
     --lessMassive: 44px;
     --massive: 48px;
     --veryMassive: 52px;
-    --blockHeight: 550px; 
+    --extraMassive: 72px;
+    --blockHeight: 650px; 
     --sliderHeight: 96px
 }
   
@@ -201,9 +202,53 @@ body {
     font-size: var(--lessBig);
     text-align: center;
 }
+
+.adsr-layout {
+    display: flex;
+    flex-direction: column;
+    height: 44px;
+}
+/* Rotary knobs */
+.knob-collection {
+    display: flex;
+    flex-direction: column;
+    width: var(--veryMassive);
+    margin-bottom: var(--small);
+    height: 110px;
+    align-items: center;
+}
+
+.knob-row {
+    display: flex;
+    flex-direction: row;
+    width: 100% !important; 
+    height: 100% !important;
+    margin-bottom: var(--verySmall);
+}
+
+.rotary-knob {
+    position: relative;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.knob-val {
+    margin-top: var(--verySmall);
+    padding: var(--verySmall);
+    background-color: var(--dryPink);
+    width: var(--big);
+    border-radius: var(--verySmall);
+    text-align: center;
+}
+
 /* Unused sensor styles*/
 .unused-sensor {
     background-color: var(--deepPurple) !important; 
+}
+
+/* Disable sensor*/
+.disabled-sensor {
+    background-color: var(--inactive) !important;
 }
 
 /* Chipset interactive buttons / interface styles.  */

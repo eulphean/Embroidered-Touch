@@ -31,10 +31,20 @@ class Sensor {
 
         // p5 sound object. 
         this.tone = ''; 
+        this.env = new p5.Env();
+        // Attack time, attack level, decay time, decay level, release time, release level. 
+        this.env.set(0.01, 0.5, 0, 0.2, 5.0, 0.0);
+        // set attackLevel, releaseLevel
+        this.env.setRange(1, 0);
+
         this.currentVolume = defaultVolume; 
+        this.isPlaying = false; 
 
         // Is this unused. 
         this.isSensorUnused = false; 
+
+        // is active
+        this.isSensorActive = true; 
 
         this.parseUI(); 
         this.setTone(); 
@@ -44,6 +54,7 @@ class Sensor {
         // Sensor index title node. 
         let chipsetSensorNode = this.parentTrees['sensors'];
         this.sensorNode = select(this.valueClass, chipsetSensorNode);
+        this.sensorNode.mousePressed(this.onSensorPressed.bind(this));
         if (this.sensorNode.hasClass(unusedSensorClass)) {
             this.isSensorUnused = true;
         }
@@ -76,12 +87,25 @@ class Sensor {
         this.cutoffTextVal.elt.addEventListener('input', this.updateCutoffSliderVal.bind(this));
     }
 
+    onSensorPressed() {
+        if (!this.isSensorUnused) {
+            this.isSensorActive = !this.isSensorActive; 
+
+            if (this.isSensorActive) {
+                this.sensorNode.removeClass('disabled-sensor');
+            } else {                
+                this.sensorNode.addClass('disabled-sensor');
+            }
+        }
+    }
+
     setTone() {
         // Don't assign a sound for an unused sensor line. 
         if (this.isSensorUnused) {
             this.tone = 'NA';
         } else {
             this.tone = audio.assignTone();
+            this.env.setInput(this.tone);
         }
     }
 
@@ -104,7 +128,8 @@ class Sensor {
     }
 
     update() {
-        if (!this.isSensorUnused) {
+        // Sensor should be used and be active. 
+        if (!this.isSensorUnused && this.isSensorActive) {
             let cutoffVal = parseInt(this.cutoffTextVal.value());
             let filteredVal = parseInt(this.filteredVal.html());
     
@@ -120,24 +145,31 @@ class Sensor {
 
     handleSound(command) {
         if (command === 'play') {
-            if (!this.tone.isPlaying()) {
-                this.tone.setVolume(this.currentVolume); // SHOULD COME FROM THE gui
+            if (!this.isPlaying) {
+                // this.tone.setVolume(this.currentVolume); // SHOULD COME FROM THE gui
                 this.tone.play(); 
                 this.tone.loop();          
+                this.env.play(this.tone);
+                this.env.triggerAttack();
+                this.isPlaying = true;
+                console.log('Hello');
             }
 
-            if (this.tone.isPlaying()) {
-                this.currentVolume = this.interpolate(this.currentVolume, maxVolume, interpolationRate);
-                this.tone.setVolume(this.currentVolume);
-                console.log(this.currentVolume);
-            }
+            // if (this.tone.isPlaying()) {
+            //     this.currentVolume = this.interpolate(this.currentVolume, maxVolume, interpolationRate);
+            //     this.tone.setVolume(this.currentVolume);
+            //     console.log(this.currentVolume);
+            // }
         } 
 
         if (command === 'stop') {
-            if (this.tone.isPlaying()) {
-                this.tone.stop();
-                this.currentVolume = defaultVolume;
-            }
+            this.isPlaying = false; 
+            this.env.triggerRelease();
+            // this.tone.stop();
+            // if (this.tone.isPlaying()) {
+            //     // this.tone.stop();
+            //     // this.currentVolume = defaultVolume;
+            // }
         }
     }
 
