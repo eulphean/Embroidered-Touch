@@ -236,7 +236,7 @@ body {
     margin-top: var(--verySmall);
     padding: var(--verySmall);
     background-color: var(--dryPink);
-    width: var(--big);
+    width: var(--huge);
     border-radius: var(--verySmall);
     text-align: center;
 }

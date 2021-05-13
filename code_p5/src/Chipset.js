@@ -20,6 +20,7 @@ class Chipset {
         this.baseValID = "#base-val-" + chipsetIdx; // Base values.
         this.cutoffKnobID = "#cutoff-knob-" + chipsetIdx; // Cutoff knobs. 
         this.cutoffValID = "#cutoff-val-" + chipsetIdx; // Cutoff values. 
+        this.adsrValID = "#adsr-val-" + chipsetIdx; // Cutoff values
         this.touchIndicatorID = "#touch-indicator-" + chipsetIdx; // Touch indicator. 
 
         // Populate interface nodes first, then initialize sensor nodes. 
@@ -46,6 +47,7 @@ class Chipset {
             'cutoffknob' : select(this.cutoffKnobID),
             'cutoffval' : select(this.cutoffValID),
             'indicator' : select(this.touchIndicatorID),
+            'adsr' : select(this.adsrValID),
             'sensors' : select(this.sensorsID)
         }
 

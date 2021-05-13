@@ -185,6 +185,7 @@ window.addEventListener("load",()=>{
         el.redraw(true);
       };
       el.setValue=(v)=>{
+        ik.valrange={min:+el.min, max:(el.max=="")?100:+el.max, step:(el.step=="")?1:+el.step};
         v=(Math.round((v-ik.valrange.min)/ik.valrange.step))*ik.valrange.step+ik.valrange.min;
         if(v<ik.valrange.min) v=ik.valrange.min;
         if(v>ik.valrange.max) v=ik.valrange.max;

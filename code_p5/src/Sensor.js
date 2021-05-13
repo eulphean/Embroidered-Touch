@@ -29,25 +29,17 @@ class Sensor {
         this.cutoffTextVal = '';
         this.touchIndicator = '';
 
-        // p5 sound object. 
-        this.tone = ''; 
-        this.env = new p5.Env();
-        // Attack time, attack level, decay time, decay level, release time, release level. 
-        this.env.set(0.01, 0.5, 0, 0.2, 5.0, 0.0);
-        // set attackLevel, releaseLevel
-        this.env.setRange(1, 0);
-
-        this.currentVolume = defaultVolume; 
-        this.isPlaying = false; 
-
         // Is this unused. 
         this.isSensorUnused = false; 
 
-        // is active
+        // This can be changed by button press.
         this.isSensorActive = true; 
 
         this.parseUI(); 
-        this.setTone(); 
+
+        // Initialize sound engine. 
+        let knobCollection = select(this.valueClass, this.parentTrees['adsr']);
+        this.adsr = new ADSR(knobCollection, this.isSensorUnused); 
     }
 
     parseUI() {
@@ -99,16 +91,6 @@ class Sensor {
         }
     }
 
-    setTone() {
-        // Don't assign a sound for an unused sensor line. 
-        if (this.isSensorUnused) {
-            this.tone = 'NA';
-        } else {
-            this.tone = audio.assignTone();
-            this.env.setInput(this.tone);
-        }
-    }
-
     updateCutoffSliderVal() {
         this.cutoffSlider.value(this.cutoffTextVal.value());
     }
@@ -145,31 +127,13 @@ class Sensor {
 
     handleSound(command) {
         if (command === 'play') {
-            if (!this.isPlaying) {
-                // this.tone.setVolume(this.currentVolume); // SHOULD COME FROM THE gui
-                this.tone.play(); 
-                this.tone.loop();          
-                this.env.play(this.tone);
-                this.env.triggerAttack();
-                this.isPlaying = true;
-                console.log('Hello');
+            if (!this.adsr.isActive) {
+                this.adsr.trigger(); 
             }
-
-            // if (this.tone.isPlaying()) {
-            //     this.currentVolume = this.interpolate(this.currentVolume, maxVolume, interpolationRate);
-            //     this.tone.setVolume(this.currentVolume);
-            //     console.log(this.currentVolume);
-            // }
         } 
 
         if (command === 'stop') {
-            this.isPlaying = false; 
-            this.env.triggerRelease();
-            // this.tone.stop();
-            // if (this.tone.isPlaying()) {
-            //     // this.tone.stop();
-            //     // this.currentVolume = defaultVolume;
-            // }
+            this.adsr.release(); 
         }
     }
 
