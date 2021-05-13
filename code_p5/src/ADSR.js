@@ -1,7 +1,7 @@
 // Name: ADSR.js
 // Author: Amay Kataria. 
 // Date: 05/10/2021
-// Description: ADSR module responsible to control the attack, decay, and release levels and times
+// Description: ADSR module responsible to control the attack, decay, and release levels and times for each sensor's audio.
 
 // ADSR properties. 
 const maxLevel = 10;
@@ -26,23 +26,23 @@ class ADSR {
             this.soundObj = 'NA';
         } else {
             this.soundObj = audio.assignTone();
-            this.soundObj.loop();  
             this.env = new p5.Env();
-            this.env.setInput(this.soundObj); 
-            // Attack time, attack level, decay time, decay level, release time, release level. 
+            // this.env.setInput(this.soundObj); 
+
+            // // Read the default values that were set when parsing the UI. 
             let attackTime = this.attackTimeKnob.value();
             let attackLevel = this.attackLevelKnob.value();
             let decayTime = this.decayTimeKnob.value();
             let decayLevel = this.decayLevelKnob.value();
             let releaseTime = this.releaseTimeKnob.value();
             let releaseLevel = this.releaseLevelKnob.value();
-
+            
+            // // Attack time, attack level, decay time, decay level, release time, release level. 
             this.env.set(attackTime, attackLevel, decayTime, decayLevel, releaseTime, releaseLevel);
             
             // Is the ADSR already active?
             this.isActive = false; 
         }
-
     }
 
     parseUI() {
@@ -88,15 +88,15 @@ class ADSR {
     }
 
     trigger() {
-        // this.soundObj.play(); 
-        
-        // this.env.play();
-        this.env.triggerAttack();
+        this.soundObj.stop();
+        this.soundObj.loop();
+        this.env.triggerAttack(this.soundObj);
         this.isActive = true; 
     }
 
     release() {
-        this.env.triggerRelease(); 
+        this.env.triggerRelease(this.soundObj); 
+        // this.soundObj.stop();
         this.isActive = false; 
     }
 
@@ -133,6 +133,11 @@ class ADSR {
         this.releaseLevelKnob.attribute("title", v); 
         this.knobVal.html(v);
         this.env.rLevel = v; 
+
+        // EDGE CASE
+        if (!this.isActive) {
+            this.env.triggerRelease();
+        }
     }
 
     onUpdateReleaseTime() {
@@ -140,5 +145,66 @@ class ADSR {
         this.releaseTimeKnob.attribute("title", v); 
         this.knobVal.html(v);
         this.env.rTime = v; 
+        
+        if (!this.isActive) {
+            this.env.triggerRelease();
+        }
+    }
+
+    getAttackLevel() {
+        return this.attackLevelKnob.value();
+    }
+
+    getAttackTime() {
+        return this.attackTimeKnob.value();
+    }
+
+    getDecayLevel() {
+        return this.decayLevelKnob.value();
+    }
+
+    getDecayTime() {
+        return this.decayTimeKnob.value();
+    }
+
+    getReleaseLevel() {
+        return this.releaseLevelKnob.value();
+    }
+
+    getReleaseTime() {
+        return this.releaseTimeKnob.value();
+    }
+
+    setValuesFromJSON(attackLevel, attackTime, decayLevel, decayTime, releaseLevel, releaseTime) {
+        if (this.env) {
+            // Attack level. 
+            this.setKnobValue(this.attackLevelKnob, attackLevel);
+            this.env.aLevel = attackLevel; 
+
+            // Attack time.
+            this.setKnobValue(this.attackTimeKnob, attackTime);
+            this.env.aTime = attackTime; 
+
+            // Decay level.
+            this.setKnobValue(this.decayLevelKnob, decayLevel);
+            this.env.dLevel = decayLevel;
+
+            // Decay time. 
+            this.setKnobValue(this.decayTimeKnob, decayTime);
+            this.env.dTime = decayTime; 
+
+            // Release level. 
+            this.setKnobValue(this.releaseLevelKnob, releaseLevel);
+            this.env.rLevel = releaseLevel;
+
+            // Release time. 
+            this.setKnobValue(this.releaseTimeKnob, releaseTime);
+            this.env.rTime = releaseTime; 
+        }
+    }
+
+    setKnobValue(knob, value) {
+        knob.value(value);
+        knob.attribute('title', value);
     }
 }

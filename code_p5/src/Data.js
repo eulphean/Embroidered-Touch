@@ -34,15 +34,43 @@ class Data {
         if (chipsets.length > 0) {
             for (let i = 0; i < chipsets.length; i++) {
                 let chipsetData = {};
+
+                // Chipset properties. 
                 let currentChipset = chipsets[i];
                 chipsetData['thresh'] = currentChipset.thresholdInput.value();
                 chipsetData['rel'] = currentChipset.releaseInput.value();
+                
+                // Sensor properties.
                 let sensors = currentChipset.sensors;
-                const cutoffPrefix = "co"; 
+                
+                // Cutoff values.
+                chipsetData['cutoff'] = {}; 
                 for (let j = 0; j < sensors.length; j++) {
-                    let a = cutoffPrefix + j;
-                    chipsetData[a] = sensors[j].cutoffTextVal.value();
+                    chipsetData['cutoff'][j] = sensors[j].cutoffTextVal.value();
                 }
+                
+                // Active/Inactive state
+                chipsetData['state'] = {}; 
+                for (let j = 0; j < sensors.length; j++) {
+                    chipsetData['state'][j] = sensors[j].isSensorActive;
+                }
+
+                // ADSR values
+                chipsetData['adsr'] = {}; 
+                for (let j = 0; j < sensors.length; j++) {
+                    let adsr = sensors[j].adsr; 
+                    
+                    // Hold adsr values for each object. 
+                    let adsrObj = {}; 
+                    adsrObj['attackLevel'] = adsr.getAttackLevel();
+                    adsrObj['attackTime'] = adsr.getAttackTime();
+                    adsrObj['decayLevel'] = adsr.getDecayLevel();
+                    adsrObj['decayTime'] = adsr.getDecayTime();
+                    adsrObj['releaseLevel'] = adsr.getReleaseLevel();
+                    adsrObj['releaseTime'] = adsr.getReleaseTime();
+                    chipsetData['adsr'][j] = adsrObj;
+                }
+
                 this.jsonObj[i.toString()] = chipsetData; 
             }
         }
@@ -88,14 +116,38 @@ class Data {
                 let currentChipset = chipsets[i];
 
                 let savedChipsetData = json[i];
+
+                // Chipsets values. 
                 currentChipset.thresholdInput.value(savedChipsetData['thresh']);
                 currentChipset.releaseInput.value(savedChipsetData['rel']);
                 
                 let sensors = currentChipset.sensors;
-                const cutoffPrefix = "co"; 
+
+                // Sensor values
+                // Cutoff
+                let cutoffValues = savedChipsetData['cutoff'];
                 for (let j = 0; j < sensors.length; j++) {
-                    let sensorKey = cutoffPrefix + j;
-                    sensors[j].setSensorValue(savedChipsetData[sensorKey]);
+                    sensors[j].setSensorValue(cutoffValues[j]);
+                }
+
+                // Sensor state
+                let stateValues = savedChipsetData['state'];
+                for (let j = 0; j < sensors.length; j++) {
+                    sensors[j].isSensorActive = stateValues[j]; 
+                    sensors[j].setSensorActiveStyle();
+                }
+
+                // ADSR values
+                let adsrValues = savedChipsetData['adsr'];
+                for (let j = 0; j < sensors.length; j++) {
+                    let adsr = sensors[j].adsr
+                    let attackLevel = adsrValues[j]['attackLevel'];
+                    let attackTime = adsrValues[j]['attackTime'];
+                    let decayLevel = adsrValues[j]['decayLevel'];
+                    let decayTime = adsrValues[j]['decayTime'];
+                    let releaseLevel = adsrValues[j]['releaseLevel'];
+                    let releaseTime = adsrValues[j]['releaseTime'];
+                    adsr.setValuesFromJSON(attackLevel, attackTime, decayLevel, decayTime, releaseLevel, releaseTime);
                 }
             }
         }

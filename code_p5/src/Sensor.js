@@ -82,12 +82,15 @@ class Sensor {
     onSensorPressed() {
         if (!this.isSensorUnused) {
             this.isSensorActive = !this.isSensorActive; 
+            this.setSensorActiveStyle();
+        }
+    }
 
-            if (this.isSensorActive) {
-                this.sensorNode.removeClass('disabled-sensor');
-            } else {                
-                this.sensorNode.addClass('disabled-sensor');
-            }
+    setSensorActiveStyle() {
+        if (this.isSensorActive) {
+            this.sensorNode.removeClass('disabled-sensor');
+        } else {                
+            this.sensorNode.addClass('disabled-sensor');
         }
     }
 
