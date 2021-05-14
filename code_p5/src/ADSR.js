@@ -27,6 +27,10 @@ class ADSR {
         } else {
             this.soundObj = audio.assignTone();
             this.env = new p5.Env();
+
+            // Change this to false if you want Linear envelope
+            // You'll need to tweak Levels and Times.
+            this.env.setExp(true); 
             // this.env.setInput(this.soundObj); 
 
             // // Read the default values that were set when parsing the UI. 
