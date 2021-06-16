@@ -1,28 +1,26 @@
-import React from 'react'
-import Radium from 'radium'
+// Name: Websocket.js
+// Author: Amay Kataria. 
+// Date: 06/15/2021
+// Description: Class responsible for communication with the webserver. We use websockets
+// technology for this. Here we have the websocket client, which communicates with backend
+// server over websockets. 
+
 import io  from 'socket.io-client'
 
-//const localhostURL = "http://localhost:5000/app";
+const localhostURL = "http://localhost:5000/app";
 const herokuURL = "https://blooming-refuge-71111.herokuapp.com/app";
-class Websocket extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state={
-            
-        };
+const siteURL = localhostURL;
 
-        this.socket = io(herokuURL, { 
-            reconnection: true, 
-            reconnectionDelay: 500, 
-            reconnectionAttempts: Infinity
-        }); 
+class Websocket {
+    constructor() {
+        // this.socket = io(siteURL, { 
+        //     reconnection: true, 
+        //     reconnectionDelay: 500, 
+        //     reconnectionAttempts: Infinity
+        // }); 
 
-        this.socket.once('connect', this.subscribe.bind(this)); 
-    }
-
-    // Return an empty div. 
-    render() {
-        return (null);
+        // this.socket.once('connect', this.subscribe.bind(this)); 
+        console.log(this.socket);
     }
 
     subscribe() {
@@ -75,4 +73,5 @@ class Websocket extends React.Component {
     }
 }
 
-export default Radium(Websocket);
+// New keyword calls the constructor for the component.
+export default new Websocket(); 

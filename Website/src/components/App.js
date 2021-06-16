@@ -1,5 +1,13 @@
+// Name: App.js
+// Author: Amay Kataria. 
+// Date: 06/15/2021
+// Description: Root class, which is the entry
+
 import React from 'react'
 import Radium from 'radium'
+
+import ble from './BLE.js'
+import websocket from './Websocket.js'
 
 const styles = {
   container: {
@@ -18,10 +26,15 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        Hello content how are you?
-        I am good react-content is looking sharp hello.
+          Hello I'm a simple content. 
+          <button onClick={this.onClick.bind(this)}>Connect BLE</button>
       </div>
     );
+  }
+
+  onClick() {
+    ble.connect();
+    console.log('Hello click bluetooth connect');
   }
 }
 
