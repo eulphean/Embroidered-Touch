@@ -5,16 +5,16 @@
 // Receives a callback function in its constructor that gets called after sensor data from the 
 // Arduino is parsed.
 
-import p5Ble from 'p5ble'
+import p5ble from 'p5ble'
 
 // UART service & characteristic description. 
 const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-const txCharacteristic = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"; // transmit is from the phone's perspective
-const rxCharacteristic = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";  // receive is from the phone's perspective
+// const txCharacteristic = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"; // transmit is from the phone's perspective
+// const rxCharacteristic = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";  // receive is from the phone's perspective
 
 class BLE {
   constructor(parseChipsetData) {
-    this.myBLE = new p5Ble(); 
+    this.myBLE = new p5ble(); 
     this.myRxCharacteristic = '';
     this.myTxCharacteristic = '';
     this.callbackData = parseChipsetData;
@@ -69,7 +69,7 @@ class BLE {
       this.callbackData(chipsetIdx, sensorDataType, sensorData);
   }
 
-  // Data buffer must be uint88Array data type of javascript.
+  // Data buffer must be uint8Array data type of javascript.
   sendBuffer(dataBuffer) {
       if (this.myTxCharacteristic !== '') {
           this.myTxCharacteristic.writeValue(dataBuffer);

@@ -8,10 +8,32 @@ import Radium from 'radium'
 
 import ble from './BLE.js'
 import websocket from './Websocket.js'
+import audio from './Audio.js'
 
 const styles = {
   container: {
     position: 'relative'
+  },
+
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '500px'
+  },
+
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+
+  input:{
+    width: '200px',
+    marginTop: '10px',
+    marginLeft: '10px'
+  },
+
+  connected: {
+    backgroundColor: 'green'
   }
 };
 
@@ -19,22 +41,55 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-
+      isConnected: false,
+      receiveVal: 'Receive Text'
     };
+
+    websocket.subscribeForUpdate(this.onDataReceived.bind(this));
   }
 
   render() {
+    let connectButtonStyle = this.state.isConnected ? [styles.input, styles.connected] : styles.input;
+
     return (
-      <div>
-          Hello I'm a simple content. 
-          <button onClick={this.onClick.bind(this)}>Connect BLE</button>
+      <div style={styles.content}>
+          <button onClick={this.onClick.bind(this)}>BLE Connect</button>
+          <button onClick={this.onPlay.bind(this)}>Play Some Audio</button>
+          <div style={styles.inputContainer}>
+            <input onChange={this.onTextAdded.bind(this)} style={styles.input} type='text' placeholder='Transmit text.'></input>
+            <div style={styles.input}>{this.state.receiveVal}</div>
+          </div>
+          <button style={connectButtonStyle} onClick={this.enableConnect.bind(this)}>Enable Connect</button>
       </div>
     );
   }
 
   onClick() {
     ble.connect();
-    console.log('Hello click bluetooth connect');
+  }
+
+  onPlay() {
+    audio.play();
+  }
+
+  enableConnect() {
+    this.setState({
+      isConnected: !this.state.isConnected
+    });
+
+    websocket.updateBroadcast();
+  }
+
+  onTextAdded(e) {
+    let val = e.target.value; 
+    websocket.broadcastText(val);
+  }
+
+  onDataReceived(data) {
+    console.log('Data received: ' + data);
+    this.setState( {
+      receiveVal: data
+    });
   }
 }
 

@@ -1,37 +1,40 @@
 // Name: Websocket.js
-// Author: Amay Kataria. 
+// Author: Amay Kataria.
 // Date: 06/15/2021
 // Description: Class responsible for communication with the webserver. We use websockets
 // technology for this. Here we have the websocket client, which communicates with backend
-// server over websockets. 
+// server over websockets.
 
 import io  from 'socket.io-client'
 
 const localhostURL = "http://localhost:5000/app";
-const herokuURL = "https://blooming-refuge-71111.herokuapp.com/app";
-const siteURL = localhostURL;
+const herokuURL = "https://fabric-backend.herokuapp.com/app";
+const siteURL = herokuURL;
 
 class Websocket {
     constructor() {
-        // this.socket = io(siteURL, { 
-        //     reconnection: true, 
-        //     reconnectionDelay: 500, 
-        //     reconnectionAttempts: Infinity
-        // }); 
+        this.socket = io(siteURL, {
+            reconnection: true,
+            reconnectionDelay: 500,
+            reconnectionAttempts: Infinity
+        });
 
-        // this.socket.once('connect', this.subscribe.bind(this)); 
-        console.log(this.socket);
+        this.socket.once('connect', this.subscribe.bind(this));
+        this.canBroadcast = false; 
+        this.dataCallback = ''; // Fired when the client receives data from the sensor.
     }
 
     subscribe() {
         console.log('Connected');
 
-        // Subscribe to events. 
-        this.socket.on('time', this.logTime.bind(this)); 
-        this.socket.on('disconnect', this.disconnect.bind(this));
-        this.socket.on('receiveRandomEntries', this.receiveEntries.bind(this)); 
-        this.socket.on('receiveDatabaseEntries', this.receiveDatabaseRentries.bind(this)); 
-        this.socket.on('printPayload', this.printPayload.bind(this));
+        // Subscribe to incoming events from the webserver here. 
+        this.socket.on('time', this.logTime.bind(this));
+        this.socket.on('receiveSensorData', this.handleSensorData.bind(this));
+    }
+
+    subscribeForUpdate(callback) {
+        this.dataCallback = callback; 
+        console.log(this.dataCallback);
     }
 
     disconnect() {
@@ -39,39 +42,24 @@ class Websocket {
     }
 
     logTime(data) {
-        console.log('Socket Connection Alive: ' + data); 
+        console.log('Socket Connection Alive: ' + data);
     }
 
-    // Send function and callback function. 
-    requestData() {
-       this.socket.emit('readRandomEntries'); 
+    updateBroadcast() {
+        this.socket.emit('broadcast');
+        this.canBroadcast = !this.canBroadcast; 
     }
 
-
-    receiveEntries(payload) {
-        console.log('Entries received');
-        this.props.processEntries(payload); 
-    }
-
-    // Send function and callback function. 
-    readDatabase() {
-        console.log('Request received');
-        // Always read in descending order. 
-        this.socket.emit('readDatabase', {order: 'DESC'}); 
-    }
-
-    receiveDatabaseRentries(payload) {
-        console.log('Entries received');
-        this.props.processDatabase(payload); 
-    }
-
-    printPayload(payload) {
-        console.log('Payload received'); 
-        if (this.props.appendDatabase) {
-            this.props.appendDatabase(payload);
+    broadcastText(text) {
+        if (this.canBroadcast) {
+            this.socket.emit('sensorData', text); 
         }
+    }
+
+    handleSensorData(data) {
+        this.dataCallback(data);
     }
 }
 
 // New keyword calls the constructor for the component.
-export default new Websocket(); 
+export default new Websocket();

@@ -1,10 +1,8 @@
 // Author: Amay Kataria
-// Date: 04/16/2020
+// Date: 06/16/2021
 // File: central.js
-// Description: Core Central server implementation for mumimsafe.live. It serves 2 routes primarily. 
-// Route 1 = client -> central -> printer
-// Route 2 = streamer -> central -> client
-// It will also have a public side, which I can use to see all the messages of the database and debug the incoming video stream. 
+// Description: Core centra web-server, which is responsible to ensure inter-connectivity between multiple 
+// web-apps. This will talk to the web-apps using websockets. 
 
 var express = require('express'); 
 var socket = require('socket.io');
@@ -21,6 +19,7 @@ const pool = new Pool({
 // ------------------ Express webserver ------------------------ //
 var app = express(); 
 app.use(cors());
+// Client index.html to be read. 
 app.use(express.static('./Client')); 
 var server = require('http').createServer(app); 
 // ------------------ Websocket ------------------------ //
@@ -36,8 +35,8 @@ server.listen(process.env.PORT || 5000, function() {
     console.log('Central server successfully started'); 
 });
 
+// /app and /central are two seperate namespaces. 
 var appSocket = io.of('/app').on('connection', onWebClient); // Connects all web instance to this. 
-var receiptSocket = io.of('/receipt').on('connection', onReceiptClient); // Connects receipt server to this. 
 var centralClientSocket = io.of('/central').on('connection', onCentralClient); // Connects the web instance of central server to read data. 
 
 // Send an event to all connected clients to keep the Socket Connection Alive. 
@@ -47,156 +46,71 @@ setInterval(alive, 1000);
 function alive() {
     var t = new Date().toTimeString(); 
     appSocket.emit('time', t); 
-    receiptSocket.emit('time', t);
     centralClientSocket.emit('time', t); 
 }
 
 function onWebClient(socket) {
     console.log('New Web Client connection: ' + socket.id); 
-    // For every incoming message payload from main web client application. 
-    socket.on('writePayload', onTextPayload); 
-    socket.on('readRandomEntries', () => {
-        onReadRandomEntries(socket);
-    });
-    socket.on('readDatabase', ({ order }) => {
-        onReadDatabase(order, socket); 
-    }); 
-
+    // Register for an event. 
+    socket.on('broadcast', onUpdateBroadcast);
+    socket.on('sensorData', handleSensorData);
+    // socket.on('writePayload', onTextPayload); 
     socket.on('disconnect', () => console.log('Web client ' + socket.id + ' disconnected')); 
 }
 
-function onReceiptClient(socket) {
-    console.log('Receipt client connection: ' + socket.id);
-    socket.on('disconnect', () => console.log('Receipt client ' + socket.id + ' disconnected'));
+// Rooms are automatically cleared when the client gets disconnected. 
+var broadcastClients = []; 
+var roomName = 'fabric';
+function onUpdateBroadcast() {
+    console.log('Update broadcast hit.');
+    var socket = this; 
+
+    // NOTE: MAYBE BLOCK the third user to join this room. 
+    // How will the third user join the room? 
+
+    // Returns a set of members in the room already.
+    var members = io.of('/app').adapter.rooms.get(roomName);
+    if (members === undefined) {
+        // Room doesn't exist at all, so add the socket. 
+        socket.join(roomName);
+
+        // NOTE: Maybe send an event back saying two users are
+        // already in a room or something.
+        console.log('Socket added to the room.');
+    } else if (members.has(socket.id)) {
+        socket.leave(roomName);
+        console.log('Socket left the room.');
+    } else {
+        socket.join(roomName);
+        console.log('Socket added to the room.');
+    }
+    
+    // Print a room summary. 
+    console.log(io.of('/app').adapter.rooms.get(roomName));
+
+    // Am I already broadcasting? 
+    // If I am, stop broadcasting me. 
+    // Else, update my broadcast status. 
+
+    // Every client connected should have a broadcast status. 
+    // It should be a map of socket id, with broadcast status. 
+
+    // When the transmit text starts happening, we first check if the client is actually in the broadcast mode 
+    // or not. 
+}
+
+function handleSensorData(data) {
+    var socket = this; 
+    // if it's here, it's already in the room. 
+    // Don't check again, just emit data to everybody in the room. 
+    socket.to(roomName).emit('receiveSensorData', data);
+
+    console.log('Emiting data');
 }
 
 function onCentralClient(socket) {
     console.log('New Central Web Client connection: ' + socket.id); 
-    socket.on('readEntries', onReadEntries); 
-    socket.on('deleteTestEntries', onDeleteTestEntries)
+    // Register for an event. 
+    // socket.on('writePayload', onTextPayload); 
     socket.on('disconnect', () => console.log('Central Web client ' + socket.id + ' diconnected'));
-}
-
-function onReadDatabase(order, socket) {
-    console.log('Requesting for some random entries with order ' + order);
-    var queryText = 'SELECT * FROM entries ORDER BY date ' + order + ', time ' + order + ';'; 
-    pool.query(queryText, (error, results) => {
-        sqlReadDatabaseCallback(error, results, socket)
-    });
-}
-
-function sqlReadDatabaseCallback(error, results, socket) {
-    if (error) {
-        throw error;
-    }
-    
-    // Format the results somehow. 
-    var entries = results.rows; 
-
-    console.log('Sending entire database entries: ' + entries.length);
-    socket.emit('receiveDatabaseEntries', entries);
-}
-
-function onReadRandomEntries(socket) {
-    console.log('Requesting for some random entries.');
-    var queryText = 'SELECT * FROM entries ORDER BY random() limit 12;'; 
-    pool.query(queryText, (error, results) => {
-        sqlReadRandomCallback(error, results, socket)
-    });
-}
-
-function sqlReadRandomCallback(error, results, socket) {
-    if (error) {
-        throw error;
-    }
-    
-    // Format the results somehow. 
-    var entries = results.rows; 
-
-    console.log('Sending random entries');
-    socket.emit('receiveRandomEntries', entries);
-}
-
-// ------------------ Handle incoming text payload ------------------------ //
-
-function onTextPayload(payload) {
-    console.log('New Write Payload Received.');
-    
-    // Store this payload into the database. 
-    // Setup database first or this will error out badly. 
-    storePayloadToDb(payload); 
-
-    console.log('Emitting Print Payload');
-    
-    // Emit this payload to be printed on the receipt printer. 
-    receiptSocket.emit('printPayload', payload); 
-    // Also send this payload back to the website, so the printer can
-    // print this message. 
-    appSocket.emit('printPayload', payload);
-}
-
-// Store the entries into the database. 
-function storePayloadToDb(payload) {
-    const date = payload.date; 
-    const time = payload.time; 
-    const msg = payload.message; 
-
-    // Write the payload to the database. 
-    pool.query('INSERT INTO entries (date, time, message) VALUES ($1, $2, $3)', [date, time, msg], (error, result) => {
-        if (error) {
-            throw error; 
-        }
-
-        console.log('Success: New entry in the databse with message ' + msg); 
-    }); 
-}
-
-// Delete all the test messages from the data base. 
-function onDeleteTestEntries() {
-    var queryText = "DELETE FROM entries WHERE message LIKE '%test%'"; 
-    pool.query(queryText, onDeletionComplete); 
-}
-
-function onDeletionComplete(error, results) {
-    if (error) {
-        throw error;
-    }
-    
-    console.log('Deletion Succesful'); 
-    centralClientSocket.emit('deleteSuccess');
-}
-
-// THIS FUNCTION WILL NEED TO BE REWRITTEN. 
-function onReadEntries(data) {
-    console.log('Request to Read entries from ' + data.from + ' to ' + data.to);
-
-    // Chose the callback to send the results back. 
-    var sqlQueryCallback;
-    if (data.state == 'show') {
-        sqlQueryCallback = showEntriesCallback;
-    }
-    
-    // Creating the query
-    var queryText = ''; 
-    if (data.from && data.to) {
-        queryText = 'SELECT * FROM entries WHERE date >= $1 AND date <= $2 ORDER BY date ASC';
-        pool.query(queryText, [data.from, data.to], sqlQueryCallback); 
-    } else if (data.from && !data.to) {
-        queryText = 'SELECT * FROM entries WHERE date >= $1 ORDER BY date ASC'; 
-        pool.query(queryText, [data.from], sqlQueryCallback); 
-    } else if (data.to && !data.from) {
-        queryText = 'SELECT * FROM entries WHERE date <= $1 ORDER BY date ASC'; 
-        pool.query(queryText, [data.to], sqlQueryCallback); 
-    } else {
-        var order = 'ASC';
-        queryText = 'SELECT * FROM entries ORDER BY date ' + order + ', time ' + order + ';';
-        pool.query(queryText, sqlQueryCallback); 
-    }
-}
-
-function showEntriesCallback(error, results) {
-    if (error) {
-        throw error; 
-    }
-    centralClientSocket.emit('showEntries', results.rows); 
 }
