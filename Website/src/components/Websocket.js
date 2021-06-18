@@ -9,7 +9,7 @@ import io  from 'socket.io-client'
 
 const localhostURL = "http://localhost:5000/app";
 const herokuURL = "https://fabric-backend.herokuapp.com/app";
-const siteURL = herokuURL;
+const siteURL = localhostURL;
 
 class Websocket {
     constructor() {
@@ -34,19 +34,19 @@ class Websocket {
 
     subscribeForUpdate(callback) {
         this.dataCallback = callback; 
-        console.log(this.dataCallback);
     }
 
     disconnect() {
-        console.log('Socket Server Disconnected.')
+        console.log('Socket Server Disconnected.');
     }
 
     logTime(data) {
         console.log('Socket Connection Alive: ' + data);
     }
 
+    // SHARE SHARE SHARE Data between users. // 
     updateBroadcast() {
-        this.socket.emit('broadcast');
+        this.socket.emit('room');
         this.canBroadcast = !this.canBroadcast; 
     }
 
@@ -58,6 +58,19 @@ class Websocket {
 
     handleSensorData(data) {
         this.dataCallback(data);
+    }
+
+    // DATABASE CALL to save data.
+    saveUserConfig(payload) {
+        this.socket.emit('saveUserConfig', payload); 
+    }
+
+    loadUserConfig(payload, dataLoadedCallback) {
+        this.socket.emit('loadUserConfig', payload);
+
+        // Data loaded callback should be fired when we receive
+        // data from the database. Subscribe to an event that 
+        // can do that for us. 
     }
 }
 

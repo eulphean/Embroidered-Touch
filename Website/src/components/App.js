@@ -6,6 +6,7 @@
 import React from 'react'
 import Radium from 'radium'
 
+import ParamConfigs from './ParamConfigs.js'
 import ble from './BLE.js'
 import websocket from './Websocket.js'
 import audio from './Audio.js'
@@ -60,6 +61,7 @@ class App extends React.Component {
             <div style={styles.input}>{this.state.receiveVal}</div>
           </div>
           <button style={connectButtonStyle} onClick={this.enableConnect.bind(this)}>Enable Connect</button>
+          <ParamConfigs />
       </div>
     );
   }

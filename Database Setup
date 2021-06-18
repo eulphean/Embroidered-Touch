@@ -1,0 +1,48 @@
+This documents some commands to maintain the database. 
+
+Database name: fabric_instrument
+Table name: configs
+Connection String: postgres://localhost/fabric_instrument
+
+ROLE: amaykataria
+On Unix systems, we need a role which is the same name as the default user on the system. 
+So, I had to create a new role called amaykataria, because that's what node API was using to 
+enter the database. 
+
+PASSWORD: abc123 is the password for the role amaykataria
+The API needs that password to connect so the connection string has the password. 
+
+Before running nodejs server locally, run this command: 
+export DATABASE_URL=postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123
+- This will ensure that server can access the database.
+- If the postgresql service is not running, start is manually with this command. sudo service postgresql start
+
+0: To test the connection to the database. 
+psql -h localhost -U amaykataria -p 5432 fabric_instrument 
+It will prompt for password, add "abc123"
+
+Steps to connect to the local database through Ubuntu prompt. 
+1: Connect to postgres role
+sudo -i -u postgres
+
+This drops us into the database. 
+2: psql fabric_instrument
+
+Create a table (although the table exists). We will update the table with all the entries once we know what
+all data needs to be stored. 
+3: CREATE TABLE configs ( name test PRIMARY KEY, s1 int, s2 int, s3 int);
+
+Insert into the table. 
+4: INSERT INTO configs (name, s1, s2, s3) VALUES ('studio', 154, 160, 173);
+
+UPDATE table_name
+SET column1 = value1, column2 = value2...., columnN = valueN
+WHERE [condition];
+5:  UPDATE configs SET s3 = 150 WHERE name='studio';
+
+Query to show all the data. 
+6: SELECT * FROM configs; 
+
+Returns the values from the table with the primary key as the condition.
+7: SELECT * FROM configs WHERE name='studio'
+
