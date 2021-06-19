@@ -45,8 +45,6 @@ class App extends React.Component {
       isConnected: false,
       receiveVal: 'Receive Text'
     };
-
-    websocket.subscribeForUpdate(this.onDataReceived.bind(this));
   }
 
   render() {
@@ -79,7 +77,7 @@ class App extends React.Component {
       isConnected: !this.state.isConnected
     });
 
-    websocket.updateBroadcast();
+    websocket.updateRoom(this.onSensorDataReceived.bind(this));
   }
 
   onTextAdded(e) {
@@ -87,8 +85,8 @@ class App extends React.Component {
     websocket.broadcastText(val);
   }
 
-  onDataReceived(data) {
-    console.log('Data received: ' + data);
+  onSensorDataReceived(data) {
+    console.log('Sensor Data received: ' + data);
     this.setState( {
       receiveVal: data
     });

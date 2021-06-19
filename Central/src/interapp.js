@@ -12,7 +12,6 @@ module.exports = {
         // if it's here, it's already in the room. 
         // Don't check again, just emit data to everybody in the room. 
         socket.to(roomName).emit('receiveSensorData', data);
-    
         console.log('Emiting data');
     },
 

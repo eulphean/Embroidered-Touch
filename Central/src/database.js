@@ -7,7 +7,8 @@
 var Pool = require('pg').Pool;
 
 // ------------------ postgresql database ---------------------- // 
-const connString = process.env['DATABASE_URL'];
+// const connString = process.env['DATABASE_URL'];
+const connString = 'postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123';
 console.log('Database Connection String: ' + connString); 
 const pool = new Pool({
     connectionString: connString
@@ -15,40 +16,35 @@ const pool = new Pool({
 
 module.exports = {    
     // Operation: 0 (save data)
-    // Operation: 1 (load data)
-    // Operation: 2 (update data)
+    // Operation: 1 (update data)
+    // Operation: 2 (delete data)
     handleUserConfig: function(data, operation) {
         var socket = this; 
         if (operation === 0) {
+            console.log('Save data');
             onWriteDatabase(data, socket);
         } else if (operation === 1) {
-            let configName = data['name'];
-            console.log('Load data');
-        } else if (operation === 2) {
-            let configName = data['name'];
             console.log('Update data');
+            onUpdateDatabase(data, socket);
+        } else if (operation === 2) {
+            let configName = data;
+            console.log('Delete data');
+            onDeleteEntryFromDatabase(configName, socket);
         }
     },
     
-    readAllConfigs: function() {
-        // Read configs, then emit an event with the results
-        // back to the client. 
-        // I should modularize database and app calls into their own
-        // respective modules. 
+    requestForConfigs: function(socket) {
+        onReadAllEntriesDatabase(socket); 
     }
 }
 
 
 function onWriteDatabase(data, socket) {
-    console.log('Writing data to the database.');
     let name = data['name'];
-    let s1 = data['s1'];
-    let s2 = data['s2'];
-    let s3 = data['s3'];
-    
-    // Need to ensure that this cannot be same name. 
-    // Will need to do a read first - if the key exists, then I call the UPDATE API. 
-
+    let s1 = Number(data['s1']);
+    let s2 = Number(data['s2']);
+    let s3 = Number(data['s3']);
+ 
     // var queryText = 'INSERT INTO configs (name, s1, s2, s3) VALUES (${name}, ${s1}, ${s2}, ${s3})';
     // console.log(queryText);
     pool.query('INSERT INTO configs (name, s1, s2, s3) VALUES ($1, $2, $3, $4)', [name, s1, s2, s3], (error, result) => {
@@ -57,18 +53,45 @@ function onWriteDatabase(data, socket) {
         }
 
         console.log('Success: New entry in the database.');
-        // sqlWriteDatabaseCallback(error, results, socket);
     });
 }
 
-function sqlWriteDatabaseCallback(error, results, socket) {
-    if (error) {
-        throw error;
-    }
-    
-    // Format the results somehow. 
-    var entries = results.rows; 
+function onUpdateDatabase(data, socket) {
+    let name = data['name'];
+    let s1 = Number(data['s1']);
+    let s2 = Number(data['s2']);
+    let s3 = Number(data['s3']);
 
-    // console.log('Sending entire database entries: ' + entries.length);
-    socket.emit('receiveDatabaseEntries', entries);
+    console.log(data);
+
+    pool.query('UPDATE configs SET s1=$1, s2=$2, s3=$3 WHERE name=$4', [s1, s2, s3, name], (error, result) => {
+        if (error) {
+            throw error;
+        }
+
+        console.log('Success: Updated entry in the database.');        
+    });
+}
+
+function onReadAllEntriesDatabase(socket) {
+    pool.query('SELECT * FROM configs', (error, result) => {
+        if (error) {
+            throw error;
+        }
+
+        let data = result.rows; 
+        // Emit all the data read. 
+        socket.emit('receiveAllConfigs', data); 
+        console.log('Success: All configs read.');
+    });
+}
+
+function onDeleteEntryFromDatabase(configName, socket) {
+    pool.query('DELETE FROM configs WHERE name=$1', [configName], (error, result) => {
+        if (error) {
+            throw error; 
+        }
+
+        console.log('Success: Deleted entry in the database.')
+    });
 }

@@ -21,7 +21,10 @@ class Websocket {
 
         this.socket.once('connect', this.subscribe.bind(this));
         this.canBroadcast = false; 
-        this.dataCallback = ''; // Fired when the client receives data from the sensor.
+
+        // ------------ Callbacks fired on response from sockets ------------------------ //
+        this.sensorDataCallback = ''; // Fired when the client receives data from the sensors.
+        this.readAllConfigCallback = ''; // Fired when the client all configs from the database. 
     }
 
     subscribe() {
@@ -30,24 +33,14 @@ class Websocket {
         // Subscribe to incoming events from the webserver here. 
         this.socket.on('time', this.logTime.bind(this));
         this.socket.on('receiveSensorData', this.handleSensorData.bind(this));
+        this.socket.on('receiveAllConfigs', this.handleAllConfigs.bind(this));
     }
 
-    subscribeForUpdate(callback) {
-        this.dataCallback = callback; 
-    }
-
-    disconnect() {
-        console.log('Socket Server Disconnected.');
-    }
-
-    logTime(data) {
-        console.log('Socket Connection Alive: ' + data);
-    }
-
-    // SHARE SHARE SHARE Data between users. // 
-    updateBroadcast() {
+    // ----------------------- SENSOR DATA BROADCAST--------------------- //
+    updateRoom(callback) {
         this.socket.emit('room');
         this.canBroadcast = !this.canBroadcast; 
+        this.sensorDataCallback = callback; 
     }
 
     broadcastText(text) {
@@ -56,22 +49,45 @@ class Websocket {
         }
     }
 
+    // Fire the sensor data callback registered before. 
     handleSensorData(data) {
-        this.dataCallback(data);
+        this.sensorDataCallback(data);
     }
 
-    // DATABASE CALL to save data.
+    // ----------------------- DATABASE CALLS --------------------- //
     saveUserConfig(payload) {
         this.socket.emit('saveUserConfig', payload); 
     }
 
-    loadUserConfig(payload, dataLoadedCallback) {
-        this.socket.emit('loadUserConfig', payload);
-
-        // Data loaded callback should be fired when we receive
-        // data from the database. Subscribe to an event that 
-        // can do that for us. 
+    updateUserConfig(payload) {
+        this.socket.emit('updateUserConfig', payload);
     }
+
+    deleteUserConfig(configName) {
+        this.socket.emit('deleteUserConfig', configName);
+    }
+
+    // ------------------ LOAD ALL USER CONFIGS ------------------
+    requestForConfigs(callback) {
+        this.readAllConfigCallback = callback;
+        this.socket.emit('requestForConfigs');
+    }
+
+    // Fire the readAllConfigCallback registered before. 
+    handleAllConfigs(data) {
+        console.log('Handle all config: ' + data);
+        this.readAllConfigCallback(data); 
+    }
+
+    // -------------------- DON'T CHANGE THESE -------------------    
+    disconnect() {
+        console.log('Socket Server Disconnected.');
+    }
+
+    logTime(data) {
+        console.log('Socket Connection Alive: ' + data);
+    }
+
 }
 
 // New keyword calls the constructor for the component.

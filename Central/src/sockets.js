@@ -52,7 +52,6 @@ function onWebClient(socket) {
     });
 
     socket.on('sensorData', (data) => {
-        console.log(data);
         interapp.broadcastSensorData(socket, data);
     });
     
@@ -60,14 +59,14 @@ function onWebClient(socket) {
     socket.on('saveUserConfig', (data) => {
         database.handleUserConfig(data, 0);
     });
-    socket.on('loadUserConfig', (data) => {
+    socket.on('updateUserConfig', (data) => {
         database.handleUserConfig(data, 1);
     });
-    socket.on('updateUserConfig', (data) => {
+    socket.on('deleteUserConfig', (data) => {
         database.handleUserConfig(data, 2);
     });
-    socket.on('readAllConfigs', () => {
-        database.readAllConfigs();
+    socket.on('requestForConfigs', () => {
+        database.requestForConfigs(socket);
     }); 
 
     socket.on('disconnect', () => console.log('Web client ' + socket.id + ' disconnected')); 
