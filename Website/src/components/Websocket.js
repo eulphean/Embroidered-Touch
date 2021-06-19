@@ -9,7 +9,7 @@ import io  from 'socket.io-client'
 
 const localhostURL = "http://localhost:5000/app";
 const herokuURL = "https://fabric-backend.herokuapp.com/app";
-const siteURL = localhostURL;
+const siteURL = herokuURL;
 
 class Websocket {
     constructor() {

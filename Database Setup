@@ -46,3 +46,8 @@ Query to show all the data.
 Returns the values from the table with the primary key as the condition.
 7: SELECT * FROM configs WHERE name='studio'
 
+
+TROUBLESHOOT
+- If heroku gives an error on setting up a database about SSL, then run this 
+command from the heroku directory.
+heroku config:set PGSSLMODE=no-verify

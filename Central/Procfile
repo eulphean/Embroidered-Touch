@@ -1,1 +1,1 @@
-web: node ./src/central.js
+web: node central.js
