@@ -14,13 +14,14 @@ import ChipsetCollection from './ChipsetCollection'
 
 const styles = {
   container: {
-    position: 'relative'
+    position: 'relative',
+    overflow: 'scroll'
   },
 
   content: {
     display: 'flex',
     flexDirection: 'column',
-    width: '500px'
+    width: '400px'
   },
 
   inputContainer: {
