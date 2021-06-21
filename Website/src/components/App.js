@@ -10,6 +10,7 @@ import ParamConfigs from './ParamConfigs.js'
 import ble from './BLE.js'
 import websocket from './Websocket.js'
 import audio from './Audio.js'
+import ChipsetCollection from './ChipsetCollection'
 
 const styles = {
   container: {
@@ -52,7 +53,8 @@ class App extends React.Component {
 
     return (
       <div style={styles.content}>
-          <button onClick={this.onClick.bind(this)}>BLE Connect</button>
+          <button onClick={this.onConnect.bind(this)}>BLE Connect</button>
+          <button onClick={this.onDisconnect.bind(this)}>BLE Disconnect</button>
           <button onClick={this.onPlay.bind(this)}>Play Some Audio</button>
           <div style={styles.inputContainer}>
             <input onChange={this.onTextAdded.bind(this)} style={styles.input} type='text' placeholder='Transmit text.'></input>
@@ -60,12 +62,17 @@ class App extends React.Component {
           </div>
           <button style={connectButtonStyle} onClick={this.enableConnect.bind(this)}>Enable Connect</button>
           <ParamConfigs />
+          <ChipsetCollection />
       </div>
     );
   }
 
-  onClick() {
+  onConnect() {
     ble.connect();
+  }
+
+  onDisconnect() {
+    ble.disconnect();
   }
 
   onPlay() {

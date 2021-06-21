@@ -6,6 +6,7 @@
 // Arduino is parsed.
 
 import p5ble from 'p5ble'
+import sensorDataStore from '../Stores/SensorDataStore';
 
 // UART service & characteristic description. 
 const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
@@ -17,7 +18,6 @@ class BLE {
     this.myBLE = new p5ble(); 
     this.myRxCharacteristic = '';
     this.myTxCharacteristic = '';
-    this.callbackData = parseChipsetData;
     this.isReceivingData = false;
   }
 
@@ -25,6 +25,10 @@ class BLE {
     // Registered callback to setup service characteristics. 
     // Called if the handshake between client and server is successful. 
     this.myBLE.connect(serviceUuid, this.handleCharacteristics.bind(this)); 
+  }
+
+  disconnect() {
+    this.myBLE.disconnect();
   }
 
   stop() {
@@ -57,6 +61,8 @@ class BLE {
   // Parse sensor data based on the above format in which 
   // the data is sent from the arduino. 
   handleIncomingData(data) {
+      // Clean the string with end of line characters. 
+      data = data.replace(/\0[\s\S]*$/g,'');
       let chipsetIdx; let sensorDataType; let sensorData = []; 
       let a = data.split('-');
       chipsetIdx = a[0][0];
@@ -65,8 +71,7 @@ class BLE {
       
       // Debug: Uncomment for raw sensor data received from bluetooth. 
       // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
-
-      this.callbackData(chipsetIdx, sensorDataType, sensorData);
+      sensorDataStore.setState(chipsetIdx, sensorDataType, sensorData); 
   }
 
   // Data buffer must be uint8Array data type of javascript.
