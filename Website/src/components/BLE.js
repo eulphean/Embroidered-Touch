@@ -50,6 +50,9 @@ class BLE {
 
       this.myTxCharacteristic = characteristics[0]; 
       this.myRxCharacteristic = characteristics[1];
+
+      console.log(this.myTxCharacteristic);
+      console.log(this.myRxCharacteristic);
       this.myBLE.startNotifications(this.myRxCharacteristic, this.handleIncomingData.bind(this), 'string');
 
       this.isReceivingData = true; 

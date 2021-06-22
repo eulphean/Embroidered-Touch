@@ -85,7 +85,7 @@ class Websocket {
     }
 
     logTime(data) {
-        console.log('Socket Connection Alive: ' + data);
+        //console.log('Socket Connection Alive: ' + data);
     }
 
 }
