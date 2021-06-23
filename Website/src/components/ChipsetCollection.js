@@ -19,15 +19,23 @@ class ChipsetCollection extends React.Component {
     super(props);
     this.state={
     };
+
+    this.chipset0Ref = React.createRef();
+    this.chipset1Ref = React.createRef(); 
   }
 
   render() {
     return (
       <div style={styles.container}>
-          <Chipset key='zero' chipsetId={0} />
-          <Chipset key='one' chipsetId={1} />
+          <Chipset ref={this.chipset0Ref} key='zero' chipsetId={0} />
+          <Chipset ref={this.chipset1Ref} key='one' chipsetId={1} />
       </div>
     );
+  }
+
+  updateCalibrationParams(configName) {
+    this.chipset0Ref.current.updateCalibrationParams(configName);
+    this.chipset1Ref.current.updateCalibrationParams(configName);
   }
 }
 

@@ -31,6 +31,7 @@ This drops us into the database.
 Create a table (although the table exists). We will update the table with all the entries once we know what
 all data needs to be stored. 
 3: CREATE TABLE configs ( name test PRIMARY KEY, s1 int, s2 int, s3 int);
+CREATE TABLE configs (name text PRIMARY KEY, config jsonb);
 
 Insert into the table. 
 4: INSERT INTO configs (name, s1, s2, s3) VALUES ('studio', 154, 160, 173);

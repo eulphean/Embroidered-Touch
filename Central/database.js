@@ -8,7 +8,7 @@ var Pool = require('pg').Pool;
 
 // ------------------ postgresql database ---------------------- // 
 const connString = process.env['DATABASE_URL'];
-// const connString = 'postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123';
+//const connString = 'postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123';
 console.log('Database Connection String: ' + connString); 
 const pool = new Pool({
     connectionString: connString
@@ -41,13 +41,11 @@ module.exports = {
 
 function onWriteDatabase(data, socket) {
     let name = data['name'];
-    let s1 = Number(data['s1']);
-    let s2 = Number(data['s2']);
-    let s3 = Number(data['s3']);
+    let config = data['config'];
  
     // var queryText = 'INSERT INTO configs (name, s1, s2, s3) VALUES (${name}, ${s1}, ${s2}, ${s3})';
     // console.log(queryText);
-    pool.query('INSERT INTO configs (name, s1, s2, s3) VALUES ($1, $2, $3, $4)', [name, s1, s2, s3], (error, result) => {
+    pool.query('INSERT INTO configs (name, config) VALUES ($1, $2)', [name, config], (error, result) => {
         if (error) {
             throw error;
         }
@@ -58,13 +56,11 @@ function onWriteDatabase(data, socket) {
 
 function onUpdateDatabase(data, socket) {
     let name = data['name'];
-    let s1 = Number(data['s1']);
-    let s2 = Number(data['s2']);
-    let s3 = Number(data['s3']);
+    let config = data['config'];
 
     console.log(data);
 
-    pool.query('UPDATE configs SET s1=$1, s2=$2, s3=$3 WHERE name=$4', [s1, s2, s3, name], (error, result) => {
+    pool.query('UPDATE configs SET config=$1 WHERE name=$2', [config, name], (error, result) => {
         if (error) {
             throw error;
         }

@@ -8,6 +8,7 @@ import React from 'react'
 import Radium from 'radium'
 import _ from 'lodash'
 import websocket from './Websocket'
+import DatabaseParamStore from '../Stores/DatabaseParamStore.js'
 
 const styles = {
   container: {
@@ -44,19 +45,17 @@ class ParamConfigs extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      configName: '',
-      configs: [],
+      textValue: '',
+      configNames: [],
       selectVal: 'newconfig', // Default value for the select box. 
-      // TODO: This will be an array off all the sensor values.
-      // This component will have to collect these from other components. 
-      s1: '',
-      s2: '',
-      s3: ''
     };
 
-    // Load user configs. 
-    websocket.requestForConfigs(this.onAllConfigsLoaded.bind(this));
     this.selectRef = React.createRef();
+  }
+
+  componentDidMount() {
+    // Subscribe to hear back from the store when data is fully loaded. 
+    this.removeListener = DatabaseParamStore.subscribe(this.onConfigsLoaded.bind(this)); 
   }
 
   render() {
@@ -67,48 +66,38 @@ class ParamConfigs extends React.Component {
           <select value={this.state.selectVal} ref={this.selectRef} onChange={this.onSelectChange.bind(this)}>{o}</select>
           <textarea
             style={styles.textArea}
-            value={this.state.configName}
+            value={this.state.textValue}
             onChange={this.onTextAdded.bind(this)}
-            placeholder={'Type config name'}
+            placeholder={'Type config name..'}
           />
         </div>
         <div style={styles.buttons}>
           <button style={styles.button} onClick={this.onSave.bind(this)}>Save</button>
           <button style={styles.button} onClick={this.onDelete.bind(this)}>Delete</button>
         </div>
-        <div style={styles.sensorData}>
-          <input onChange={this.s1Change.bind(this)} type="text" style={styles.sensor} value={this.state.s1} />
-          <input onChange={this.s2Change.bind(this)} type="text" style={styles.sensor} value={this.state.s2} />
-          <input onChange={this.s3Change.bind(this)} type="text" style={styles.sensor} value={this.state.s3} />
-        </div>
       </div>
     );
   }
 
+  componentWillUnmount() {
+    // Remove this listener. 
+    this.removeListener();
+  }
+
   onSave() {
     // Current selected value. 
-    let v = this.selectRef.current.value;
-
-    // Payload that goes to the database. 
-    let payload = {}; 
-    payload['s1'] = this.state.s1; 
-    payload['s2'] = this.state.s2;
-    payload['s3'] = this.state.s3; 
-    
-    // TODO: Check if this name already exists in the config. If it does,
-    // Show an alert saying the name already exists... Or some message. 
-    // somewhere. Maybe I need a message for the database commits. 
-    // TODO: Show a message for a successful save to the db. 
+    let v = this.selectRef.current.value;    
     if (v === 'newconfig') {
-      if (this.state.configName.length > 0) {
-        payload['name'] = this.state.configName; 
-        websocket.saveUserConfig(payload); 
-        let new_configs = this.state.configs;
-        new_configs.push(payload);
+      if (this.state.textValue.length > 0) {
+        DatabaseParamStore.saveParams(this.state.textValue); 
+        let new_config_names = this.state.configNames;
+
+        // Add this new config created in the state. 
+        new_config_names.push(this.state.textValue);
         this.setState({
-          configs: new_configs,
-          selectVal: payload['name'],
-          configName: ''
+          configNames: new_config_names,
+          selectVal: this.state.textValue,
+          textValue: ''
         });
       } else {
         // Maybe update the message box with this. 
@@ -116,8 +105,8 @@ class ParamConfigs extends React.Component {
       }
     } else {
       // We are doing an update / ignore the this.state.configName
-      payload['name'] = v; // Because value and name are same for entries added to the db.
-      websocket.updateUserConfig(payload);
+      let configName = v; 
+      DatabaseParamStore.updateParams(configName); 
     }
   }
 
@@ -125,39 +114,16 @@ class ParamConfigs extends React.Component {
     let configName = this.selectRef.current.value;
     websocket.deleteUserConfig(configName);
 
-    let newConfigs = this.state.configs; 
+    let newConfigs = this.state.configNames; 
     // Remove this value from the array. 
     _.remove(newConfigs, (c) => {
-      return configName === c['name'];
+      return configName === c;
     });
 
     this.setState({
       selectVal: 'newconfig',
-      s1: '',
-      s2: '',
-      s3: '',
-      configs: newConfigs
+      configNames: newConfigs
     });
-
-    // Remove the config from this collection. 
-  }
-
-  s1Change(e) {
-    this.setState({
-      s1: e.target.value
-    });
-  }
-  
-  s2Change(e) {
-    this.setState({
-      s2: e.target.value
-    });
-  }
-
-  s3Change(e) {
-    this.setState({
-      s3: e.target.value
-    })
   }
 
   onSelectChange(e) {
@@ -169,20 +135,20 @@ class ParamConfigs extends React.Component {
       });
       return;
     } else {
-      let configs = this.state.configs; 
+      let configs = this.state.configNames; 
       // Update sensor text boxes with 
       for (let i = 0; i < configs.length; i++) {
-        let name = configs[i]['name'];
+        let name = configs[i];
         if (name === v) {
-          let s1 = configs[i]['s1'];
-          let s2 = configs[i]['s2'];
-          let s3 = configs[i]['s3'];
+          // Config found in this.
+          // Assign the config to individual sensors. 
+          // How will I do this???
           this.setState({
-            selectVal: v,
-            s1: s1,
-            s2: s2,
-            s3: s3
+            selectVal: name
           });
+          if (this.props.onConfigSelected) {
+            this.props.onConfigSelected(name);
+          }
           break;
         }
       }
@@ -196,8 +162,8 @@ class ParamConfigs extends React.Component {
       // Blank option - always add by default.
       options.push(<option key="new" value="newconfig">newconfig</option>);
 
-      for (let i = 0; i < this.state.configs.length; i++) {
-        let name = this.state.configs[i]['name'];
+      for (let i = 0; i < this.state.configNames.length; i++) {
+        let name = this.state.configNames[i];
         options.push(<option key={name} value={name}>{name}</option>);
       }
 
@@ -206,30 +172,16 @@ class ParamConfigs extends React.Component {
 
   onTextAdded(e) {
     this.setState({
-      configName: e.target.value
+      textValue: e.target.value
     });
   }
 
-  onAllConfigsLoaded(d) {
-    console.log('All configs loaded: ');
+  onConfigsLoaded(fullConfigs) {
+    let names = Object.keys(fullConfigs);
     this.setState({
-      configs: d
-    });
+      configNames: names
+    }); 
   }
 }
 
 export default Radium(ParamConfigs);
-
-
-    // // Check if this config already exists. 
-    // let configName = this.state.configName; 
-    // let found = false; 
-    // for (let i = 0; i < this.state.configs.length; i++) {
-    //   let name = this.state.configs[i]['name'];
-    //   if (name === configName) {
-    //     found = true; 
-    //     configName = name; 
-    //     console.log('Found: ' + name);
-    //     break;
-    //   }
-    // }

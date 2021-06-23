@@ -23,7 +23,8 @@ class Chipset extends React.Component {
 
     // Use the chipset id to collect sensorData from the store. 
     this.state={
-        chipData: SensorDataStore.getChipData(this.props.chipsetId)
+        chipData: SensorDataStore.getChipData(this.props.chipsetId),
+        configName: ''
     };
   }
 
@@ -54,10 +55,12 @@ class Chipset extends React.Component {
     for (let i = 0; i < fVals.length; i++) {
         let s = (
             <Sensor 
-                idx={i}
-                fVal={ fVals[i] } 
-                bVal={ bVals[i] }
-                key={ 'key' + i }
+                chipsetId={this.props.chipsetId}
+                configName={this.state.configName}
+                sensorIdx={i}
+                fVal={fVals[i]} 
+                bVal={bVals[i]}
+                key={'key' + i}
             />
         );
 
@@ -70,6 +73,12 @@ class Chipset extends React.Component {
     let data = sensorData[this.props.chipsetId];
     this.setState({
         chipData: data
+    }); 
+  }
+
+  updateCalibrationParams(configName) {
+    this.setState({
+      configName: configName
     }); 
   }
 }

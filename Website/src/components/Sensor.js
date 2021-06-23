@@ -7,9 +7,18 @@
 import React from 'react'
 import Radium from 'radium'
 
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+
 const styles = {
   container: {
     position: 'relative'
+  },
+
+  input: {
+      width: '40px',
+      height: '20px',
+      marginBottom: '10px',
+      marginTop: '5px'
   }
 };
 
@@ -17,14 +26,24 @@ class Sensor extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-
+        cutoffVal: DatabaseParamStore.getCutoffValue(this.props.configName, this.props.chipsetId, this.props.sensorIdx)
     };
-
-    // Use the id from the props to create a collection of the sensor lines. 
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-      if (this.props.fVal !== nextProps.fVal || this.props.bVal !== nextProps.bVal) {
+      // Be careful, no state changes will happen.
+      if (this.props.fVal !== nextProps.fVal || 
+            this.props.bVal !== nextProps.bVal || 
+              this.props.configName !== nextProps.configName ||
+                  this.state.cutoffVal !== nextState.cutoffVal) {
+          
+          // Config has changed, so update the cut off value.
+          if (this.props.configName !== nextProps.configName) {
+            let newVal = DatabaseParamStore.getCutoffValue(nextProps.configName, this.props.chipsetId, this.props.sensorIdx); 
+            this.setState({
+              cutoffVal : newVal
+            });
+          }
           return true; 
       } else {
           return false; 
@@ -32,12 +51,23 @@ class Sensor extends React.Component {
   }
 
   render() {
-    let content = 'Sensor ' + this.props.idx + ' : ' + 'Base Val: ' + this.props.bVal + ', Filtered Val: ' + this.props.fVal; 
     return (
       <div style={styles.container}>
-        { content }
+        <div>
+            <span>{'Sensor Idx '}</span>{this.props.sensoridx}<span>{', Base Val: '}</span>{this.props.bVal}<span>{', Filtered Val: '}</span>{this.props.fVal}
+        </div>
+        <span>{'Cutoff Value: '}</span><input style={styles.input} onChange={this.cutoffChange.bind(this)} type="number" value={this.state.cutoffVal}></input>
       </div>
     );
+  }
+
+  cutoffChange(e) {
+    let v = e.target.value; 
+    this.setState({
+        cutoffVal: Number(v)
+    });
+
+    DatabaseParamStore.setState(this.props.chipsetId, this.props.sensorIdx, v);
   }
 }
 

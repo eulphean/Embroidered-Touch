@@ -75,7 +75,6 @@ class Websocket {
 
     // Fire the readAllConfigCallback registered before. 
     handleAllConfigs(data) {
-        console.log('Handle all config: ' + data);
         this.readAllConfigCallback(data); 
     }
 

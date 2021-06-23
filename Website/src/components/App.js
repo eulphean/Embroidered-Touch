@@ -47,6 +47,8 @@ class App extends React.Component {
       isConnected: false,
       receiveVal: 'Receive Text'
     };
+
+    this.chipsetCollectionRef = React.createRef(); 
   }
 
   render() {
@@ -62,8 +64,8 @@ class App extends React.Component {
             <div style={styles.input}>{this.state.receiveVal}</div>
           </div>
           <button style={connectButtonStyle} onClick={this.enableConnect.bind(this)}>Enable Connect</button>
-          <ParamConfigs />
-          <ChipsetCollection />
+          <ParamConfigs onConfigSelected={this.onConfigSelected.bind(this)} />
+          <ChipsetCollection ref={this.chipsetCollectionRef} />
       </div>
     );
   }
@@ -98,6 +100,10 @@ class App extends React.Component {
     this.setState( {
       receiveVal: data
     });
+  }
+
+  onConfigSelected(configName) {
+    this.chipsetCollectionRef.current.updateCalibrationParams(configName); 
   }
 }
 
