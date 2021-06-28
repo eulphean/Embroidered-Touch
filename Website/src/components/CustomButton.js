@@ -13,7 +13,7 @@ const styles = {
   },
 
   button: {
-    width: '150px',
+    width: '125px',
     height: '35px'
   }
 };
@@ -22,18 +22,21 @@ class CustomButton extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-
     };
   }
 
   render() {
     return (
       <div style={styles.container}>
-        <button style={styles.button}>
+        <button onClick={this.props.onClick ? this.onClick.bind(this) : () => {}}style={styles.button}>
             {this.props.children}
         </button>
       </div>
     );
+  }
+
+  onClick() {
+    this.props.onClick(); 
   }
 }
 

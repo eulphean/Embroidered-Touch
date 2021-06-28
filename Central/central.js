@@ -8,12 +8,13 @@ var express = require('express');
 var cors = require('cors');
 
 var sockets = require('./sockets.js');
+var database = require('./database.js');
 
 // ------------------ Express webserver ---------------- //
 var app = express(); 
 app.use(cors());
-// Client index.html to be read. 
-app.use(express.static('./Client')); 
+app.use(express.static('./Client')); // Client index.html to be read. 
+app.use(express.json());
 var server = require('http').createServer(app); 
 
 // ------------------ Websocket Configuration ------------ //
@@ -22,6 +23,20 @@ sockets.socketConfig(server);
 // ------------------ Express webserver ------------------------ //
 server.listen(process.env.PORT || 5000, function() {
     console.log('Central server successfully started'); 
+});
+
+// Post request
+app.post('/login', (req, res) => {
+    let user = req.body.username;
+    let password = req.body.password;
+    database.queryUser(user, password, res);
+});
+
+app.post('/signup', (req, res) => {
+    let user = req.body.username; 
+    let password = req.body.password; 
+    let config = req.body.config;
+    database.createUser(user, password, config, res); 
 });
 
 // Ping the main server. 

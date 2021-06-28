@@ -7,8 +7,8 @@
 var Pool = require('pg').Pool;
 
 // ------------------ postgresql database ---------------------- // 
-const connString = process.env['DATABASE_URL'];
-//const connString = 'postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123';
+// const connString = process.env['DATABASE_URL'];
+const connString = 'postgresql://localhost/fabric_instrument?user=amaykataria&password=abc123';
 console.log('Database Connection String: ' + connString); 
 const pool = new Pool({
     connectionString: connString
@@ -35,6 +35,14 @@ module.exports = {
     
     requestForConfigs: function(socket) {
         onReadAllEntriesDatabase(socket); 
+    },
+
+    queryUser: function(username, password, res) {
+        onQueryUserTable(username, password, res);
+    },
+
+    createUser: function(username, password, config, res) {
+        onCreateEntryUserTable(username, password, config, res);
     }
 }
 
@@ -90,4 +98,62 @@ function onDeleteEntryFromDatabase(configName, socket) {
 
         console.log('Success: Deleted entry in the database.')
     });
+}
+
+// This is a join command. It will return password and configs together. 
+function onQueryUserTable(username, password, res) {
+    console.log('create user');
+    pool.query('SELECT users.password, configs.config FROM configs, users WHERE users.name=$1 AND configs.name=$1', [username], (error, result) => {
+        if (error) {
+            throw error;
+        }
+
+        let pass, config; 
+        if (result.rows.length > 0) {
+            let user = result.rows[0];
+            pass = user.password;
+            config = user.config;
+        }
+        
+        res.setHeader('Content-Type', 'application/json');
+        if (password === pass) {
+            res.end(JSON.stringify({ result: 'user_found', config: config }));
+            console.log('User found.');
+        } else {
+            res.end(JSON.stringify({ result: 'user_not_found' }));
+            console.log('User not found.');
+        }
+    });
+}
+
+function onCreateEntryUserTable(username, password, config, res) {
+    pool.query('SELECT * FROM users WHERE name=$1', [username], (error, result) => {
+        if (error) {
+            throw error; 
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        if (result.rows.length > 0) {
+            res.end(JSON.stringify({ result: 'user_exists'}));
+            console.log('User Exists');
+        } else {
+            pool.query('INSERT INTO users (name, password) VALUES ($1, $2)', [username, password], (error, result) => {
+                if (error) {
+                    throw error;
+                }
+
+                pool.query('INSERT INTO configs (name, config) VALUES ($1, $2)', [username, config], (error, result) => {
+                    if (error) {
+                        throw error; 
+                    }
+
+                    res.end(JSON.stringify({ result: 'new_user'}));
+                    console.log('New User created.');
+                });
+            })
+        }
+    });
+    //  Check if this user already exists.
+    // If the user doesn't exist, then create an entry in the user table
+    // Then create an entry in the config table. 
 }

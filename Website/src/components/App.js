@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import Title from './Title.js'
 import Setup from './Setup.js'
@@ -16,6 +16,7 @@ import TestCalibration from './TestCalibration.js'
 import Sensor from './Sensor.js'
 
 import { color, padding } from './CommonStyles.js'
+import Websocket from './Websocket.js'
 
 const styles = {
   container: {
@@ -30,7 +31,8 @@ class App extends React.Component {
     super(props);
     this.state={
       isConnected: false,
-      receiveVal: 'Receive Text'
+      receiveVal: 'Receive Text',
+      isLoggedIn: false
     };
 
     this.chipsetCollectionRef = React.createRef(); 
@@ -38,16 +40,24 @@ class App extends React.Component {
 
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
+
+    //Redirect the page if there is no user login. 
+    let loginPage = <React.Fragment><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>
+    let setupPage = this.state.isLoggedIn ? <React.Fragment><Title /><Setup /></React.Fragment> : <Redirect to="/" />; 
+    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><Title /><Calibration /></React.Fragment> : <Redirect to="/" />
+    let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
+    let selectModePage = this.state.isLoggedIn ? <React.Fragment><Title /><SelectMode /></React.Fragment> : <Redirect to="/" />
+
     return (
       <div style={styles.container}>
-          <Router basename={process.env.PUBLIC_URL}> 
+          <Router>
             <Switch>
               {calibrationPages}
-              <Route path="/selectmode"><Title /><SelectMode /></Route>
-              <Route path="/testcal"><Title /><TestCalibration /></Route>
-              <Route path="/calibration"><Title /><Calibration /></Route>
-              <Route path="/setup"><Title /><Setup /></Route>
-              <Route path="/"><Title /><Login /></Route>
+              <Route path="/selectmode">{selectModePage}</Route>
+              <Route path="/testcal">{testCalPage} </Route>
+              <Route path="/calibration">{calibrationPage}</Route>
+              <Route path="/setup">{setupPage}</Route>
+              <Route path="/">{loginPage}</Route>
             </Switch>
         </Router>
       </div>
@@ -94,6 +104,13 @@ class App extends React.Component {
     }
 
     return pages; 
+  }
+
+  hasLoggedIn(state) {
+    console.log('Login State: ' + state);
+    this.setState({
+      isLoggedIn: state
+    });
   }
 }
 

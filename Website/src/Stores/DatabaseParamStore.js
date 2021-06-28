@@ -111,6 +111,22 @@ class DatabaseParamStore {
             return this.cutoffVals[chipsetId]['co'][sensorIdx];
         }
     }
+
+    getDefaultConfig() {
+        let jsonObject = {}; 
+        for (let i = 0; i < 2; i++) { // Num chips = 2
+            let chipsetData = {}; 
+            chipsetData['cutoff'] = {}; 
+            for (let j = 0; j < 12; j++) { // Num sensors = 12
+                let cutoffVals = this.cutoffVals[i]['co']; 
+                chipsetData['cutoff'][j] = cutoffVals[j];  
+            }
+
+            jsonObject[i.toString()] = chipsetData; 
+        }
+
+        return jsonObject; 
+    }
 }
 
 export default new DatabaseParamStore(); 
