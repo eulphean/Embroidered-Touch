@@ -1,14 +1,7 @@
 const color = {
-    pureTeal: '#055A85',
-    liveRed: '#D0011B',
-    sunLight: '#FCF0E1',
-    deepSky: '#02293C',
-    disabled: '#7E8A90',
-    link: '#F7C98C',
+    tealBack: '#849099',
     white: '#FFFFFF',
-    black: '#000000',
-    bodyGrey: '#595959',
-    faceGrey: '#2D2C2C'
+    black: '#000000'
 };
 
 const fontSize = {

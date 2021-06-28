@@ -5,11 +5,23 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { color, padding } from './CommonStyles';
+import { Link } from 'react-router-dom';
+
+import CustomButton from './CustomButton';
+const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
+    display: 'flex',
+    flexDirection: 'column',
     position: 'relative',
-    marginLeft: '10px'
+    color: color.white,
+    padding: padding.big
+  },
+
+  title: {
+
   }
 };
 
@@ -24,7 +36,14 @@ class Login extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-          LOGIN PAGE
+        <div style={styles.content}>
+        <div style={styles.title}>
+          LOGIN
+        </div>
+        <CustomButton>
+          <RadiumLink to="/setup">Create Account</RadiumLink>
+        </CustomButton>
+        </div>
       </div>
     );
   }

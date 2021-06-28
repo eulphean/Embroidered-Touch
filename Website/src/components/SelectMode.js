@@ -5,11 +5,21 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { color } from './CommonStyles';
+import { Link } from 'react-router-dom';
+
+import CustomButton from './CustomButton';
+const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
     position: 'relative',
-    marginLeft: '10px'
+    color: color.white
+  },
+
+  modeContainer: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 };
 
@@ -18,13 +28,23 @@ class SelectMode extends React.Component {
     super(props);
     this.state={
     };
-
   }
 
   render() {
     return (
       <div style={styles.container}>
-          Select Mode
+        <div>MODE</div>
+        <div style={styles.modeContainer}>
+          <CustomButton>
+            <RadiumLink>CONNECTION</RadiumLink>
+          </CustomButton>
+          <CustomButton>
+            <RadiumLink>SOLO</RadiumLink>
+          </CustomButton>
+          <CustomButton>
+            <RadiumLink to="/testcal">SETUP</RadiumLink>
+          </CustomButton>
+        </div>
       </div>
     );
   }

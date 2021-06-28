@@ -5,11 +5,18 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { color } from './CommonStyles';
+import { Link } from 'react-router-dom';
+
+import CustomButton from './CustomButton';
+const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
+    display: 'flex',
+    flexDirection: 'column',
     position: 'relative',
-    marginLeft: '10px'
+    color: color.white
   }
 };
 
@@ -24,7 +31,12 @@ class TestCalibration extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-          Test Calibration
+        <div>
+          Testing Calibration
+        </div>
+        <CustomButton>
+          <RadiumLink to="/selectmode">SAVE</RadiumLink>
+        </CustomButton>
       </div>
     );
   }

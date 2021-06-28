@@ -6,10 +6,18 @@
 import React from 'react'
 import Radium from 'radium'
 
+import { color, padding } from './CommonStyles';
+
 const styles = {
   container: {
-    position: 'relative',
-    marginLeft: '10px'
+    position: 'relative'
+  },
+
+  titleContainer: {
+    display: 'flex',
+    backgroundColor: color.tealBack,
+    color: color.black,
+    padding: padding.extraSmall
   }
 };
 
@@ -18,13 +26,15 @@ class Title extends React.Component {
     super(props);
     this.state={
     };
-
   }
 
   render() {
     return (
       <div style={styles.container}>
-          TITLE COMPONENT
+        <div style={styles.titleContainer}>
+            EMBROIDERED TOUCH
+        </div>
+
       </div>
     );
   }

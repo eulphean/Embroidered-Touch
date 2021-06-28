@@ -6,12 +6,20 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { color } from './CommonStyles';
+import { Link } from 'react-router-dom';
 
-import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import CustomButton from './CustomButton';
+const RadiumLink = Radium(Link);
+
+// import DatabaseParamStore from '../Stores/DatabaseParamStore';
 
 const styles = {
   container: {
-    position: 'relative'
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    color: color.white
   },
 
   input: {
@@ -30,47 +38,72 @@ class Sensor extends React.Component {
     };
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //     // // Be careful, no state changes will happen.
-  //     // if (this.props.fVal !== nextProps.fVal || 
-  //     //       this.props.bVal !== nextProps.bVal || 
-  //     //         this.props.configName !== nextProps.configName ||
-  //     //             this.state.cutoffVal !== nextState.cutoffVal) {
-          
-  //     //     // Config has changed, so update the cut off value.
-  //     //     if (this.props.configName !== nextProps.configName) {
-  //     //       let newVal = DatabaseParamStore.getCutoffValue(nextProps.configName, this.props.chipsetId, this.props.sensorIdx); 
-  //     //       this.setState({
-  //     //         cutoffVal : newVal
-  //     //       });
-  //     //     }
-  //     //     return true; 
-  //     // } else {
-  //     //     return false; 
-  //     // }
-  // }
-
   render() {
+    let nextPath = this.getNextPath(); 
     return (
       <div style={styles.container}>
         Chipset {this.props.chipsetId}
         <br />
         Sensor {this.props.sensorIdx}
+        <CustomButton>
+          <RadiumLink to={nextPath}>NEXT</RadiumLink>
+        </CustomButton>
       </div>
     );
   }
 
-  // cutoffChange(e) {
-  //   let v = e.target.value; 
-  //   this.setState({
-  //       cutoffVal: Number(v)
-  //   });
+  getNextPath() {
+    let path = ''; 
+    let sensorIdx = this.props.sensorIdx < 11 ? this.props.sensorIdx : 0;
+    if (this.props.chipsetId === 0 && this.props.sensorIdx < 11) {
+      sensorIdx = sensorIdx + 1; 
+      path = '/l-' + sensorIdx; 
+      console.log(path);
+    } else {
+      sensorIdx = sensorIdx + 1; 
+      path = '/r-' + sensorIdx;
+      console.log(path);
+    }
 
-  //   DatabaseParamStore.setState(this.props.chipsetId, this.props.sensorIdx, v);
-  // }
+    if (this.props.chipsetId === 1 && this.props.sensorIdx === 11) {
+      path = '/testcal'
+    }
+
+    return path; 
+  }
 }
 
 export default Radium(Sensor);
+
+// cutoffChange(e) {
+//   let v = e.target.value; 
+//   this.setState({
+//       cutoffVal: Number(v)
+//   });
+
+//   DatabaseParamStore.setState(this.props.chipsetId, this.props.sensorIdx, v);
+// }
+
+// shouldComponentUpdate(nextProps, nextState) {
+//     // // Be careful, no state changes will happen.
+//     // if (this.props.fVal !== nextProps.fVal || 
+//     //       this.props.bVal !== nextProps.bVal || 
+//     //         this.props.configName !== nextProps.configName ||
+//     //             this.state.cutoffVal !== nextState.cutoffVal) {
+        
+//     //     // Config has changed, so update the cut off value.
+//     //     if (this.props.configName !== nextProps.configName) {
+//     //       let newVal = DatabaseParamStore.getCutoffValue(nextProps.configName, this.props.chipsetId, this.props.sensorIdx); 
+//     //       this.setState({
+//     //         cutoffVal : newVal
+//     //       });
+//     //     }
+//     //     return true; 
+//     // } else {
+//     //     return false; 
+//     // }
+// }
+
 
 // <div>
 // <span>{'Sensor Idx '}</span>{this.props.sensoridx}<span>{', Base Val: '}</span>{this.props.bVal}<span>{', Filtered Val: '}</span>{this.props.fVal}

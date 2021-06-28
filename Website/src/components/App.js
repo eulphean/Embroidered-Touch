@@ -15,9 +15,13 @@ import SelectMode from './SelectMode.js'
 import TestCalibration from './TestCalibration.js'
 import Sensor from './Sensor.js'
 
+import { color, padding } from './CommonStyles.js'
+
 const styles = {
   container: {
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: color.black, 
+    padding: padding.small
   }
 };
 
