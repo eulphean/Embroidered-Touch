@@ -42,7 +42,10 @@ class App extends React.Component {
     let calibrationPages = this.getSensorCalibrationPages(); 
 
     //Redirect the page if there is no user login. 
-    let loginPage = <React.Fragment><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>
+    // function loginPage (routerProps) {
+    //   return <React.Fragment><Title /><Login {...routerProps} onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>
+    // } 
+    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
     let setupPage = this.state.isLoggedIn ? <React.Fragment><Title /><Setup /></React.Fragment> : <Redirect to="/" />; 
     let calibrationPage = this.state.isLoggedIn ? <React.Fragment><Title /><Calibration /></React.Fragment> : <Redirect to="/" />
     let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
@@ -110,6 +113,12 @@ class App extends React.Component {
     console.log('Login State: ' + state);
     this.setState({
       isLoggedIn: state
+    });
+  }
+
+  logOut() {
+    this.setState({
+      isLoggedIn: false
     });
   }
 }

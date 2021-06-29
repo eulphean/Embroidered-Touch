@@ -55,6 +55,7 @@ class Login extends React.Component {
 
     this.loginUrl = Websocket.loginURL; 
     this.signupURL = Websocket.signupURL;
+    console.log(this.context);
   }
 
   render() {

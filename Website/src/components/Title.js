@@ -7,6 +7,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import { color, padding } from './CommonStyles';
+import CustomButton from './CustomButton';
 
 const styles = {
   container: {
@@ -28,13 +29,14 @@ class Title extends React.Component {
     };
   }
 
+  // As soon as I click on Logout, I step out of the app. 
   render() {
     return (
       <div style={styles.container}>
         <div style={styles.titleContainer}>
             EMBROIDERED TOUCH
         </div>
-
+        <button onClick={this.props.logout}>Logout</button>
       </div>
     );
   }
