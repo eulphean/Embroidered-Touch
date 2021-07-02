@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ff02d0ad40d6005e88374235c2ab027d",
+    "revision": "4f05a54b5d526b84b6ffc20d4ccb66e8",
     "url": "/Fabric_Instrument/index.html"
   },
   {
-    "revision": "fac7cd7cdd7b06fc5f0f",
+    "revision": "cc066f49e59167d6cdb1",
     "url": "/Fabric_Instrument/static/css/main.913bc3f4.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/js/2.5ba0e167.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "fac7cd7cdd7b06fc5f0f",
-    "url": "/Fabric_Instrument/static/js/main.5651c51c.chunk.js"
+    "revision": "cc066f49e59167d6cdb1",
+    "url": "/Fabric_Instrument/static/js/main.97494db1.chunk.js"
   },
   {
     "revision": "753171d1d1123f6e4281",
@@ -30,5 +30,9 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "d82172a12cff4bbdfb39bef65c160ad9",
     "url": "/Fabric_Instrument/static/media/2sleeve.d82172a1.svg"
+  },
+  {
+    "revision": "51cabdaf1bdf5155749e956fd334e77b",
+    "url": "/Fabric_Instrument/static/media/logout.51cabdaf.svg"
   }
 ]);
