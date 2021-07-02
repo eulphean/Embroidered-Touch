@@ -1,5 +1,6 @@
 const color = {
     tealBack: '#849099',
+    tealActive: '#1A5F92',
     white: '#FFFFFF',
     black: '#000000',
     active: 'green',

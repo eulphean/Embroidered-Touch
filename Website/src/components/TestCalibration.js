@@ -6,7 +6,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
@@ -61,32 +61,66 @@ class TestCalibration extends React.Component {
   constructor(props) {
     super(props);
     this.state={
+      sensorNum: '',
+      redirectPath: ''
     };
   }
 
   render() {
-    return (
-      <div style={styles.container}>
-        <DoubleSleeve />
-        <div style={styles.content}>
-          <div style={styles.title}>Testing Calibration</div>
-          <br />
-          <div style={styles.info}>The lines of the above grid should turn blue when a touch on the garment is detected.</div>
-          <br />
-          <div style={styles.info}>To adjust the calibration for a specific sensor line, enter the number for that sensor line below and click enter.</div>
-          <br />
-          <div style={styles.inputContainer}>
-            <input style={styles.input} type='number'></input>
-            <button style={styles.button}>enter</button>
+    // Push a new path on to the history, so I can come back here. 
+    if (this.state.redirectPath !== '') {
+      return (<Redirect push to={this.state.redirectPath} />);
+    } else {
+      return (
+        <div style={styles.container}>
+          <DoubleSleeve />
+          <div style={styles.content}>
+            <div style={styles.title}>Testing Calibration</div>
+            <br />
+            <div style={styles.info}>The lines of the above grid should turn blue when a touch on the garment is detected.</div>
+            <br />
+            <div style={styles.info}>To adjust the calibration for a specific sensor line, enter the number for that sensor line below and click enter.</div>
+            <br />
+            <div style={styles.inputContainer}>
+              <input style={styles.input} type='number' onChange={this.onInputChange.bind(this)} value={this.state.sensorNum}></input>
+              <button onClick={this.onEnter.bind(this)} style={styles.button}>enter</button>
+            </div>
+            <br />
+            <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div>
+            <CustomButton>
+              <RadiumLink to="/selectmode">SAVE</RadiumLink>
+            </CustomButton>
           </div>
-          <br />
-          <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div>
-          <CustomButton>
-            <RadiumLink to="/selectmode">SAVE</RadiumLink>
-          </CustomButton>
         </div>
-      </div>
-    );
+      );
+    }
+  }
+
+  onEnter(e) {
+    e.preventDefault();
+    // How do I navigate to the sensor line for calibration???
+    let sensorNum = this.state.sensorNum; 
+    let newPath = ''; 
+    if (sensorNum >= 1 && sensorNum <= 12) {
+      sensorNum = sensorNum - 1; 
+      newPath = '/l-' + sensorNum;
+    } else if (sensorNum >=13 && sensorNum <= 24) {
+      sensorNum = sensorNum - 13
+      newPath = '/r-' + sensorNum;
+    }
+
+    console.log(newPath);
+
+    this.setState({
+      redirectPath: newPath
+    }); 
+  }
+
+  onInputChange(e) {
+    console.log(e.target.value);
+    this.setState({
+      sensorNum: e.target.value
+    });
   }
 }
 

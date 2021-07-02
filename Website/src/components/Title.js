@@ -7,12 +7,13 @@ import React from 'react'
 import Radium from 'radium'
 
 import { color, fontSize, padding } from './CommonStyles';
-import CustomButton from './CustomButton';
+import { ReactComponent as Logout } from '../Assets/logout.svg'
 
 const styles = {
   container: {
     position: 'relative',
-    padding: padding.small
+    padding: padding.small,
+    zIndex: 2
   },
 
   titleContainer: {
@@ -23,7 +24,7 @@ const styles = {
     color: color.black,
     padding: padding.verySmall,
     fontSize: fontSize.small,
-    zIndex: 2
+    zIndex: 'inherit'
   },
 
   infoContainer: {
@@ -33,28 +34,49 @@ const styles = {
     marginTop: padding.small,
     color: color.white,
     fontSize: fontSize.verySmall,
-    zIndex: 2
+    zIndex: 'inherit'
   },
 
   statusContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    zIndex: 2
+    zIndex: 'inherit'
   },
 
   statusIcon: {
     backgroundColor: color.inactive,
     width: fontSize.small,
     height: fontSize.small,
-    borderRadius: fontSize.small
+    borderRadius: fontSize.small,
+    zIndex: 'inherit'
   },
 
   statusText: {
     marginLeft: padding.verySmall
   },
 
+  iconContainer: {
+    fill: 'white',
+    marginTop: padding.extraSmall,
+    zIndex: 'inherit'
+  },
+
+  icon: {
+    width: '15px',
+    height: '15px',
+    zIndex: 'inherit'
+  },
+
   modeText: {
+    marginRight: padding.verySmall
+  },
+
+  modeContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 'inherit'
   }
 };
 
@@ -62,13 +84,14 @@ class Title extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      mode: 'SETUP',
-      shouldLogout: false
+      mode: 'SETUP'
     };
   }
 
   // As soon as I click on Logout, I step out of the app. 
   render() {
+    let mode = this.props.mode ? this.props.mode : this.state.mode; 
+    let logout = this.props.showLogout ? this.getLogout() : React.Null;
     return (
       <div style={styles.container}>
         <div style={styles.titleContainer}>
@@ -79,13 +102,32 @@ class Title extends React.Component {
               <div style={styles.statusIcon}></div>
               <div style={styles.statusText}>BLUETOOTH STATUS</div>
             </div>
-            <div style={styles.modeText}>
-              MODE: {this.state.mode}
+            <div style={styles.modeContainer}>
+              <div style={styles.modeText}>MODE: {mode}</div>
+              { logout }
             </div>
         </div>
-        {/* <button onClick={this.props.logout}>Logout</button> */}
       </div>
     );
+  }
+
+  getLogout() {
+    return (
+      <div onClick={this.onLogout.bind(this)} style={styles.iconContainer}><Logout style={styles.icon}/></div>
+    );
+  }
+
+  updateMode(newMode) {
+    this.setState({
+      mode: newMode
+    })
+  }
+
+  onLogout(e) {
+    e.preventDefault();
+    if (this.props.onLogout) {
+      this.props.onLogout();
+    }
   }
 }
 

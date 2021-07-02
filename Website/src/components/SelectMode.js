@@ -38,6 +38,7 @@ class SelectMode extends React.Component {
   constructor(props) {
     super(props);
     this.state={
+      isSoloActive: false
     };
   }
 
@@ -49,13 +50,11 @@ class SelectMode extends React.Component {
           <div style={styles.title}>Mode</div>
           <br />
           <div style={styles.info}>Choose SOLO to send sound to your own device.</div>
-          <CustomButton>
-            <RadiumLink>SOLO</RadiumLink>
-          </CustomButton>
+          <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>
           <br />
           <div style={styles.info}>Choose CONNECTION to send and receive sound with a friend.</div>
           <CustomButton>
-            <RadiumLink>CONNECTION</RadiumLink>
+            <RadiumLink to='/connection'>CONNECTION</RadiumLink>
           </CustomButton>
           <br />
           <div style={styles.info}>Choose SETUP to recalibrate your device.</div>
@@ -65,6 +64,22 @@ class SelectMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  onClickSolo() {
+    if (this.props.onClick) {
+      // The new state will be opposite of what the current state is.
+      if (this.state.isSoloActive) {
+        this.props.onClick('SETUP');
+      } else {
+        this.props.onClick('SOLO');
+      }
+
+      // Activate.
+      this.setState({
+        isSoloActive: !this.state.isSoloActive
+      });
+    }
   }
 }
 

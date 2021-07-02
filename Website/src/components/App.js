@@ -14,6 +14,7 @@ import Login from './Login.js'
 import Calibration from './Calibration.js'
 import SelectMode from './SelectMode.js'
 import TestCalibration from './TestCalibration.js'
+import ConnectionMode from './ConnectionMode.js'
 import Sensor from './Sensor.js'
 
 import { color, padding } from './CommonStyles.js'
@@ -32,27 +33,29 @@ class App extends React.Component {
     this.state={
       isConnected: false,
       receiveVal: 'Receive Text',
-      isLoggedIn: true
+      isLoggedIn: false
     };
 
-    this.chipsetCollectionRef = React.createRef(); 
+    this.titleRef = React.createRef();
   }
 
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
     let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
-    let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title /><Setup /></React.Fragment> : <Redirect to="/" />; 
-    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title /><Calibration /></React.Fragment> : <Redirect to="/" />
-    let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
-    let selectModePage = this.state.isLoggedIn ? <React.Fragment><Title /><SelectMode /></React.Fragment> : <Redirect to="/" />
+    let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title onLogout={this.logOut.bind(this)} showLogout={true}/><Setup /></React.Fragment> : <Redirect to="/" />; 
+    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title onLogout={this.logOut.bind(this)} showLogout={true}/><Calibration /></React.Fragment> : <Redirect to="/" />
+    let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title onLogout={this.logOut.bind(this)} showLogout={true} /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
+    let selectModePage = this.state.isLoggedIn ? this.getSelectMode() : <Redirect to="/" />;
+    let connectionModePage = this.state.isLoggedIn ? this.getConnectionMode() : <Redirect to="/" />;
 
     return (
       <div style={styles.container}>
           <Router>
             <Switch>
               {calibrationPages}
+              <Route path="/connection">{connectionModePage}</Route>
               <Route path="/selectmode">{selectModePage}</Route>
-              <Route path="/testcal">{testCalPage} </Route>
+              <Route path="/testcal">{testCalPage}</Route>
               <Route path="/calibration">{calibrationPage}</Route>
               <Route path="/setup">{setupPage}</Route>
               <Route path="/">{loginPage}</Route>
@@ -62,49 +65,75 @@ class App extends React.Component {
     );
   }
 
+  getConnectionMode() {
+    return (
+      <React.Fragment>
+        <Title mode={'CONNECTION'} showLogout={true} onLogout={this.logOut.bind(this)} />
+        <ConnectionMode />
+      </React.Fragment>
+    );
+  }
+
+  getSelectMode() {
+    return (
+      <React.Fragment>
+        <Title ref={this.titleRef} showLogout={true} onLogout={this.logOut.bind(this)} />
+        <SelectMode onClick={this.onModeUpdate.bind(this)} />
+      </React.Fragment>
+    );
+  }
+
+  onModeUpdate(mode) {
+    this.titleRef.current.updateMode(mode);
+  }
+
   getSensorCalibrationPages() {
     // Left sleeve....
     let pathPrefix = '/l-';
     let pages=[]; 
     for (let i=0; i < 12; i++) {
       let path = pathPrefix + i; 
-      let route = (
-        <Route key={'keyL:' + i} path={path}>
+      let component = this.state.isLoggedIn ? (
+        <React.Fragment>  
           <StaticSleeve 
             chipsetId={0}
             sensorIdx={i}
           />
-          <Title />
+          <Title showLogout={true} onLogout={this.logOut.bind(this)} />
           <Sensor 
             chipsetId={0}
             sensorIdx={i}
             key={'keyL:' + i}
           >
           </Sensor>
-        </Route>
-      );
+        </React.Fragment>
+      ) : (<Redirect key={'l-' + i} to='/' />);
+
+      let route = <Route key={'keyL:' + i} path={path}>{component}</Route>
       pages.push(route);
     }
 
-    // Right sleeve...
+    // Right sleeve....
     pathPrefix = '/r-'; 
     for (let i = 0; i < 12; i++) {
       let path = pathPrefix + i; 
-      let route = (
-        <Route key={'keyR:' + i} path={path}>
+      let component = this.state.isLoggedIn ? (
+        <React.Fragment>
           <StaticSleeve 
             chipsetId={1}
             sensorIdx={i}
           />
-          <Title />
+          <Title showLogout={true} onLogout={this.logOut.bind(this)} />
           <Sensor
             chipsetId={1}
             sensorIdx={i}
             key={'keyR:' + i}
           >
           </Sensor>
-        </Route>
-      );
+        </React.Fragment>
+      ) : (<Redirect key={'r-' + i} to='/' />);
+
+      let route = <Route key={'keyR:' + i} path={path}>{component}</Route>
       pages.push(route); 
     }
 

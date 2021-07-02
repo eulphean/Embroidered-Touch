@@ -17,11 +17,18 @@ const styles = {
     zIndex: 'inherit',
     border: 'none',
     marginTop: padding.small,
-    backgroundColor: color.tealBack,
     fontSize: fontSize.small,
     color: color.white,
     padding: padding.small,
     letterSpacing: '1.5px'
+  },
+
+  buttonStatic: {
+    backgroundColor: color.tealBack,
+  },
+
+  buttonActive: {
+    backgroundColor: color.tealActive
   }
 };
 
@@ -33,16 +40,18 @@ class CustomButton extends React.Component {
   }
 
   render() {
+    let buttonStyle = this.props.isActive ? [styles.button, styles.buttonActive] : [styles.button, styles.buttonStatic];
     return (
       <div style={styles.container}>
-        <button style={styles.button}>
+        <button onClick={this.props.onClick ? this.onClick.bind(this) : () => {}} style={buttonStyle}>
             {this.props.children}
         </button>
       </div>
     );
   }
 
-  onClick() {
+  onClick(e) {
+    e.preventDefault();
     this.props.onClick(); 
   }
 }
