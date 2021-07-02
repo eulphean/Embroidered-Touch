@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
+import { color, fontSize, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -14,9 +14,23 @@ const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
-    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     color: color.white,
-    padding: padding.big
+    padding: padding.huge,
+    zIndex: 2
+  },
+
+  title: {
+    fontWeight: 'bold',
+    zIndex: 'inherit'
+  },
+
+  info: {
+    zIndex: 'inherit',
+    textAlign: 'center',
+    zIndex: 2
   }
 };
 
@@ -30,12 +44,23 @@ class Setup extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <div>Initial Set-Up</div>
-        <CustomButton>
-          <RadiumLink to='/calibration'>PAIR</RadiumLink>
-        </CustomButton>
+        <div style={styles.title}>Initial Set-Up</div>
+        <br />
+        <div style={styles.info}>Start by attaching the battery.</div>
+        <br />
+        <div style={styles.info}>You should see the blue LED start to blink.</div>
+        <br />
+        <div style={styles.info}>Next put the shirt on and click PAIR below.</div>
+        <br />
+        <div style={styles.info}>Choose the Bluetooth device 'TOUCH' from the popup window and click 'PAIR'</div>
+        <br /><br />
+        <CustomButton><RadiumLink to='/calibration'>PAIR</RadiumLink></CustomButton>
       </div>
     );
+  }
+
+  onPair(e) {
+    e.preventDefault();
   }
 }
 

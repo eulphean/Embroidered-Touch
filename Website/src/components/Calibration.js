@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
+import { color, padding, fontSize } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -15,9 +15,20 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    position: 'relative',
+    alignItems: 'center',
     color: color.white,
-    padding: padding.big
+    padding: padding.huge,
+    zIndex: 2
+  },
+
+  title: {
+    zIndex: 'inherit',
+    fontWeight: 'bold'
+  },
+
+  info: {
+    zIndex: 'inherit',
+    textAlign: 'center'
   }
 };
 
@@ -31,9 +42,13 @@ class Calibration extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        CALIBRATION
+        <div style={styles.title}>Calibration</div>
+        <br /><br />
+        <div style={styles.info}>For calibration, you will be prompted to touch each of the grid lines one by one.</div>
+        <br /><br /><div style={styles.info}>When you are ready to begin, click on CALIBRATE below.</div>
+        <br /><br />
         <CustomButton>
-          <RadiumLink to="/l-0">CALIBRATE</RadiumLink>
+          <RadiumLink to='/l-0'>CALIBRATE</RadiumLink>
         </CustomButton>
       </div>
     );

@@ -7,6 +7,7 @@ import React from 'react'
 import Radium from 'radium'
 import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
+import StaticSleeve from './StaticSleeve.js'
 import Title from './Title.js'
 import Setup from './Setup.js'
 import Login from './Login.js'
@@ -21,8 +22,7 @@ import Websocket from './Websocket.js'
 const styles = {
   container: {
     position: 'relative',
-    backgroundColor: color.black, 
-    padding: padding.small
+    backgroundColor: color.black
   }
 };
 
@@ -32,7 +32,7 @@ class App extends React.Component {
     this.state={
       isConnected: false,
       receiveVal: 'Receive Text',
-      isLoggedIn: false
+      isLoggedIn: true
     };
 
     this.chipsetCollectionRef = React.createRef(); 
@@ -40,14 +40,9 @@ class App extends React.Component {
 
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
-
-    //Redirect the page if there is no user login. 
-    // function loginPage (routerProps) {
-    //   return <React.Fragment><Title /><Login {...routerProps} onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>
-    // } 
-    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
-    let setupPage = this.state.isLoggedIn ? <React.Fragment><Title /><Setup /></React.Fragment> : <Redirect to="/" />; 
-    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><Title /><Calibration /></React.Fragment> : <Redirect to="/" />
+    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
+    let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title /><Setup /></React.Fragment> : <Redirect to="/" />; 
+    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title /><Calibration /></React.Fragment> : <Redirect to="/" />
     let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
     let selectModePage = this.state.isLoggedIn ? <React.Fragment><Title /><SelectMode /></React.Fragment> : <Redirect to="/" />
 
@@ -75,6 +70,10 @@ class App extends React.Component {
       let path = pathPrefix + i; 
       let route = (
         <Route key={'keyL:' + i} path={path}>
+          <StaticSleeve 
+            chipsetId={0}
+            sensorIdx={i}
+          />
           <Title />
           <Sensor 
             chipsetId={0}
@@ -84,7 +83,6 @@ class App extends React.Component {
           </Sensor>
         </Route>
       );
-
       pages.push(route);
     }
 
@@ -94,6 +92,10 @@ class App extends React.Component {
       let path = pathPrefix + i; 
       let route = (
         <Route key={'keyR:' + i} path={path}>
+          <StaticSleeve 
+            chipsetId={1}
+            sensorIdx={i}
+          />
           <Title />
           <Sensor
             chipsetId={1}
@@ -110,7 +112,6 @@ class App extends React.Component {
   }
 
   hasLoggedIn(state) {
-    console.log('Login State: ' + state);
     this.setState({
       isLoggedIn: state
     });

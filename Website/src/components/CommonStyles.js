@@ -1,7 +1,10 @@
 const color = {
     tealBack: '#849099',
     white: '#FFFFFF',
-    black: '#000000'
+    black: '#000000',
+    active: 'green',
+    inactive: 'red',
+    sensorActive: '#04A0FF'
 };
 
 const fontSize = {

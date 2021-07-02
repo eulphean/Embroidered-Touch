@@ -6,7 +6,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color } from './CommonStyles';
+import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -18,63 +18,84 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    position: 'relative',
-    color: color.white
+    alignItems: 'center',
+    color: color.white,
+    padding: padding.veryBig,
+    zIndex: 2
   },
 
-  input: {
-      width: '40px',
-      height: '20px',
-      marginBottom: '10px',
-      marginTop: '5px'
+  info: {
+    textAlign: 'center',
+    zIndex: 'inherit'
+  },
+
+  title: {
+    zIndex: 'inherit',
+    fontWeight: 'bold'
+  },
+
+  button: {
+    zIndex: 'inherit'
   }
 };
 
 class Sensor extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
-        // cutoffVal: DatabaseParamStore.getCutoffValue(this.props.configName, this.props.chipsetId, this.props.sensorIdx)
-    };
+    this.state={};
   }
 
   render() {
     let nextPath = this.getNextPath(); 
     return (
       <div style={styles.container}>
-        Chipset {this.props.chipsetId}
+        <div style={styles.title}>Calibration</div>
         <br />
-        Sensor {this.props.sensorIdx}
-        <CustomButton>
-          <RadiumLink to={nextPath}>NEXT</RadiumLink>
-        </CustomButton>
+        <div style={styles.info}>First, the Left Sleeve.</div>
+        <br />
+        <div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div>
+        <br />
+        <div style={styles.info}>Touch the vertical grid line closest to the front of the body.</div>
+        <br />
+        <div style={styles.info}>Hold for about 3 seconds, then release.</div>
+        <br />
+        <div style={styles.info}>Then click NEXT below.</div>
+        <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
   }
 
+  // Logic to create the next path for the next button.
   getNextPath() {
     let path = ''; 
     let sensorIdx = this.props.sensorIdx < 11 ? this.props.sensorIdx : 0;
     if (this.props.chipsetId === 0 && this.props.sensorIdx < 11) {
       sensorIdx = sensorIdx + 1; 
       path = '/l-' + sensorIdx; 
-      console.log(path);
     } else {
-      sensorIdx = sensorIdx + 1; 
+      // Right-0
       path = '/r-' + sensorIdx;
-      console.log(path);
     }
 
+    // Handle all the sensors from Right-0 onwards. 
+    if (this.props.chipsetId === 1 && this.props.sensorIdx < 11) {
+      sensorIdx = sensorIdx + 1; 
+      path = '/r-' + sensorIdx;
+    }
+
+    // Last Right-11 path.
     if (this.props.chipsetId === 1 && this.props.sensorIdx === 11) {
       path = '/testcal'
     }
-
     return path; 
   }
 }
 
 export default Radium(Sensor);
 
+// Chipset {this.props.chipsetId}
+// <br />
+// Sensor {this.props.sensorIdx}
 // cutoffChange(e) {
 //   let v = e.target.value; 
 //   this.setState({

@@ -45,6 +45,7 @@ class DatabaseParamStore {
         this.cutoffVals[chipsetId]['co'][sensorIdx] = cutoffVal; 
     }
 
+    // TODO: Don't need to load all configs. 
     onAllConfigsLoaded(data) {
         let configs = data; 
         for (let i = 0; i < configs.length; i++) {

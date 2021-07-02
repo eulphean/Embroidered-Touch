@@ -5,9 +5,10 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color } from './CommonStyles';
+import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
+import DoubleSleeve from './DoubleSleeve';
 import CustomButton from './CustomButton';
 const RadiumLink = Radium(Link);
 
@@ -17,9 +18,19 @@ const styles = {
     color: color.white
   },
 
-  modeContainer: {
+  content: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: padding.big,
+    alignItems: 'center'
+  },
+
+  title: {
+    fontWeight: 'bold'
+  },
+
+  info: {
+    textAlign: 'center'
   }
 };
 
@@ -33,14 +44,21 @@ class SelectMode extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <div>MODE</div>
-        <div style={styles.modeContainer}>
-          <CustomButton>
-            <RadiumLink>CONNECTION</RadiumLink>
-          </CustomButton>
+        <DoubleSleeve />
+        <div style={styles.content}>
+          <div style={styles.title}>Mode</div>
+          <br />
+          <div style={styles.info}>Choose SOLO to send sound to your own device.</div>
           <CustomButton>
             <RadiumLink>SOLO</RadiumLink>
           </CustomButton>
+          <br />
+          <div style={styles.info}>Choose CONNECTION to send and receive sound with a friend.</div>
+          <CustomButton>
+            <RadiumLink>CONNECTION</RadiumLink>
+          </CustomButton>
+          <br />
+          <div style={styles.info}>Choose SETUP to recalibrate your device.</div>
           <CustomButton>
             <RadiumLink to="/testcal">SETUP</RadiumLink>
           </CustomButton>

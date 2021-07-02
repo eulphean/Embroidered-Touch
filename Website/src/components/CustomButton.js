@@ -5,16 +5,23 @@
 
 import React from 'react'
 import Radium from 'radium'
+import { color, fontSize, padding } from './CommonStyles.js'
 
 
 const styles = {
   container: {
-    position: 'relative',
+    zIndex: 2
   },
 
   button: {
-    width: '125px',
-    height: '35px'
+    zIndex: 'inherit',
+    border: 'none',
+    marginTop: padding.small,
+    backgroundColor: color.tealBack,
+    fontSize: fontSize.small,
+    color: color.white,
+    padding: padding.small,
+    letterSpacing: '1.5px'
   }
 };
 
@@ -28,7 +35,7 @@ class CustomButton extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <button onClick={this.props.onClick ? this.onClick.bind(this) : () => {}}style={styles.button}>
+        <button style={styles.button}>
             {this.props.children}
         </button>
       </div>

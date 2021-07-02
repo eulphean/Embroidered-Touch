@@ -5,18 +5,55 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color } from './CommonStyles';
+import { color, padding, fontSize } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
+import DoubleSleeve from './DoubleSleeve';
 const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    position: 'relative',
-    color: color.white
+    alignItems: 'center',
+    color: color.white,
+    padding: padding.extraSmall
+  },
+
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: padding.big
+  },
+
+  title: {
+    fontWeight: 'bold'
+  },
+
+  info: {
+    textAlign: 'center'
+  },
+
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  input: {
+    width: fontSize.huge,
+    height: fontSize.small,
+    marginRight: padding.extraSmall
+  },
+
+  button: {
+    backgroundColor: color.tealBack,
+    color: color.white,
+    border: 'none',
+    fontSize: fontSize.verySmall,
+    padding: padding.extraSmall
   }
 };
 
@@ -25,18 +62,29 @@ class TestCalibration extends React.Component {
     super(props);
     this.state={
     };
-
   }
 
   render() {
     return (
       <div style={styles.container}>
-        <div>
-          Testing Calibration
+        <DoubleSleeve />
+        <div style={styles.content}>
+          <div style={styles.title}>Testing Calibration</div>
+          <br />
+          <div style={styles.info}>The lines of the above grid should turn blue when a touch on the garment is detected.</div>
+          <br />
+          <div style={styles.info}>To adjust the calibration for a specific sensor line, enter the number for that sensor line below and click enter.</div>
+          <br />
+          <div style={styles.inputContainer}>
+            <input style={styles.input} type='number'></input>
+            <button style={styles.button}>enter</button>
+          </div>
+          <br />
+          <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div>
+          <CustomButton>
+            <RadiumLink to="/selectmode">SAVE</RadiumLink>
+          </CustomButton>
         </div>
-        <CustomButton>
-          <RadiumLink to="/selectmode">SAVE</RadiumLink>
-        </CustomButton>
       </div>
     );
   }

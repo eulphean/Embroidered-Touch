@@ -5,42 +5,59 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { color, fontSize, padding } from './CommonStyles';
 
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
-import CustomButton from './CustomButton';
 import Websocket from './Websocket';
-const RadiumLink = Radium(Link);
+import { ReactComponent as Sleeve } from '../Assets/1Sleeve.svg'
 
 const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    color: color.white,
-    padding: padding.big
+    color: color.white
   },
 
-  buttons: {
+  loginContent: {
+    zIndex: 2,
+    padding: padding.huge
+  },
+
+  buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginTop: padding.small
   },
 
+  button: {
+    backgroundColor: color.tealBack,
+    border: 'none',
+    marginRight: padding.small,
+    fontSize: fontSize.verySmall,
+    height: fontSize.huge,
+    color: color.white
+  },
+
   inputContainer: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: padding.small
+    marginTop: padding.veryBig
   },
 
   input: {
     width: '100px',
+    height: '20px',
     marginTop: padding.extraSmall
   },
 
   resultLabel: {
     marginTop: padding.extraSmall
+  },
+
+
+  loginText: {
+    fontWeight: 'bold'
   }
 };
 
@@ -50,38 +67,42 @@ class Login extends React.Component {
     this.state={
       username: '',
       password: '',
-      message: 'Message'
+      message: ''
     };
 
     this.loginUrl = Websocket.loginURL; 
     this.signupURL = Websocket.signupURL;
-    console.log(this.context);
   }
 
   render() {
     return (
       <div style={styles.container}>
-        <div>LOGIN</div>
-        <div style={styles.input}>
-          <input style={styles.input} onChange={this.usernameChanged.bind(this)} type="text" placeholder="username.." value={this.state.username}></input>
-          <input style={styles.input} onChange={this.passwordChanged.bind(this)} type="password" placeholder="password.." value={this.state.password}></input>
-        </div>
-        <div style={styles.buttons}>
-          <CustomButton onClick={this.onClickLogin.bind(this)}>
-              Sign In
-          </CustomButton>
-          <CustomButton onClick={this.onClickSignUp.bind(this)}>
-            Create Account
-          </CustomButton>
-        </div>
-        <div style={styles.resultLabel}>
-          {this.state.message}
+        <div style={styles.loginContent}>
+          <div style={styles.loginText}>Login</div>
+          <div style={styles.inputContainer}>
+            <input style={styles.input} onChange={this.usernameChanged.bind(this)} type="text" placeholder="Username.." value={this.state.username}></input>
+            <input style={styles.input} onChange={this.passwordChanged.bind(this)} type="password" placeholder="Password.." value={this.state.password}></input>
+          </div>
+          <div style={styles.buttonContainer}>
+            <button style={styles.button} onClick={this.onClickLogin.bind(this)}>ENTER</button>
+            <button style={styles.button} onClick={this.onClickSignUp.bind(this)}>CREATE ACCOUNT</button>
+          </div>
+          <div style={styles.resultLabel}>
+            {this.state.message}
+          </div>
         </div>
       </div>
     );
   }
 
+  componentDidMount() {
+    // let line2 = document.getElementById('line2');
+    // line2.style.stroke = 'red';
+  }
+
   onClickLogin(e) {
+    e.preventDefault(); 
+
     // Make a HTTP request. 
     const request = new Request(this.loginUrl, { method: 'POST', headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({ username: this.state.username, password: this.state.password}) });    
@@ -97,12 +118,9 @@ class Login extends React.Component {
                 });
               } else if (result === 'user_found') {
                 let config = data['config'];
-                console.log('Read config: ' + Object.keys(config));
+                // console.log('Read config: ' + Object.keys(config));
                 // Populate the store with this config. 
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
-                this.setState({
-                  message: 'Account found'
-                });
               }
             });
         } else {
@@ -116,6 +134,8 @@ class Login extends React.Component {
     }
 
     onClickSignUp(e) {
+      e.preventDefault();
+
       // Make a post request with all these in a json
       let username = this.state.username;
       let password = this.state.password;
@@ -167,3 +187,5 @@ class Login extends React.Component {
 }
 
 export default Radium(Login);
+
+
