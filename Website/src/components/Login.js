@@ -10,6 +10,7 @@ import { color, fontSize, padding } from './CommonStyles';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import Websocket from './Websocket';
 import { ReactComponent as Sleeve } from '../Assets/1Sleeve.svg'
+import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {
   container: {
@@ -72,6 +73,7 @@ class Login extends React.Component {
 
     this.loginUrl = Websocket.loginURL; 
     this.signupURL = Websocket.signupURL;
+    AppStatusStore.setShowLogout(false);
   }
 
   render() {

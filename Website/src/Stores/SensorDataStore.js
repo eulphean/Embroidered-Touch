@@ -43,7 +43,7 @@ class SensorDataStore {
 
     // Populates the store. 
     setState(chipsetIdx, sensorDataType, sensorData) {
-        console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
+        // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
         // Populate the state. 
         for (let i = 0; i < sensorData.length; i++) {
             let v = Number(sensorData[i]); 

@@ -6,11 +6,11 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, fontSize, padding } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
-
-const RadiumLink = Radium(Link);
+import BLE from './BLE';
+import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {
   container: {
@@ -38,29 +38,43 @@ class Setup extends React.Component {
   constructor(props) {
     super(props);
     this.state={
+      hasPaired: false
     };
+
+    AppStatusStore.setShowLogout(true);
   }
 
   render() {
-    return (
-      <div style={styles.container}>
-        <div style={styles.title}>Initial Set-Up</div>
-        <br />
-        <div style={styles.info}>Start by attaching the battery.</div>
-        <br />
-        <div style={styles.info}>You should see the blue LED start to blink.</div>
-        <br />
-        <div style={styles.info}>Next put the shirt on and click PAIR below.</div>
-        <br />
-        <div style={styles.info}>Choose the Bluetooth device 'TOUCH' from the popup window and click 'PAIR'</div>
-        <br /><br />
-        <CustomButton><RadiumLink to='/calibration'>PAIR</RadiumLink></CustomButton>
-      </div>
-    );
+    if (this.state.hasPaired) {
+      return (<Redirect push to="/calibration" />);
+    } else {
+      return (
+        <div style={styles.container}>
+          <div style={styles.title}>Initial Set-Up</div>
+          <br />
+          <div style={styles.info}>Start by attaching the battery.</div>
+          <br />
+          <div style={styles.info}>You should see the blue LED start to blink.</div>
+          <br />
+          <div style={styles.info}>Next put the shirt on and click PAIR below.</div>
+          <br />
+          <div style={styles.info}>Choose the Bluetooth device 'TOUCH' from the popup window and click 'PAIR'</div>
+          <br /><br />
+          <CustomButton onClick={this.onPair.bind(this)}>PAIR</CustomButton>
+        </div>
+      );
+    }
   }
 
-  onPair(e) {
-    e.preventDefault();
+  onPair() {
+    console.log('Pair Pair');
+    BLE.connect(this.hasPaired.bind(this));
+  }
+
+  hasPaired() {
+    this.setState({
+      hasPaired: true
+    }); 
   }
 }
 

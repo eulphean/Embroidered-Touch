@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 
 import DoubleSleeve from './DoubleSleeve';
 import CustomButton from './CustomButton';
+
+import AppStatusStore from '../Stores/AppStatusStore';
 const RadiumLink = Radium(Link);
 
 const styles = {
@@ -67,19 +69,16 @@ class SelectMode extends React.Component {
   }
 
   onClickSolo() {
-    if (this.props.onClick) {
-      // The new state will be opposite of what the current state is.
-      if (this.state.isSoloActive) {
-        this.props.onClick('SETUP');
-      } else {
-        this.props.onClick('SOLO');
-      }
-
-      // Activate.
-      this.setState({
-        isSoloActive: !this.state.isSoloActive
-      });
+    if (this.state.isSoloActive) {
+      AppStatusStore.setMode('SETUP')
+    } else {
+      AppStatusStore.setMode('SOLO');
     }
+
+    // Activate.
+    this.setState({
+      isSoloActive: !this.state.isSoloActive
+    });
   }
 }
 

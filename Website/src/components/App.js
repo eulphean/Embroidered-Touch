@@ -18,11 +18,9 @@ import ConnectionMode from './ConnectionMode.js'
 import Sensor from './Sensor.js'
 
 import { color, padding } from './CommonStyles.js'
-import Websocket from './Websocket.js'
 
 const styles = {
   container: {
-    position: 'relative',
     backgroundColor: color.black
   }
 };
@@ -35,21 +33,20 @@ class App extends React.Component {
       receiveVal: 'Receive Text',
       isLoggedIn: false
     };
-
-    this.titleRef = React.createRef();
   }
 
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
-    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Title /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
-    let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title onLogout={this.logOut.bind(this)} showLogout={true}/><Setup /></React.Fragment> : <Redirect to="/" />; 
-    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Title onLogout={this.logOut.bind(this)} showLogout={true}/><Calibration /></React.Fragment> : <Redirect to="/" />
-    let testCalPage = this.state.isLoggedIn ? <React.Fragment><Title onLogout={this.logOut.bind(this)} showLogout={true} /><TestCalibration /></React.Fragment> : <Redirect to="/" />;
+    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
+    let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Setup /></React.Fragment> : <Redirect to="/" />; 
+    let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Calibration /></React.Fragment> : <Redirect to="/" />
+    let testCalPage = this.state.isLoggedIn ? <React.Fragment><TestCalibration /></React.Fragment> : <Redirect to="/" />;
     let selectModePage = this.state.isLoggedIn ? this.getSelectMode() : <Redirect to="/" />;
     let connectionModePage = this.state.isLoggedIn ? this.getConnectionMode() : <Redirect to="/" />;
 
     return (
       <div style={styles.container}>
+          <Title onLogout={this.logOut.bind(this)} />
           <Router>
             <Switch>
               {calibrationPages}
@@ -68,7 +65,6 @@ class App extends React.Component {
   getConnectionMode() {
     return (
       <React.Fragment>
-        <Title mode={'CONNECTION'} showLogout={true} onLogout={this.logOut.bind(this)} />
         <ConnectionMode />
       </React.Fragment>
     );
@@ -77,14 +73,9 @@ class App extends React.Component {
   getSelectMode() {
     return (
       <React.Fragment>
-        <Title ref={this.titleRef} showLogout={true} onLogout={this.logOut.bind(this)} />
-        <SelectMode onClick={this.onModeUpdate.bind(this)} />
+        <SelectMode />
       </React.Fragment>
     );
-  }
-
-  onModeUpdate(mode) {
-    this.titleRef.current.updateMode(mode);
   }
 
   getSensorCalibrationPages() {
@@ -99,7 +90,6 @@ class App extends React.Component {
             chipsetId={0}
             sensorIdx={i}
           />
-          <Title showLogout={true} onLogout={this.logOut.bind(this)} />
           <Sensor 
             chipsetId={0}
             sensorIdx={i}
@@ -123,7 +113,6 @@ class App extends React.Component {
             chipsetId={1}
             sensorIdx={i}
           />
-          <Title showLogout={true} onLogout={this.logOut.bind(this)} />
           <Sensor
             chipsetId={1}
             sensorIdx={i}
