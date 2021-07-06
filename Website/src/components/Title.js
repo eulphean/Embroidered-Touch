@@ -9,6 +9,7 @@ import Radium from 'radium'
 import { color, fontSize, padding } from './CommonStyles';
 import { ReactComponent as Logout } from '../Assets/logout.svg'
 import AppStatusStore from '../Stores/AppStatusStore';
+import BLE from './BLE';
 
 const styles = {
   container: {
@@ -135,6 +136,7 @@ class Title extends React.Component {
     if (this.props.onLogout) {
       this.props.onLogout();
     }
+    BLE.disconnect();
   }
 
   onStatusUpdate() {

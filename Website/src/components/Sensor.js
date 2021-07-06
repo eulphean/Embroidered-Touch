@@ -10,9 +10,11 @@ import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
-const RadiumLink = Radium(Link);
 
-// import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import SensorDataStore from '../Stores/SensorDataStore';
+
+const RadiumLink = Radium(Link);
 
 const styles = {
   container: {
@@ -42,7 +44,18 @@ const styles = {
 class Sensor extends React.Component {
   constructor(props) {
     super(props);
-    this.state={};
+    let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    this.state={
+      sensorVal: v
+    };
+  }
+
+  componentDidMount() {
+    this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this)); 
+  }
+
+  componentWillUnmount() {
+    this.removeSubscription();
   }
 
   render() {
@@ -60,6 +73,7 @@ class Sensor extends React.Component {
         <div style={styles.info}>Hold for about 3 seconds, then release.</div>
         <br />
         <div style={styles.info}>Then click NEXT below.</div>
+        <div>Sensor Val: {this.state.sensorVal}</div>
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
@@ -88,6 +102,13 @@ class Sensor extends React.Component {
       path = '/testcal'
     }
     return path; 
+  }
+
+  onSensorData() {
+    let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    this.setState({
+      sensorVal: v
+    });
   }
 }
 

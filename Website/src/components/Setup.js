@@ -67,7 +67,6 @@ class Setup extends React.Component {
   }
 
   onPair() {
-    console.log('Pair Pair');
     BLE.connect(this.hasPaired.bind(this));
   }
 

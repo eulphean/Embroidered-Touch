@@ -50,14 +50,18 @@ class SensorDataStore {
             this.state[chipsetIdx][sensorDataType][i] = v; 
         }
 
-        // Alert all the listeners that new data is coming. 
+        // Alert all the listeners that new data is received. 
         for (let listener of this.listeners) {
-            listener(this.state);
+            listener();
         }
     }
 
     getChipData(chipsetIdx) {
         return this.state[chipsetIdx]; 
+    }
+
+    getSensorData(chipsetId, sensorIdx) {
+        return this.state[chipsetId]['f'][sensorIdx];
     }
 }
 

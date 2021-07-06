@@ -17,6 +17,7 @@ class BLE {
     this.myRxCharacteristic = '';
     this.myTxCharacteristic = '';
     this.isReceivingData = false;
+    this.device = ''; 
   }
 
   connect(hasPaired) {
@@ -27,6 +28,7 @@ class BLE {
         }]
       })
       .then(device => { 
+          this.device = device; 
           device.addEventListener('gattserverdisconnected', this.onDisconnected.bind(this));
           return device.gatt.connect();
       })
@@ -53,6 +55,10 @@ class BLE {
     const device = event.target;
     console.log(`Device ${device.name} is disconnected.`);
     AppStatusStore.setBluetoothStatus(false);
+  }
+
+  disconnect() {
+    this.device.gatt.disconnect();
   }
 
   stop() {
