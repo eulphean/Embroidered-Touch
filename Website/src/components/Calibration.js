@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding, fontSize } from './CommonStyles';
+import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';

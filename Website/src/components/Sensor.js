@@ -10,8 +10,6 @@ import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
-
-import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import SensorDataStore from '../Stores/SensorDataStore';
 
 const RadiumLink = Radium(Link);
@@ -113,41 +111,3 @@ class Sensor extends React.Component {
 }
 
 export default Radium(Sensor);
-
-// Chipset {this.props.chipsetId}
-// <br />
-// Sensor {this.props.sensorIdx}
-// cutoffChange(e) {
-//   let v = e.target.value; 
-//   this.setState({
-//       cutoffVal: Number(v)
-//   });
-
-//   DatabaseParamStore.setState(this.props.chipsetId, this.props.sensorIdx, v);
-// }
-
-// shouldComponentUpdate(nextProps, nextState) {
-//     // // Be careful, no state changes will happen.
-//     // if (this.props.fVal !== nextProps.fVal || 
-//     //       this.props.bVal !== nextProps.bVal || 
-//     //         this.props.configName !== nextProps.configName ||
-//     //             this.state.cutoffVal !== nextState.cutoffVal) {
-        
-//     //     // Config has changed, so update the cut off value.
-//     //     if (this.props.configName !== nextProps.configName) {
-//     //       let newVal = DatabaseParamStore.getCutoffValue(nextProps.configName, this.props.chipsetId, this.props.sensorIdx); 
-//     //       this.setState({
-//     //         cutoffVal : newVal
-//     //       });
-//     //     }
-//     //     return true; 
-//     // } else {
-//     //     return false; 
-//     // }
-// }
-
-
-// <div>
-// <span>{'Sensor Idx '}</span>{this.props.sensoridx}<span>{', Base Val: '}</span>{this.props.bVal}<span>{', Filtered Val: '}</span>{this.props.fVal}
-// </div>
-// <span>{'Cutoff Value: '}</span><input style={styles.input} onChange={this.cutoffChange.bind(this)} type="number" value={this.state.cutoffVal}></input>

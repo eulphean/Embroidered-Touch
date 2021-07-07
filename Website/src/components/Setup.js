@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, fontSize, padding } from './CommonStyles';
+import { color, padding } from './CommonStyles';
 import { Redirect } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -30,7 +30,6 @@ const styles = {
   info: {
     zIndex: 'inherit',
     textAlign: 'center',
-    zIndex: 2
   }
 };
 

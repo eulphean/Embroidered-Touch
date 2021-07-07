@@ -9,7 +9,6 @@ import { color, fontSize, padding } from './CommonStyles';
 
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import Websocket from './Websocket';
-import { ReactComponent as Sleeve } from '../Assets/1Sleeve.svg'
 import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {
@@ -119,7 +118,7 @@ class Login extends React.Component {
                   message: 'Account not found'
                 });
               } else if (result === 'user_found') {
-                let config = data['config'];
+                // let config = data['config'];
                 // console.log('Read config: ' + Object.keys(config));
                 // Populate the store with this config. 
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
@@ -142,8 +141,6 @@ class Login extends React.Component {
       let username = this.state.username;
       let password = this.state.password;
       let defaultConfig = DatabaseParamStore.getDefaultConfig(); 
-
-      console.log(defaultConfig);
       
       // Make a HTTP request. 
       const request = new Request(this.signupURL, { method: 'POST', headers: {'Content-Type': 'application/json'}, 

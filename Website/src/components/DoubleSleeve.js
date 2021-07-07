@@ -6,7 +6,6 @@
 import React from 'react'
 import Radium from 'radium'
 import { ReactComponent as Sleeve } from '../Assets/2sleeve.svg'
-import { color } from './CommonStyles';
 
 const styles = {
   svg: {
@@ -29,6 +28,9 @@ class DoubleSleeve extends React.Component {
       </div>
     );
   }
+
+  // To light up the lines, we must subscribe to the SensorDataStore
+  // SensorDataStore will become the crux of this. 
 
 //   componentDidMount() {
 //     // Need to light up some lines. 
