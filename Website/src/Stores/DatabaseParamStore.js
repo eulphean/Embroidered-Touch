@@ -128,6 +128,10 @@ class DatabaseParamStore {
 
         return jsonObject; 
     }
+
+    getConfig() {
+        // Return the config here. 
+    }
 }
 
 export default new DatabaseParamStore(); 

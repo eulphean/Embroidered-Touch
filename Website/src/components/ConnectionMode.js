@@ -9,6 +9,9 @@ import Radium from 'radium'
 import DoubleSleeve from './DoubleSleeve';
 import { color } from './CommonStyles';
 
+import SensorDataStore from '../Stores/SensorDataStore';
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+
 const styles = {
   container: {
     color: color.white
@@ -30,6 +33,14 @@ class ConnectionMode extends React.Component {
     super(props);
     this.state={
     };
+  }
+
+  componentDidMount() {
+
+  }
+
+  componentWillUnmount() {
+
   }
 
   render() {

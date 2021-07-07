@@ -12,6 +12,10 @@ import DoubleSleeve from './DoubleSleeve';
 import CustomButton from './CustomButton';
 
 import AppStatusStore from '../Stores/AppStatusStore';
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import SensorDataStore from '../Stores/SensorDataStore';
+import AudioManager from './AudioManager';
+
 const RadiumLink = Radium(Link);
 
 const styles = {
@@ -44,6 +48,18 @@ class SelectMode extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Subscribe to sensor data store, so when it's receiving new data. 
+    // We can trigger the audio engine by correlating the parameters with the 
+    // DatabaseParamStore (where the current configuration for calibration is stored.)
+    this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
+  }
+
+  componentWillUnmount() {
+    // Unsubscribe from the sensor data store.
+    this.removeSubscription();  
+  }
+
   render() {
     return (
       <div style={styles.container}>
@@ -66,6 +82,19 @@ class SelectMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  onSensorData() {
+    let config = DatabaseParamStore.getConfig(); 
+    let chipASensorData = SensorDataStore.getChipData(0)['f']; 
+    let chipBSensorData = SensorDataStore.getChipData(1)['f'];
+
+    // TODO: 
+    // Compare the cutoff values in the database param store with the chipset sensor data. 
+    // If cutoff value is hit, then call the AudioManager to play a sound for that 
+    // specific sample. 
+
+    console.log(chipASensorData);
   }
 
   onClickSolo() {
