@@ -118,9 +118,9 @@ class Login extends React.Component {
                   message: 'Account not found'
                 });
               } else if (result === 'user_found') {
-                // let config = data['config'];
-                // console.log('Read config: ' + Object.keys(config));
-                // Populate the store with this config. 
+                // Update the database store with this config. 
+                let config = data['config'];
+                DatabaseParamStore.setConfig(config); 
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
               }
             });
@@ -140,9 +140,10 @@ class Login extends React.Component {
       // Make a post request with all these in a json
       let username = this.state.username;
       let password = this.state.password;
-      let defaultConfig = DatabaseParamStore.getDefaultConfig(); 
+      // For first time sign up, this default config is sent to the DB. 
+      let defaultConfig = DatabaseParamStore.getConfigJson(); 
       
-      // Make a HTTP request. 
+      // Initial config is always sent as a HTTP request. 
       const request = new Request(this.signupURL, { method: 'POST', headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({ username: username, password: password, config: defaultConfig } ) });    
     
@@ -160,6 +161,12 @@ class Login extends React.Component {
                 });
               }
             });
+            
+            // User is succesfully logged in, set the config name 
+            // in the Database store as well, so it knows which config
+            // to update in the DB
+            // NOTE: Username is the same as config name. 
+            DatabaseParamStore.setConfigName(username);
         } else {
           console.error('Something wrong');
         }

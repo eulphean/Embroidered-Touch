@@ -8,25 +8,20 @@ import Websocket from "../components/Websocket";
 class DatabaseParamStore {
     constructor() {
         // Cut off values for the entire system.
-        // This is the current state. 
-        // Initial cutoff values filled.
-        this.cutoffVals = [{
-            'co': new Array(12).fill(150), // For chipset 0
-        }, {
-            'co': new Array(12).fill(150) // For chipset 1
-        }]; 
+        // Filled with an initial set of values. 
+        // Updated when new values are received from the database. 
+        this.cutoffVals = {
+            0: new Array(12).fill(150),
+            1: new Array(12).fill(150)
+        }
 
-        // All use the user configs are loaded and stored in this. 
-        // Any save or update should also save and update this.         
-        // [NOTE] We should do this based on db success but I'm not plumbing that code for now. 
-        // Key is configName, Value is json
-        this.configs = {}; 
+        this.configName = '';
 
-        // All the listeners subscribed to this database.
+        // Listeners for this database. 
         this.listeners = []; 
 
         // Fire an async db call to load all configs.
-        Websocket.requestForConfigs(this.onAllConfigsLoaded.bind(this)); 
+        // Websocket.requestForConfigs(this.onAllConfigsLoaded.bind(this)); 
     }
 
     subscribe(listener) {
@@ -38,100 +33,101 @@ class DatabaseParamStore {
         return removeListener;
     }
 
-    // Update the store. 
-    setState(chipsetId, sensorIdx, cutoffVal) {
-        // console.log('ChipsetId: ' + chipsetId + ', sensorIdx: ' + sensorIdx + ', cutoffVal: ' + cutoffVal);
+    // Update the data in memory. 
+    setCutOffVal(chipsetId, sensorIdx, cutoffVal) {
         // Update chipset data. 
-        this.cutoffVals[chipsetId]['co'][sensorIdx] = cutoffVal; 
+        this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
     }
 
-    // TODO: Don't need to load all configs. 
-    onAllConfigsLoaded(data) {
-        let configs = data; 
-        for (let i = 0; i < configs.length; i++) {
-            let name = configs[i]['name'];
-            let json = configs[i]['config'];
-            this.configs[name] = json; 
-        }
-
-        console.log(this.configs);
-
-        // Intimate all the subscribers of the updates.
-        for (let i = 0; i < this.listeners.length; i++) {
-            this.listeners[i](this.configs); 
-        }
+    getCutOffVal(chipsetId, sensorIdx) {
+        return this.cutoffVals[chipsetId][sensorIdx];
     }
 
-    saveParams(configName, save = true) {
+    commitConfig() {
         // Create the payload with the config name and sensor values. 
         // Both the chip params will be stored to the database. 
-        // [name - text, config - json]
-        // Database payload. 
-
+        // [name - text, config - json] (Database Payload)
         // JSON object, which gets stringified and goes to the database.
-        let jsonObject = {}; 
-        for (let i = 0; i < 2; i++) { // Num chips = 2
-            let chipsetData = {}; 
-            chipsetData['cutoff'] = {}; 
-            for (let j = 0; j < 12; j++) { // Num sensors = 12
-                let cutoffVals = this.cutoffVals[i]['co']; 
-                chipsetData['cutoff'][j] = cutoffVals[j];  
-            }
-
-            jsonObject[i.toString()] = chipsetData; 
-        }
-
+        let jsonObject = this.getConfigJson();
         let dbPayload = {
-            'name' : configName,
+            'name' : this.configName,
             'config' : JSON.stringify(jsonObject)
         };
-
-        if (save) {
-            Websocket.saveUserConfig(dbPayload);
-            // Update config state with the new payload. 
-            this.configs[configName] = jsonObject;
-        } else {
-            Websocket.updateUserConfig(dbPayload);
-            // Replace the old config here with the new config.
-            this.configs[configName] = jsonObject;
-        }
-
+        console.log(dbPayload);
+        Websocket.updateUserConfig(dbPayload);
     }
 
-    updateParams(configName) {
-        this.saveParams(configName, false); 
-    }
-
-    getCutoffValue(configName, chipsetId, sensorIdx) {
-        if (this.configs[configName]) {
-            let v = this.configs[configName][chipsetId]['cutoff'][sensorIdx];
-            return v;
-        } else {
-            // Return default values when there is no config name.
-            // This happens in the beginning.
-            return this.cutoffVals[chipsetId]['co'][sensorIdx];
-        }
-    }
-
-    getDefaultConfig() {
+    getConfigJson() {
         let jsonObject = {}; 
         for (let i = 0; i < 2; i++) { // Num chips = 2
-            let chipsetData = {}; 
-            chipsetData['cutoff'] = {}; 
+            let chipsetData = []; 
             for (let j = 0; j < 12; j++) { // Num sensors = 12
-                let cutoffVals = this.cutoffVals[i]['co']; 
-                chipsetData['cutoff'][j] = cutoffVals[j];  
+                chipsetData[j] = this.cutoffVals[i][j]; 
             }
 
             jsonObject[i.toString()] = chipsetData; 
         }
-
         return jsonObject; 
     }
 
-    getConfig() {
-        // Return the config here. 
+    // Assign config values to the cut off values. 
+    setConfig(config) {
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < 12; j++) {
+                this.cutoffVals[i][j] = config[i][j]; 
+            }
+        }
+    }
+
+    setConfigName(configName) {
+        this.configName = configName; 
     }
 }
 
 export default new DatabaseParamStore(); 
+
+
+
+// getCutoffValue(chipsetId, sensorIdx) {
+//     if (this.configs[configName]) {
+//         let v = this.configs[configName][chipsetId]['cutoff'][sensorIdx];
+//         return v;
+//     } else {
+//         // Return default values when there is no config name.
+//         // This happens in the beginning.
+//         return this.cutoffVals[chipsetId]['co'][sensorIdx];
+//     }
+// }
+
+    // TODO: Don't need to load all configs. 
+    // onAllConfigsLoaded(data) {
+    //     let configs = data; 
+    //     for (let i = 0; i < configs.length; i++) {
+    //         let name = configs[i]['name'];
+    //         let json = configs[i]['config'];
+    //         this.configs[name] = json; 
+    //     }
+
+    //     console.log(this.configs);
+
+    //     // Intimate all the subscribers of the updates.
+    //     for (let i = 0; i < this.listeners.length; i++) {
+    //         this.listeners[i](this.configs); 
+    //     }
+    // }
+
+    // getDefaultConfig() {
+    //     let jsonObject = {}; 
+    //     for (let i = 0; i < 2; i++) { // Num chips = 2
+    //         let chipsetData = {}; 
+    //         chipsetData['cutoff'] = {}; 
+    //         for (let j = 0; j < 12; j++) { // Num sensors = 12
+    //             let cutoffVals = this.cutoffVals[i]['co']; 
+    //             chipsetData['cutoff'][j] = cutoffVals[j];  
+    //         }
+
+    //         jsonObject[i.toString()] = chipsetData; 
+    //     }
+
+    //     return jsonObject; 
+    // }

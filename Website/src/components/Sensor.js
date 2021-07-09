@@ -10,9 +10,16 @@ import { color, padding } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
+
+import DatabaseParamStore from '../Stores/DatabaseParamStore'
 import SensorDataStore from '../Stores/SensorDataStore';
 
 const RadiumLink = Radium(Link);
+const CALIBRATIONSTATE = {
+  NOTSTARTED: 'NOTSTARTED',
+  STARTED: 'STARTED',
+  COMPLETED: 'COMPLETED'
+}; 
 
 const styles = {
   container: {
@@ -44,8 +51,15 @@ class Sensor extends React.Component {
     super(props);
     let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
     this.state={
-      sensorVal: v
+      sensorVal: v,
+      time: 5,
+      calibration: CALIBRATIONSTATE.NOTSTARTED
     };
+
+    // Calibration parameters. 
+    this.curSensorValue = v; 
+    this.initialThreshold = 10; 
+    this.interval = ''; 
   }
 
   componentDidMount() {
@@ -58,6 +72,7 @@ class Sensor extends React.Component {
 
   render() {
     let nextPath = this.getNextPath(); 
+    let calibrationMessage = this.getCalibrationMsg(); 
     return (
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
@@ -68,13 +83,23 @@ class Sensor extends React.Component {
         <br />
         <div style={styles.info}>Touch the vertical grid line closest to the front of the body.</div>
         <br />
-        <div style={styles.info}>Hold for about 3 seconds, then release.</div>
+        {calibrationMessage}
         <br />
         <div style={styles.info}>Then click NEXT below.</div>
-        <div>Sensor Val: {this.state.sensorVal}</div>
+        <div>Debug Sensor Val: {this.state.sensorVal}</div>
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
+  }
+
+  getCalibrationMsg() {
+    if (this.state.calibration === CALIBRATIONSTATE.NOTSTARTED) {
+      return (<div style={styles.info}>Hold for about 3 seconds, then release.</div>);
+    } else if (this.state.calibration === CALIBRATIONSTATE.STARTED) {
+      return (<div style={styles.info}>Calibration in process...{this.state.time}</div>);
+    } else if (this.state.calibration === CALIBRATIONSTATE.COMPLETED) {
+      return (<div style={styles.info}>Calibration completed.</div>); 
+    }
   }
 
   // Logic to create the next path for the next button.
@@ -107,6 +132,41 @@ class Sensor extends React.Component {
     this.setState({
       sensorVal: v
     });
+
+    // Check if this incoming value is less than the set value and we are not calibrating.
+    if ((v < this.curSensorValue - this.initialThreshold) && (this.state.calibration === CALIBRATIONSTATE.NOTSTARTED)) {
+      // Start the timer. 
+      this.interval = setInterval(this.updateTime.bind(this), 1000); 
+      this.setState({
+        calibration: CALIBRATIONSTATE.STARTED
+      }); 
+    }
+  }
+
+  updateTime() {
+    let curTime = this.state.time; 
+    curTime = curTime - 1;
+
+    // Calibration completed. 
+    if (curTime < 0) {
+      curTime = 0; 
+      clearInterval(this.interval);
+      let curSensorValue = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+      let cutoffVal = curSensorValue + this.initialThreshold; 
+      DatabaseParamStore.setCutOffVal(this.props.chipsetId, this.props.sensorIdx, cutoffVal);
+      // Register the cutoff value to the database param store. 
+      // Cut off value is 10 points more than this. 
+      // Commit this cutoff value to the db.
+      this.setState({
+        calibration: CALIBRATIONSTATE.COMPLETED
+      }); 
+
+      return;
+    }
+
+    this.setState({
+      time: curTime
+    }); 
   }
 }
 

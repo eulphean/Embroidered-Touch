@@ -10,7 +10,8 @@ import { Redirect, Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
-const RadiumLink = Radium(Link);
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+
 
 const styles = {
   container: {
@@ -87,9 +88,7 @@ class TestCalibration extends React.Component {
             </div>
             <br />
             <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div>
-            <CustomButton>
-              <RadiumLink to="/selectmode">SAVE</RadiumLink>
-            </CustomButton>
+            <CustomButton onClick={this.onSave.bind(this)}>SAVE</CustomButton>
           </div>
         </div>
       );
@@ -114,6 +113,10 @@ class TestCalibration extends React.Component {
     this.setState({
       redirectPath: newPath
     }); 
+  }
+
+  onSave() {
+    DatabaseParamStore.commitConfig(); 
   }
 
   onInputChange(e) {
