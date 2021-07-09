@@ -124,6 +124,7 @@ class Login extends React.Component {
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
               }
             });
+            DatabaseParamStore.setConfigName(this.state.username);
         } else {
           console.error('Something wrong');
         }

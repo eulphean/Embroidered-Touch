@@ -61,6 +61,10 @@ class SensorDataStore {
     }
 
     getSensorData(chipsetId, sensorIdx) {
+        sensorIdx = sensorIdx - 1; 
+        if (sensorIdx >= 12 && sensorIdx <=23) {
+            sensorIdx = sensorIdx - 12; 
+        }
         return this.state[chipsetId]['f'][sensorIdx];
     }
 }

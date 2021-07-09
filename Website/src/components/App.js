@@ -82,7 +82,7 @@ class App extends React.Component {
     // Left sleeve....
     let pathPrefix = '/l-';
     let pages=[]; 
-    for (let i=0; i < 12; i++) {
+    for (let i=1; i <= 12; i++) {
       let path = pathPrefix + i; 
       let component = this.state.isLoggedIn ? (
         <React.Fragment>  
@@ -105,7 +105,7 @@ class App extends React.Component {
 
     // Right sleeve....
     pathPrefix = '/r-'; 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 13; i <= 24; i++) {
       let path = pathPrefix + i; 
       let component = this.state.isLoggedIn ? (
         <React.Fragment>

@@ -48,7 +48,7 @@ class Calibration extends React.Component {
         <br /><br /><div style={styles.info}>When you are ready to begin, click on CALIBRATE below.</div>
         <br /><br />
         <CustomButton>
-          <RadiumLink to='/l-0'>CALIBRATE</RadiumLink>
+          <RadiumLink to='/l-1'>CALIBRATE</RadiumLink>
         </CustomButton>
       </div>
     );

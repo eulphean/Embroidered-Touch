@@ -81,6 +81,7 @@ class DatabaseParamStore {
 
     setConfigName(configName) {
         this.configName = configName; 
+        console.log('Set Config Name: ' + configName);
     }
 }
 

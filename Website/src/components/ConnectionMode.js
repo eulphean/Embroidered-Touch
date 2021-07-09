@@ -9,8 +9,10 @@ import Radium from 'radium'
 import DoubleSleeve from './DoubleSleeve';
 import { color } from './CommonStyles';
 
+import { ReactComponent as Ear } from '../Assets/ear.svg';
 import SensorDataStore from '../Stores/SensorDataStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {
   container: {
@@ -25,6 +27,11 @@ const styles = {
 
   title: {
     fontWeight: 'bold'
+  },
+
+  svg: {
+    width: '25%',
+    height: '25%'
   }
 };
 
@@ -36,11 +43,11 @@ class ConnectionMode extends React.Component {
   }
 
   componentDidMount() {
-
+    AppStatusStore.setMode('CONNECTION'); 
   }
 
   componentWillUnmount() {
-
+    AppStatusStore.setMode('SETUP');
   }
 
   render() {
@@ -50,6 +57,8 @@ class ConnectionMode extends React.Component {
         <div style={styles.content}>
           <div style={styles.info}>Message Sent.</div> 
           <div style={styles.info}>Waiting for a friend to connect...</div>
+          <br /><br />
+          <Ear style={styles.svg} />
         </div>
       </div>
     );

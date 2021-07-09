@@ -74,7 +74,7 @@ class TestCalibration extends React.Component {
     } else {
       return (
         <div style={styles.container}>
-          <DoubleSleeve />
+          <DoubleSleeve showLife={false} />
           <div style={styles.content}>
             <div style={styles.title}>Testing Calibration</div>
             <br />
@@ -95,20 +95,24 @@ class TestCalibration extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // Is showLife false?
+    // Then get the life component and hide
+
+    // If showLife is true
+    // Then get the number component and hide. 
+  }
+
   onEnter(e) {
     e.preventDefault();
     // How do I navigate to the sensor line for calibration???
     let sensorNum = this.state.sensorNum; 
     let newPath = ''; 
     if (sensorNum >= 1 && sensorNum <= 12) {
-      sensorNum = sensorNum - 1; 
       newPath = '/l-' + sensorNum;
     } else if (sensorNum >=13 && sensorNum <= 24) {
-      sensorNum = sensorNum - 13
       newPath = '/r-' + sensorNum;
     }
-
-    console.log(newPath);
 
     this.setState({
       redirectPath: newPath
@@ -117,6 +121,9 @@ class TestCalibration extends React.Component {
 
   onSave() {
     DatabaseParamStore.commitConfig(); 
+    this.setState({
+      redirectPath: '/selectmode'
+    });
   }
 
   onInputChange(e) {

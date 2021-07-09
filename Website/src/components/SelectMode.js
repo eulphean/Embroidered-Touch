@@ -63,7 +63,7 @@ class SelectMode extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <DoubleSleeve />
+        <DoubleSleeve showLife={true} />
         <div style={styles.content}>
           <div style={styles.title}>Mode</div>
           <br />
@@ -85,7 +85,7 @@ class SelectMode extends React.Component {
   }
 
   onSensorData() {
-    let config = DatabaseParamStore.getConfig(); 
+    let config = DatabaseParamStore.getConfigJson(); 
     let chipASensorData = SensorDataStore.getChipData(0)['f']; 
     let chipBSensorData = SensorDataStore.getChipData(1)['f'];
 
@@ -93,8 +93,6 @@ class SelectMode extends React.Component {
     // Compare the cutoff values in the database param store with the chipset sensor data. 
     // If cutoff value is hit, then call the AudioManager to play a sound for that 
     // specific sample. 
-
-    console.log(chipASensorData);
   }
 
   onClickSolo() {

@@ -86,7 +86,7 @@ class Sensor extends React.Component {
         {calibrationMessage}
         <br />
         <div style={styles.info}>Then click NEXT below.</div>
-        <div>Debug Sensor Val: {this.state.sensorVal}</div>
+        <div style={styles.info}>Debug Sensor Val: {this.state.sensorVal}</div>
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
@@ -94,7 +94,7 @@ class Sensor extends React.Component {
 
   getCalibrationMsg() {
     if (this.state.calibration === CALIBRATIONSTATE.NOTSTARTED) {
-      return (<div style={styles.info}>Hold for about 3 seconds, then release.</div>);
+      return (<div style={styles.info}>Hold for about 5 seconds, then release.</div>);
     } else if (this.state.calibration === CALIBRATIONSTATE.STARTED) {
       return (<div style={styles.info}>Calibration in process...{this.state.time}</div>);
     } else if (this.state.calibration === CALIBRATIONSTATE.COMPLETED) {
@@ -105,23 +105,24 @@ class Sensor extends React.Component {
   // Logic to create the next path for the next button.
   getNextPath() {
     let path = ''; 
-    let sensorIdx = this.props.sensorIdx < 11 ? this.props.sensorIdx : 0;
-    if (this.props.chipsetId === 0 && this.props.sensorIdx < 11) {
+    let sensorIdx = this.props.sensorIdx;
+    if (this.props.chipsetId === 0 && this.props.sensorIdx <= 12) {
       sensorIdx = sensorIdx + 1; 
-      path = '/l-' + sensorIdx; 
-    } else {
-      // Right-0
-      path = '/r-' + sensorIdx;
+      if (this.props.sensorIdx === 12) {
+        path = '/r-' + sensorIdx;
+      } else {
+        path = '/l-' + sensorIdx; 
+      }
     }
 
     // Handle all the sensors from Right-0 onwards. 
-    if (this.props.chipsetId === 1 && this.props.sensorIdx < 11) {
+    if (this.props.chipsetId === 1 && this.props.sensorIdx <= 24) {
       sensorIdx = sensorIdx + 1; 
       path = '/r-' + sensorIdx;
     }
 
-    // Last Right-11 path.
-    if (this.props.chipsetId === 1 && this.props.sensorIdx === 11) {
+    // Last Right-24 path.
+    if (this.props.chipsetId === 1 && this.props.sensorIdx === 24) {
       path = '/testcal'
     }
     return path; 

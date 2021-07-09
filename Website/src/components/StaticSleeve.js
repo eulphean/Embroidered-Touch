@@ -5,7 +5,8 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { ReactComponent as Sleeve } from '../Assets/1Sleeve.svg'
+import { ReactComponent as LeftSleeve } from '../Assets/left_sleeve.svg'
+import { ReactComponent as RightSleeve } from '../Assets/right_sleeve.svg'
 
 import { color } from './CommonStyles.js'
 
@@ -31,9 +32,10 @@ class StaticSleeve extends React.Component {
   }
 
   render() {
+    let sleeve = !this.props.sensorIdx ? <LeftSleeve style={styles.svg} /> : this.props.sensorIdx <= 12 ? <LeftSleeve style={styles.svg}/> : <RightSleeve style={styles.svg}/>;
     return (
       <div style={styles.svgContainer}>
-        <Sleeve style={styles.svg} />
+        {sleeve}
       </div>
     );
   }

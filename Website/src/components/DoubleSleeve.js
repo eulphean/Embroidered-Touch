@@ -5,11 +5,13 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { ReactComponent as Sleeve } from '../Assets/2sleeve.svg'
+import { ReactComponent as Sleeve } from '../Assets/2sleeve_life.svg'
+
+const lifeId = 'life'; 
+const numbersId = 'numbers'; 
 
 const styles = {
   svg: {
-    stroke: 'red',
     width: '100%',
     height: '100%'
   },
@@ -32,14 +34,16 @@ class DoubleSleeve extends React.Component {
   // To light up the lines, we must subscribe to the SensorDataStore
   // SensorDataStore will become the crux of this. 
 
-//   componentDidMount() {
-//     // Need to light up some lines. 
-//     if (this.props.chipsetId !== undefined && this.props.sensorIdx !== undefined) {
-//        let sensorLineId = 'line' + this.props.sensorIdx;
-//        let sensor = document.getElementById(sensorLineId);
-//        sensor.style.stroke = color.sensorActive;
-//     }
-//   }
+  componentDidMount() {
+    // Need to light up some lines. 
+    if (this.props.showLife) {
+       let numbers = document.getElementById(numbersId);
+       numbers.style.visibility = 'hidden'; 
+    } else {
+      let life = document.getElementById(lifeId);
+      life.style.visibility = 'hidden'; 
+    }
+  }
 }
 
 export default Radium(DoubleSleeve);
