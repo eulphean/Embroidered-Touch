@@ -5,7 +5,8 @@ const color = {
     black: '#000000',
     active: '#7FFF00',
     inactive: 'red',
-    sensorActive: '#04A0FF'
+    sensorActive: '#04A0FF',
+    sensorDefault: '#849099'
 };
 
 const fontSize = {

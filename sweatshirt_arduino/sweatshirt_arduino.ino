@@ -1,4 +1,3 @@
-
 // sweatshirt_arduino.h
 // Author: Amay Kataria
 // Date: 06/21/2021

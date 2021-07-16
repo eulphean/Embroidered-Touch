@@ -95,14 +95,6 @@ class TestCalibration extends React.Component {
     }
   }
 
-  componentDidMount() {
-    // Is showLife false?
-    // Then get the life component and hide
-
-    // If showLife is true
-    // Then get the number component and hide. 
-  }
-
   onEnter(e) {
     e.preventDefault();
     // How do I navigate to the sensor line for calibration???

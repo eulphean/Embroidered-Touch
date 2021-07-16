@@ -11,8 +11,8 @@ class DatabaseParamStore {
         // Filled with an initial set of values. 
         // Updated when new values are received from the database. 
         this.cutoffVals = {
-            0: new Array(12).fill(150),
-            1: new Array(12).fill(150)
+            0: new Array(12).fill(0),
+            1: new Array(12).fill(0)
         }
 
         this.configName = '';
@@ -35,6 +35,7 @@ class DatabaseParamStore {
 
     // Update the data in memory. 
     setCutOffVal(chipsetId, sensorIdx, cutoffVal) {
+        sensorIdx = sensorIdx - 1; // Adjust it since sensor idx is from 1-12
         // Update chipset data. 
         this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
     }
