@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b55b1c530f77bb744a2cc176aa4c0055",
+    "revision": "56db958670204c358522e4adfe4705fc",
     "url": "/Fabric_Instrument/index.html"
   },
   {
-    "revision": "d30a9aaa77d37808054f",
+    "revision": "669421f3c678b75c3589",
     "url": "/Fabric_Instrument/static/css/main.913bc3f4.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/js/2.d98a831d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "d30a9aaa77d37808054f",
-    "url": "/Fabric_Instrument/static/js/main.adf48b6f.chunk.js"
+    "revision": "669421f3c678b75c3589",
+    "url": "/Fabric_Instrument/static/js/main.35a50f31.chunk.js"
   },
   {
     "revision": "753171d1d1123f6e4281",
@@ -32,8 +32,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/media/2minor.840ca4e9.wav"
   },
   {
-    "revision": "d613978c0139c3b22aad2788d23912f3",
-    "url": "/Fabric_Instrument/static/media/2sleeve_life.d613978c.svg"
+    "revision": "f2f9a83412054fc07b251882dd681fe2",
+    "url": "/Fabric_Instrument/static/media/2sleeve_life.f2f9a834.svg"
   },
   {
     "revision": "2a054654319c7ead0499a831f46c624d",
