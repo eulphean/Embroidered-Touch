@@ -89,17 +89,41 @@ class SelectMode extends React.Component {
     let chipASensorData = SensorDataStore.getChipData(0)['f']; 
     let chipBSensorData = SensorDataStore.getChipData(1)['f'];
 
-    // TODO: 
-    // Compare the cutoff values in the database param store with the chipset sensor data. 
-    // If cutoff value is hit, then call the AudioManager to play a sound for that 
-    // specific sample. 
+    // Only when we are in solo mode. 
+    if (this.state.isSoloActive) {
+      // Chip A sensor lines. 
+      let chipACutoffVal = config[0]; 
+      for (let i = 0; i < chipASensorData.length; i++) {
+        let cutoffVal = chipACutoffVal[i]; 
+        let data = chipASensorData[i]; 
+        if (data < cutoffVal) {
+          AudioManager.trigger(i, true); 
+        } else {
+          AudioManager.release(i, true); 
+        }
+      }
+
+      // Chip B sensor lines. 
+      let chipBCutoffVal = config[1]; 
+      for (let i = 0; i < chipBSensorData.length; i++) {
+        let cutoffVal = chipBCutoffVal[i]; 
+        let data = chipBSensorData[i]; 
+        if (data < cutoffVal) {
+          AudioManager.trigger(i, false); 
+        } else {
+          AudioManager.release(i, false); 
+        }
+      }
+    }
   }
 
   onClickSolo() {
     if (this.state.isSoloActive) {
-      AppStatusStore.setMode('SETUP')
+      AppStatusStore.setMode('SETUP');
+      AudioManager.resetPallete(); 
     } else {
       AppStatusStore.setMode('SOLO');
+      AudioManager.startPalleteTimer();
     }
 
     // Activate.

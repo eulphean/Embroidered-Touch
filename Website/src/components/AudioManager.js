@@ -14,6 +14,7 @@ class Audio {
     constructor(soundObj, env) {
         this.soundObject = soundObj;
         this.adsr = env; 
+        this.isActive = false; 
     }
 
     setAdsr(attackTime, attackLevel, decayTime, decayLevel, releaseTime, releaseLevel) {
@@ -21,9 +22,16 @@ class Audio {
         this.adsr.set(attackTime, attackLevel, decayTime, decayLevel, releaseTime, releaseLevel); 
     }
 
-    play() {
+    trigger() {
         this.soundObject.stop();
+        this.soundObject.loop(); 
         this.adsr.triggerAttack(this.soundObject); 
+        this.isActive = true; 
+    }
+
+    release() {
+        this.adsr.triggerRelease(this.soundObject);
+        this.isActive = false; 
     }
 }
 
@@ -63,6 +71,27 @@ class AudioManager {
         setTimeout(this.setPallete.bind(this), 5000); 
     }
 
+    startPalleteTimer() {
+        this.palleteInterval = setInterval(this.updatePallete.bind(this), 5000); 
+    }
+
+    updatePallete() {
+        // Stop sounds the previous pallete. 
+        this.stopAllSounds(); 
+
+        // Set new pallete. 
+        this.curPaletteIdx = (this.curPaletteIdx + 1) % 5; 
+        this.setPallete(); 
+    }
+
+    resetPallete() {
+        clearInterval(this.palleteInterval); 
+        // Stop all sounds from the current pallete. 
+        this.stopAllSounds(); 
+        // Reset the pallete back to beginning.
+        this.curPaletteIdx = 0; 
+    }
+
     setPallete() {
         let p = palettes[this.curPaletteIdx]; 
         let keys = Object.keys(p); 
@@ -75,21 +104,36 @@ class AudioManager {
             // attack time, attack level, decay time, decay level, release time, release level
             audio.setAdsr(adsrParams[0], adsrParams[1], adsrParams[2], adsrParams[3], adsrParams[4], adsrParams[5]); 
         }
+
+        console.log('Current Pal idx: ' + this.curPaletteIdx); 
     }
 
-    play(sensorIdx) {
-        let audioIdx; 
-        if (sensorIdx >= 0 && sensorIdx <=11) {
-            // Left sleeve. 
-            audioIdx = sensorIdx; 
+    trigger(idx, isChipA) {
+        let aIdx = this.getAudioIndex(idx, isChipA);
+        let audio = this.getAudioByPaletteIdx(aIdx); 
+        if (!audio.isActive) {
+            audio.trigger(); 
+        }
+    }
+
+    release(idx, isChipA) {
+        let aIdx = this.getAudioIndex(idx, isChipA);
+        let audio = this.getAudioByPaletteIdx(aIdx); 
+        audio.release(); 
+    }
+
+    getAudioIndex(idx, isChipA) {
+        // This is the index of the object in the audio pallete.  
+        // It's between 0-23.
+        // Incoming index is between 0-11 (along isChipA, which tells if it's left or right chip)
+        let aIdx; 
+        if (isChipA) {
+            aIdx = idx; 
         } else {
-            // Right sleeve. 
-            audioIdx = sensorIdx - 12; 
+            aIdx = idx + 12; 
         }
 
-        // Play the correct audio track. 
-        let audio = this.getAudioByPaletteIdx(audioIdx); 
-        audio.play(); 
+        return aIdx; 
     }
 
     getAudioByPaletteIdx(idx) {
@@ -97,6 +141,16 @@ class AudioManager {
         let soundIdx = p[idx]['sound']; 
         let audio = this.myP5.getAudio()[soundIdx]; 
         return audio; 
+    }
+
+    stopAllSounds() {
+        let p = palettes[this.curPaletteIdx]; 
+        let keys = Object.keys(p); 
+        for (let i = 0; i < keys.length; i++) {
+            let soundIdx = p[i]['sound'];
+            let audio = this.myP5.getAudio()[soundIdx];
+            audio.release(); 
+        }
     }
 }
 

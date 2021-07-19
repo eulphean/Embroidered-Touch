@@ -35,7 +35,11 @@ class DatabaseParamStore {
 
     // Update the data in memory. 
     setCutOffVal(chipsetId, sensorIdx, cutoffVal) {
-        sensorIdx = sensorIdx - 1; // Adjust it since sensor idx is from 1-12
+        if (sensorIdx >=1 && sensorIdx <= 12) {
+            sensorIdx = sensorIdx - 1;
+        } else {
+            sensorIdx = sensorIdx - 12 - 1; 
+        }
         // Update chipset data. 
         this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
     }
@@ -86,50 +90,4 @@ class DatabaseParamStore {
     }
 }
 
-export default new DatabaseParamStore(); 
-
-
-
-// getCutoffValue(chipsetId, sensorIdx) {
-//     if (this.configs[configName]) {
-//         let v = this.configs[configName][chipsetId]['cutoff'][sensorIdx];
-//         return v;
-//     } else {
-//         // Return default values when there is no config name.
-//         // This happens in the beginning.
-//         return this.cutoffVals[chipsetId]['co'][sensorIdx];
-//     }
-// }
-
-    // TODO: Don't need to load all configs. 
-    // onAllConfigsLoaded(data) {
-    //     let configs = data; 
-    //     for (let i = 0; i < configs.length; i++) {
-    //         let name = configs[i]['name'];
-    //         let json = configs[i]['config'];
-    //         this.configs[name] = json; 
-    //     }
-
-    //     console.log(this.configs);
-
-    //     // Intimate all the subscribers of the updates.
-    //     for (let i = 0; i < this.listeners.length; i++) {
-    //         this.listeners[i](this.configs); 
-    //     }
-    // }
-
-    // getDefaultConfig() {
-    //     let jsonObject = {}; 
-    //     for (let i = 0; i < 2; i++) { // Num chips = 2
-    //         let chipsetData = {}; 
-    //         chipsetData['cutoff'] = {}; 
-    //         for (let j = 0; j < 12; j++) { // Num sensors = 12
-    //             let cutoffVals = this.cutoffVals[i]['co']; 
-    //             chipsetData['cutoff'][j] = cutoffVals[j];  
-    //         }
-
-    //         jsonObject[i.toString()] = chipsetData; 
-    //     }
-
-    //     return jsonObject; 
-    // }
+export default new DatabaseParamStore();
