@@ -20,6 +20,7 @@ const CALIBRATIONSTATE = {
   STARTED: 'STARTED',
   COMPLETED: 'COMPLETED'
 }; 
+const calibrationTime = 5; // seconds.
 
 const styles = {
   container: {
@@ -52,7 +53,7 @@ class Sensor extends React.Component {
     let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
     this.state={
       sensorVal: v,
-      time: 5,
+      time: calibrationTime,
       calibration: CALIBRATIONSTATE.NOTSTARTED
     };
 
@@ -140,6 +141,15 @@ class Sensor extends React.Component {
       this.interval = setInterval(this.updateTime.bind(this), 1000); 
       this.setState({
         calibration: CALIBRATIONSTATE.STARTED
+      }); 
+    }
+
+    // If we lifted our finger off by mistake before the calibration was completed, reset calibration state.
+    if ((v > this.curSensorValue - this.initialThreshold) && (this.state.calibration === CALIBRATIONSTATE.STARTED)) {
+      clearInterval(this.interval); 
+      this.setState({
+        calibration: CALIBRATIONSTATE.NOTSTARTED,
+        time: calibrationTime
       }); 
     }
   }
