@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "56db958670204c358522e4adfe4705fc",
+    "revision": "41ab4c8da02bd7841ddad64cf7e0dc87",
     "url": "/Fabric_Instrument/index.html"
   },
   {
-    "revision": "669421f3c678b75c3589",
+    "revision": "253ab5641b15264d97d2",
     "url": "/Fabric_Instrument/static/css/main.913bc3f4.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/js/2.d98a831d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "669421f3c678b75c3589",
-    "url": "/Fabric_Instrument/static/js/main.35a50f31.chunk.js"
+    "revision": "253ab5641b15264d97d2",
+    "url": "/Fabric_Instrument/static/js/main.78730dea.chunk.js"
   },
   {
     "revision": "753171d1d1123f6e4281",
@@ -116,8 +116,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/media/leaves.48c90127.wav"
   },
   {
-    "revision": "cdbb922e9aedf9b526df16144c2e3de9",
-    "url": "/Fabric_Instrument/static/media/left_sleeve.cdbb922e.svg"
+    "revision": "5009c0b066d7af202ef9c001d79680bd",
+    "url": "/Fabric_Instrument/static/media/left_sleeve.5009c0b0.svg"
   },
   {
     "revision": "51cabdaf1bdf5155749e956fd334e77b",
@@ -148,8 +148,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/media/quickhigh.06042eb9.wav"
   },
   {
-    "revision": "d477729b2894dfab0cf9caa031a5b727",
-    "url": "/Fabric_Instrument/static/media/right_sleeve.d477729b.svg"
+    "revision": "7c6952f9dc8468abd614456809e5feea",
+    "url": "/Fabric_Instrument/static/media/right_sleeve.7c6952f9.svg"
   },
   {
     "revision": "1d1a2a94a4f01439c88de674a1caf600",
