@@ -21,7 +21,10 @@ import { color } from './CommonStyles.js'
 
 const styles = {
   container: {
-    backgroundColor: color.black
+    backgroundColor: color.black,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column'
   }
 };
 

@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
+import { color, padding, fontSize } from './CommonStyles';
 import { Redirect } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -19,17 +19,26 @@ const styles = {
     alignItems: 'center',
     color: color.white,
     padding: padding.huge,
-    zIndex: 2
+    zIndex: 2,
+    '@media (min-width: 1200px)': {
+      marginTop: padding.extraEnormous
+    }
   },
 
   title: {
     fontWeight: 'bold',
-    zIndex: 'inherit'
+    zIndex: 'inherit',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   info: {
     zIndex: 'inherit',
     textAlign: 'center',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   }
 };
 
@@ -54,10 +63,10 @@ class Setup extends React.Component {
           <div style={styles.info}>Start by attaching the battery.</div>
           <br />
           <div style={styles.info}>You should see the blue LED start to blink.</div>
-          <br />
+          <br /><br />
           <div style={styles.info}>Next put the shirt on and click PAIR below.</div>
           <br />
-          <div style={styles.info}>Choose the Bluetooth device 'TOUCH' from the popup window and click 'PAIR'</div>
+          <div style={styles.info}>Choose the Bluetooth device 'TOUCH' from the<div>popup window and click 'PAIR'</div></div>
           <br /><br />
           <CustomButton onClick={this.onPair.bind(this)}>PAIR</CustomButton>
         </div>

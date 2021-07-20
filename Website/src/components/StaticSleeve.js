@@ -15,8 +15,26 @@ const styles = {
     zIndex: 1,
     position: 'fixed',
     top: '45px',
-    left: '0%',
-    right: '0%'
+    opacity: 0.7,
+    '@media (min-width: 1200px)': {
+      top: '80px',
+      width: '90%',
+      height: '90%',
+    }
+  },
+
+  leftSleeve: {
+    paddingLeft: '10px',
+    '@media (min-width: 1200px)': {
+      paddingLeft: '5%'
+    }
+  },
+
+  rightSleeve: {
+    paddingRight: '5px',
+    '@media (min-width: 1200px)': {
+      paddingRight: '5%'
+    }
   },
 
   svg: {
@@ -29,12 +47,15 @@ class StaticSleeve extends React.Component {
   constructor(props) {
     super(props);
     this.state={};
+    this.isLeftSleeve = true; 
   }
 
   render() {
-    let sleeve = !this.props.sensorIdx ? <LeftSleeve style={styles.svg} /> : this.props.sensorIdx <= 12 ? <LeftSleeve style={styles.svg}/> : <RightSleeve style={styles.svg}/>;
+    this.isLeftSleeve = !this.props.sensorIdx ? true : this.props.sensorIdx <= 12 ? true : false; 
+    let sleeve = this.isLeftSleeve ? <LeftSleeve style={styles.svg} /> : <RightSleeve style={styles.svg}/>;
+    let sleeveStyle = this.isLeftSleeve ? [styles.svgContainer, styles.leftSleeve] : [styles.svgContainer, styles.rightSleeve];
     return (
-      <div style={styles.svgContainer}>
+      <div style={sleeveStyle}>
         {sleeve}
       </div>
     );

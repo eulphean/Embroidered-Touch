@@ -20,7 +20,11 @@ const styles = {
     fontSize: fontSize.small,
     color: color.white,
     padding: padding.small,
-    letterSpacing: '1.5px'
+    letterSpacing: '1.5px',
+    '@media (min-width: 1200px)': {
+      padding: padding.veryBig,
+      fontSize: fontSize.huge
+    }
   },
 
   buttonStatic: {

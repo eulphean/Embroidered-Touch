@@ -40,6 +40,7 @@ const padding = {
     verySmall: '8px',
     small: '12px',
     // Incremenets of 8
+    lessBig: '16px',
     big : '20px',
     veryBig : '28px',
     extraBig : '36px',
@@ -52,7 +53,7 @@ const padding = {
     veryMassive: '108px',
     extraMassive: '124px',
     // Increment of 20
-    enourmous: '100px',
+    enormous: '100px',
     veryEnormous: '120px',
     extraEnormous: '140px',
     // Increment of 40

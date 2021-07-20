@@ -30,11 +30,17 @@ const styles = {
   },
 
   title: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   info: {
-    textAlign: 'center'
+    textAlign: 'center',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   inputContainer: {
@@ -46,7 +52,13 @@ const styles = {
   input: {
     width: fontSize.huge,
     height: fontSize.small,
-    marginRight: padding.extraSmall
+    marginRight: padding.extraSmall,
+    fontSize: fontSize.small,
+    '@media (min-width: 1200px)': {
+      width: fontSize.extraHuge,
+      height: fontSize.huge,
+      fontSize: fontSize.big
+    }
   },
 
   button: {
@@ -54,7 +66,11 @@ const styles = {
     color: color.white,
     border: 'none',
     fontSize: fontSize.verySmall,
-    padding: padding.extraSmall
+    padding: padding.extraSmall,
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.big,
+      padding: padding.verySmall
+    }
   }
 };
 
@@ -87,7 +103,7 @@ class TestCalibration extends React.Component {
               <button onClick={this.onEnter.bind(this)} style={styles.button}>enter</button>
             </div>
             <br />
-            <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div>
+            <div style={styles.info}>When you are satisfied with the calibration, click SAVE below.</div><br />
             <CustomButton onClick={this.onSave.bind(this)}>SAVE</CustomButton>
           </div>
         </div>

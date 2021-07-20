@@ -13,9 +13,15 @@ import BLE from './BLE';
 
 const styles = {
   container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'stretch',
     position: 'relative',
     padding: padding.small,
-    zIndex: 2
+    zIndex: 2,
+    '@media (min-width: 1200px)': {
+      padding: padding.lessBig
+    }
   },
 
   titleContainer: {
@@ -26,7 +32,11 @@ const styles = {
     color: color.black,
     padding: padding.verySmall,
     fontSize: fontSize.small,
-    zIndex: 'inherit'
+    zIndex: 'inherit',
+    '@media (min-width: 1200px)': {
+      padding: padding.lessBig,
+      fontSize: fontSize.extraBig
+    }
   },
 
   infoContainer: {
@@ -35,8 +45,11 @@ const styles = {
     justifyContent: 'space-between',
     marginTop: padding.small,
     color: color.white,
+    zIndex: 'inherit',
     fontSize: fontSize.verySmall,
-    zIndex: 'inherit'
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   statusContainer: {
@@ -50,7 +63,11 @@ const styles = {
     width: fontSize.small,
     height: fontSize.small,
     borderRadius: fontSize.small,
-    zIndex: 'inherit'
+    zIndex: 'inherit',
+    '@media (min-width: 1200px)': {
+      width: fontSize.big,
+      height: fontSize.big
+    }
   },
 
   statusIconInactive: {
@@ -67,18 +84,20 @@ const styles = {
 
   iconContainer: {
     fill: 'white',
+    zIndex: 'inherit',
+    marginLeft: padding.verySmall,
     marginTop: padding.extraSmall,
-    zIndex: 'inherit'
+    width: fontSize.small,
+    '@media (min-width: 1200px)': {
+      marginLeft: padding.small,
+      width: fontSize.veryBig,
+    }
   },
 
   icon: {
-    width: '15px',
-    height: '15px',
+    width: '100%',
+    height: '100%',
     zIndex: 'inherit'
-  },
-
-  modeText: {
-    marginRight: padding.verySmall
   },
 
   modeContainer: {
@@ -117,7 +136,7 @@ class Title extends React.Component {
               <div style={styles.statusText}>BLUETOOTH STATUS</div>
             </div>
             <div style={styles.modeContainer}>
-              <div style={styles.modeText}>MODE: {this.state.mode}</div>
+              <div>MODE: {this.state.mode}</div>
               { logout }
             </div>
         </div>

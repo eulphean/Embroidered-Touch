@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
+import { color, padding, fontSize } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import DoubleSleeve from './DoubleSleeve';
@@ -21,22 +21,48 @@ const RadiumLink = Radium(Link);
 const styles = {
   container: {
     position: 'relative',
-    color: color.white
+    color: color.white,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    '@media (min-width: 1200px)': {
+      alignSelf: 'stretch'
+    }
   },
 
   content: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: padding.big,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: padding.verySmall,
+    paddingRight: padding.verySmall,
+    '@media (min-width: 1200px)': {
+      display: 'flex',
+      flexDirection: 'row',
+      paddingLeft: '20%',
+      paddingRight: '20%',
+      alignSelf: 'stretch',
+      justifyContent: 'space-between',
+      marginTop: '-100px'
+    }
   },
 
   title: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   info: {
-    textAlign: 'center'
+    textAlign: 'center',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
+  },
+
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 };
 
@@ -65,20 +91,25 @@ class SelectMode extends React.Component {
       <div style={styles.container}>
         <DoubleSleeve showLife={true} />
         <div style={styles.content}>
-          <div style={styles.title}>Mode</div>
-          <br />
-          <div style={styles.info}>Choose SOLO to send sound to your own device.</div>
-          <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>
-          <br />
-          <div style={styles.info}>Choose CONNECTION to send and receive sound with a friend.</div>
-          <CustomButton>
-            <RadiumLink to='/connection'>CONNECTION</RadiumLink>
-          </CustomButton>
-          <br />
-          <div style={styles.info}>Choose SETUP to recalibrate your device.</div>
-          <CustomButton>
-            <RadiumLink to="/testcal">SETUP</RadiumLink>
-          </CustomButton>
+          <div style={styles.buttonContainer}>
+            <div style={styles.info}>Choose SOLO to send sound<div>to your own device.</div></div>
+            <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>
+            <br />
+          </div>
+          <div style={styles.buttonContainer}>
+            <div style={styles.info}>Choose CONNECTION to send and receive<div>sound with a friend.</div></div>
+            <CustomButton>
+              <RadiumLink to='/connection'>CONNECTION</RadiumLink>
+            </CustomButton>
+            <br />
+          </div>
+          <div style={styles.buttonContainer}>
+            <div style={styles.info}>Choose SETUP to recalibrate<div>your device.</div></div>
+            <CustomButton>
+              <RadiumLink to="/testcal">SETUP</RadiumLink>
+            </CustomButton>
+            <br />
+          </div>
         </div>
       </div>
     );

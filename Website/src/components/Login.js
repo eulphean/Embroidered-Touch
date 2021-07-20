@@ -16,18 +16,21 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    color: color.white
-  },
-
-  loginContent: {
+    color: color.white,
+    padding: padding.huge,
     zIndex: 2,
-    padding: padding.huge
+    '@media (min-width: 1200px)': {
+      marginTop: padding.veryInsane
+    }
   },
 
   buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: padding.small
+    marginTop: padding.small,
+    '@media (min-width: 1200px)': {
+      marginTop: padding.veryBig
+    }
   },
 
   button: {
@@ -35,8 +38,12 @@ const styles = {
     border: 'none',
     marginRight: padding.small,
     fontSize: fontSize.verySmall,
-    height: fontSize.huge,
-    color: color.white
+    color: color.white,
+    padding: padding.verySmall,
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.big,
+      padding: padding.small,
+    }
   },
 
   inputContainer: {
@@ -48,16 +55,23 @@ const styles = {
   input: {
     width: '100px',
     height: '20px',
-    marginTop: padding.extraSmall
+    marginTop: padding.extraSmall,
+    '@media (min-width: 1200px)': {
+      width: '150px',
+      height: '30px',
+      fontSize: fontSize.big
+    }
   },
 
   resultLabel: {
     marginTop: padding.extraSmall
   },
 
-
   loginText: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   }
 };
 
@@ -78,28 +92,22 @@ class Login extends React.Component {
   render() {
     return (
       <div style={styles.container}>
-        <div style={styles.loginContent}>
-          <div style={styles.loginText}>Login</div>
-          <div style={styles.inputContainer}>
-            <input style={styles.input} onChange={this.usernameChanged.bind(this)} type="text" placeholder="Username.." value={this.state.username}></input>
-            <input style={styles.input} onChange={this.passwordChanged.bind(this)} type="password" placeholder="Password.." value={this.state.password}></input>
-          </div>
-          <div style={styles.buttonContainer}>
-            <button style={styles.button} onClick={this.onClickLogin.bind(this)}>ENTER</button>
-            <button style={styles.button} onClick={this.onClickSignUp.bind(this)}>CREATE ACCOUNT</button>
-          </div>
-          <div style={styles.resultLabel}>
-            {this.state.message}
-          </div>
+        <div style={styles.loginText}>Login</div>
+        <div style={styles.inputContainer}>
+          <input style={styles.input} onChange={this.usernameChanged.bind(this)} type="text" placeholder="Username.." value={this.state.username}></input>
+          <input style={styles.input} onChange={this.passwordChanged.bind(this)} type="password" placeholder="Password.." value={this.state.password}></input>
+        </div>
+        <div style={styles.buttonContainer}>
+          <button style={styles.button} onClick={this.onClickLogin.bind(this)}>ENTER</button>
+          <button style={styles.button} onClick={this.onClickSignUp.bind(this)}>CREATE ACCOUNT</button>
+        </div>
+        <div style={styles.resultLabel}>
+          {this.state.message}
         </div>
       </div>
     );
   }
 
-  componentDidMount() {
-    // let line2 = document.getElementById('line2');
-    // line2.style.stroke = 'red';
-  }
 
   onClickLogin(e) {
     e.preventDefault(); 

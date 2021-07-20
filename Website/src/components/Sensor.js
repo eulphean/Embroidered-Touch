@@ -6,7 +6,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { color, padding } from './CommonStyles';
+import { color, padding, fontSize } from './CommonStyles';
 import { Link } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
@@ -29,21 +29,26 @@ const styles = {
     alignItems: 'center',
     color: color.white,
     padding: padding.veryBig,
-    zIndex: 2
+    zIndex: 2,
+    '@media (min-width: 1200px)': {
+      marginTop: padding.extraEnormous
+    }
   },
 
   info: {
     textAlign: 'center',
-    zIndex: 'inherit'
+    zIndex: 'inherit',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   },
 
   title: {
     zIndex: 'inherit',
-    fontWeight: 'bold'
-  },
-
-  button: {
-    zIndex: 'inherit'
+    fontWeight: 'bold',
+    '@media (min-width: 1200px)': {
+      fontSize: fontSize.veryBig
+    }
   }
 };
 
@@ -60,7 +65,7 @@ class Sensor extends React.Component {
     // Calibration parameters. 
     this.curSensorValue = v; 
     this.initialThreshold = 10; 
-    this.interval = ''; 
+    this.interval = '';   
   }
 
   componentDidMount() {
@@ -74,23 +79,77 @@ class Sensor extends React.Component {
   render() {
     let nextPath = this.getNextPath(); 
     let calibrationMessage = this.getCalibrationMsg(); 
+
+    // Some conditions used to render the messages. 
+    let isLeftSleeve = this.props.sensorIdx <=12;
+    let isContinuing = this.props.sensorIdx >= 2 && this.props.sensorIdx <=12 || this.props.sensorIdx >= 14 && this.props.sensorIdx <=24; 
+
+    // Pending messages. 
+    let firstMessage = this.getFirstMessage(isLeftSleeve, isContinuing); 
+    let secondMessage = this.getSecondMessage(isLeftSleeve, isContinuing); 
+    let thirdMessage = this.getThirdMessage(isLeftSleeve, isContinuing); 
     return (
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
         <br />
-        <div style={styles.info}>First, the Left Sleeve.</div>
-        <br />
-        <div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div>
-        <br />
-        <div style={styles.info}>Touch the vertical grid line closest to the front of the body.</div>
-        <br />
+        {firstMessage}
+        {secondMessage}
+        {thirdMessage}
         {calibrationMessage}
         <br />
         <div style={styles.info}>Then click NEXT below.</div>
         <div style={styles.info}>Debug Sensor Val: {this.state.sensorVal}</div>
+        <br />
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
+  }
+
+  getFirstMessage(isLeftSleeve, isContinuing) {
+    let message; 
+    if (isLeftSleeve) {
+      message = (<span><div style={styles.info}>First, the Left Sleeve.</div><br /></span>);
+    }
+    
+    if (isLeftSleeve && isContinuing) {
+      message = (<span><div style={styles.info}>Continuing with the Left Sleeve.</div><br /></span>);
+    }
+    
+    if (!isLeftSleeve) {
+      message = (<span><div style={styles.info}>Now, the Right Sleeve.</div><br /></span>);
+    }
+
+    if (!isLeftSleeve && isContinuing) {
+      message = (<span><div style={styles.info}>Continuing with the Right Sleeve.</div><br /></span>);
+    }
+
+    return message; 
+  }
+
+  getSecondMessage(isLeftSleeve, isContinuing) {
+    let message;
+    if (isLeftSleeve || !isLeftSleeve) {
+      message = (<span><div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div><br /></span>);
+    }
+
+    if (isLeftSleeve && isContinuing || !isLeftSleeve && isContinuing) {
+      message = <React.Fragment></React.Fragment>;
+    } 
+
+    return message; 
+  }
+
+  getThirdMessage(isLeftSleeve, isContinuing) {
+    let message; 
+    if (isLeftSleeve || !isLeftSleeve) {
+      message = <span><div style={styles.info}>Touch the vertical grid line closest to the front of the body.</div><br /></span>;
+    }
+
+    if (isLeftSleeve && isContinuing || !isLeftSleeve && isContinuing) {
+      message = <span><div style={styles.info}>Touch the next vertical grid line moving away from the center of the body.</div><br /></span>;
+    }
+
+    return message; 
   }
 
   getCalibrationMsg() {
