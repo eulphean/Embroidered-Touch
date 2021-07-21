@@ -17,11 +17,8 @@ import TestCalibration from './TestCalibration.js'
 import ConnectionMode from './ConnectionMode.js'
 import Sensor from './Sensor.js'
 
-import { color } from './CommonStyles.js'
-
 const styles = {
   container: {
-    backgroundColor: color.black,
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column'

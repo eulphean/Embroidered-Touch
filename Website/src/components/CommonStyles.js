@@ -3,6 +3,7 @@ const color = {
     tealActive: '#1A5F92',
     white: '#FFFFFF',
     black: '#000000',
+    mainBg: '#3D3E3F',
     active: '#7FFF00',
     inactive: 'red',
     sensorActive: '#04A0FF',

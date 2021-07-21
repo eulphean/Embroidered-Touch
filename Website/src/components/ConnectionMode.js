@@ -10,8 +10,6 @@ import DoubleSleeve from './DoubleSleeve';
 import { color, fontSize} from './CommonStyles';
 
 import { ReactComponent as Ear } from '../Assets/ear.svg';
-import SensorDataStore from '../Stores/SensorDataStore';
-import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {

@@ -82,7 +82,7 @@ class Sensor extends React.Component {
 
     // Some conditions used to render the messages. 
     let isLeftSleeve = this.props.sensorIdx <=12;
-    let isContinuing = this.props.sensorIdx >= 2 && this.props.sensorIdx <=12 || this.props.sensorIdx >= 14 && this.props.sensorIdx <=24; 
+    let isContinuing = (this.props.sensorIdx >= 2 && this.props.sensorIdx <=12) || (this.props.sensorIdx >= 14 && this.props.sensorIdx <=24); 
 
     // Pending messages. 
     let firstMessage = this.getFirstMessage(isLeftSleeve, isContinuing); 
@@ -132,7 +132,7 @@ class Sensor extends React.Component {
       message = (<span><div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div><br /></span>);
     }
 
-    if (isLeftSleeve && isContinuing || !isLeftSleeve && isContinuing) {
+    if ((isLeftSleeve && isContinuing) || (!isLeftSleeve && isContinuing)) {
       message = <React.Fragment></React.Fragment>;
     } 
 
@@ -145,7 +145,7 @@ class Sensor extends React.Component {
       message = <span><div style={styles.info}>Touch the vertical grid line closest to the front of the body.</div><br /></span>;
     }
 
-    if (isLeftSleeve && isContinuing || !isLeftSleeve && isContinuing) {
+    if ((isLeftSleeve && isContinuing) || (!isLeftSleeve && isContinuing)) {
       message = <span><div style={styles.info}>Touch the next vertical grid line moving away from the center of the body.</div><br /></span>;
     }
 

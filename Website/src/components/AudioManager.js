@@ -37,16 +37,21 @@ class Audio {
 
 // Use this p5 sketch to load all audio. 
 var sketch = (s) => {
-    let allAudio = [];
+    // Two arrays. One for each side. 
+    let leftAudio = [];
+    let rightAudio = [];
     s.preload = () => {
         for (let i = 0; i < audioFiles.length; i++) {
             let sound = s.loadSound(audioFiles[i]); 
             let env = new p5.Envelope(0.1, 0.5, 0.1, 0.5); // Default envelope. 
             let a = new Audio(sound, env); 
-            allAudio.push(a); 
-        }
+            let b = new Audio(sound, env); 
 
-        console.log(allAudio);
+            // Left handles left side.
+            // Right handles right side. 
+            leftAudio.push(a); 
+            rightAudio.push(b); 
+        }
     }
     
     s.setup = () => {
@@ -57,11 +62,16 @@ var sketch = (s) => {
         s.noLoop(); 
     };
 
-    s.getAudio = () => {
-        return allAudio; 
+    s.getLeftAudio = () => {
+        return leftAudio; 
+    }
+
+    s.getRightAudio = () => {
+        return rightAudio;
     }
 };
 
+const TimeInterval = 5000; 
 // Keeps track of the current pallete and is responsible for cycling the palletes. 
 class AudioManager {
     constructor() {
@@ -72,7 +82,7 @@ class AudioManager {
     }
 
     startPalleteTimer() {
-        this.palleteInterval = setInterval(this.updatePallete.bind(this), 5000); 
+        this.palleteInterval = setInterval(this.updatePallete.bind(this), TimeInterval); 
     }
 
     updatePallete() {
@@ -95,51 +105,44 @@ class AudioManager {
     setPallete() {
         let p = palettes[this.curPaletteIdx]; 
         let keys = Object.keys(p); 
-        let allAudio = this.myP5.getAudio(); 
+        let leftAudio = this.myP5.getLeftAudio(); 
+        let rightAudio = this.myP5.getRightAudio(); 
         for (let i = 0; i < keys.length; i++) {
             let k = keys[i]; 
             let soundIdx = p[k]['sound']; 
             let adsrParams = p[k]['adsr'];
-            let audio = allAudio[soundIdx];
+
+            // Set both audios. 
+            let lAudio = leftAudio[soundIdx];
+            let rAudio = rightAudio[soundIdx];
+
+            // Set ADSR on both the audios. 
             // attack time, attack level, decay time, decay level, release time, release level
-            audio.setAdsr(adsrParams[0], adsrParams[1], adsrParams[2], adsrParams[3], adsrParams[4], adsrParams[5]); 
+            lAudio.setAdsr(adsrParams[0], adsrParams[1], adsrParams[2], adsrParams[3], adsrParams[4], adsrParams[5]); 
+            rAudio.setAdsr(adsrParams[0], adsrParams[1], adsrParams[2], adsrParams[3], adsrParams[4], adsrParams[5]); 
         }
 
         console.log('Current Pal idx: ' + this.curPaletteIdx); 
     }
 
     trigger(idx, isChipA) {
-        let aIdx = this.getAudioIndex(idx, isChipA);
-        let audio = this.getAudioByPaletteIdx(aIdx); 
+        // Index is always between 0 - 11 because sounds are same on both the sides. 
+        // ChipA is left and ChipB is right. 
+        let audio = this.getAudioByPaletteIdx(idx, isChipA); 
         if (!audio.isActive) {
             audio.trigger(); 
         }
     }
 
     release(idx, isChipA) {
-        let aIdx = this.getAudioIndex(idx, isChipA);
-        let audio = this.getAudioByPaletteIdx(aIdx); 
+        let audio = this.getAudioByPaletteIdx(idx, isChipA); 
         audio.release(); 
     }
 
-    getAudioIndex(idx, isChipA) {
-        // This is the index of the object in the audio pallete.  
-        // It's between 0-23.
-        // Incoming index is between 0-11 (along isChipA, which tells if it's left or right chip)
-        let aIdx; 
-        if (isChipA) {
-            aIdx = idx; 
-        } else {
-            aIdx = idx + 12; 
-        }
-
-        return aIdx; 
-    }
-
-    getAudioByPaletteIdx(idx) {
+    getAudioByPaletteIdx(idx, isChipA) {
         let p = palettes[this.curPaletteIdx]; 
         let soundIdx = p[idx]['sound']; 
-        let audio = this.myP5.getAudio()[soundIdx]; 
+        let audio = isChipA ? this.myP5.getLeftAudio()[soundIdx] : this.myP5.getRightAudio()[soundIdx];
         return audio; 
     }
 
@@ -148,8 +151,10 @@ class AudioManager {
         let keys = Object.keys(p); 
         for (let i = 0; i < keys.length; i++) {
             let soundIdx = p[i]['sound'];
-            let audio = this.myP5.getAudio()[soundIdx];
-            audio.release(); 
+            let lAudio = this.myP5.getLeftAudio()[soundIdx];
+            let rAudio = this.myP5.getRightAudio()[soundIdx];
+            lAudio.release(); 
+            rAudio.release();
         }
     }
 }

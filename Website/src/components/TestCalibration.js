@@ -6,7 +6,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
