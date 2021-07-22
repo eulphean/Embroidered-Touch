@@ -121,7 +121,7 @@ class Login extends React.Component {
             response.json().then(data => {
               let result = data['result'];
               if (result === 'user_not_found') {
-                this.props.onLogin(false); // Send back a token to decide if we should move forward. 
+                this.props.onLogin(false, false); // Send back a token to decide if we should move forward. 
                 this.setState({
                   message: 'Account not found'
                 });
@@ -170,12 +170,6 @@ class Login extends React.Component {
                 });
               }
             });
-            
-            // User is succesfully logged in, set the config name 
-            // in the Database store as well, so it knows which config
-            // to update in the DB
-            // NOTE: Username is the same as config name. 
-            DatabaseParamStore.setConfigName(username);
         } else {
           console.error('Something wrong');
         }

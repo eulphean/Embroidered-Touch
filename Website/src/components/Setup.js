@@ -11,6 +11,7 @@ import { Redirect } from 'react-router-dom';
 import CustomButton from './CustomButton';
 import BLE from './BLE';
 import AppStatusStore from '../Stores/AppStatusStore';
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
 
 const styles = {
   container: {
@@ -46,7 +47,8 @@ class Setup extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      hasPaired: false
+      hasPaired: false,
+      hasCalibrated: false
     };
 
     AppStatusStore.setShowLogout(true);
@@ -54,7 +56,9 @@ class Setup extends React.Component {
 
   render() {
     if (this.state.hasPaired) {
-      return (<Redirect push to="/calibration" />);
+      // If we have already calibrated, go straight to test calibration.
+      if (this.state.hasCalibrated) return (<Redirect push to='/testcal' />);
+      else return (<Redirect push to="/calibration" />);
     } else {
       return (
         <div style={styles.container}>
@@ -79,8 +83,10 @@ class Setup extends React.Component {
   }
 
   hasPaired() {
+    let config = DatabaseParamStore.getConfigJson(); 
     this.setState({
-      hasPaired: true
+      hasPaired: true,
+      hasCalibrated: config['hasCalibrated']
     }); 
   }
 }

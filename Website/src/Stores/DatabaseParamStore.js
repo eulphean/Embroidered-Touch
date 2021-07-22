@@ -13,7 +13,10 @@ class DatabaseParamStore {
         this.cutoffVals = {
             0: new Array(12).fill(0),
             1: new Array(12).fill(0)
-        }
+        };
+
+        // Keep track if the user has calibrated the system. 
+        this.hasCalibrated = false; 
 
         this.configName = '';
 
@@ -53,6 +56,7 @@ class DatabaseParamStore {
         // Both the chip params will be stored to the database. 
         // [name - text, config - json] (Database Payload)
         // JSON object, which gets stringified and goes to the database.
+        this.hasCalibrated = true; // We have calibrated the dress. 
         let jsonObject = this.getConfigJson();
         let dbPayload = {
             'name' : this.configName,
@@ -72,16 +76,23 @@ class DatabaseParamStore {
 
             jsonObject[i.toString()] = chipsetData; 
         }
+
+        // Save this flag in the config. 
+        jsonObject['hasCalibrated'] = this.hasCalibrated;
         return jsonObject; 
     }
 
-    // Assign config values to the cut off values. 
+    // Assign fetched config values to the cut off values. 
     setConfig(config) {
+        // Cut off values. 
         for (let i = 0; i < 2; i++) {
             for (let j = 0; j < 12; j++) {
                 this.cutoffVals[i][j] = config[i][j]; 
             }
         }
+
+        // Has calibrated flag. 
+        this.hasCalibrated = config['hasCalibrated']; 
     }
 
     setConfigName(configName) {

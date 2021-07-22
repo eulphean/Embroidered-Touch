@@ -38,6 +38,7 @@ class App extends React.Component {
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
     let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
+    // Redirect to test calibration page if we have already calibrated. 
     let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Setup /></React.Fragment> : <Redirect to="/" />; 
     let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Calibration /></React.Fragment> : <Redirect to="/" />
     let testCalPage = this.state.isLoggedIn ? <React.Fragment><TestCalibration /></React.Fragment> : <Redirect to="/" />;
@@ -143,65 +144,3 @@ class App extends React.Component {
 }
 
 export default Radium(App);
-
-// import ble from './BLE.js'
-// import websocket from './Websocket.js'
-// import audio from './Audio.js'
-
-
-// <Sensor 
-// chipsetId={this.props.chipsetId}
-// configName={this.state.configName}
-// sensorIdx={i}
-// fVal={fVals[i]} 
-// bVal={bVals[i]}
-// key={'key' + i}
-// />
-
-
-// <button onClick={this.onConnect.bind(this)}>BLE Connect</button>
-// <button onClick={this.onDisconnect.bind(this)}>BLE Disconnect</button>
-// <button onClick={this.onPlay.bind(this)}>Play Some Audio</button>
-// <div style={styles.inputContainer}>
-//   <input onChange={this.onTextAdded.bind(this)} style={styles.input} type='text' placeholder='Transmit text.'></input>
-//   <div style={styles.input}>{this.state.receiveVal}</div>
-// </div>
-// <button style={connectButtonStyle} onClick={this.enableConnect.bind(this)}>Enable Connect</button>
-// <ParamConfigs onConfigSelected={this.onConfigSelected.bind(this)} />
-// <ChipsetCollection ref={this.chipsetCollectionRef} />
-
-// onConnect() {
-//   ble.connect();
-// }
-
-// onDisconnect() {
-//   ble.disconnect();
-// }
-
-// onPlay() {
-//   audio.play();
-// }
-
-// enableConnect() {
-//   this.setState({
-//     isConnected: !this.state.isConnected
-//   });
-
-//   websocket.updateRoom(this.onSensorDataReceived.bind(this));
-// }
-
-// onTextAdded(e) {
-//   let val = e.target.value; 
-//   websocket.broadcastText(val);
-// }
-
-// onSensorDataReceived(data) {
-//   console.log('Sensor Data received: ' + data);
-//   this.setState( {
-//     receiveVal: data
-//   });
-// }
-
-// onConfigSelected(configName) {
-//   this.chipsetCollectionRef.current.updateCalibrationParams(configName); 
-// }
