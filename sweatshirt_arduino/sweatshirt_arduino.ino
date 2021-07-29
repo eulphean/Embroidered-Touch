@@ -16,7 +16,7 @@ void setup()
 {
   Serial.begin(115200);
   // Uncomment if you want Arduino operation to be linked with Serial communication.
-  while ( !Serial ) delay(10);   // for nrf52840 with native usb
+//  while ( !Serial ) delay(10);   // for nrf52840 with native usb
   
   Serial.println("Fabric Instrument Initialization Routine.");
   Serial.println("-------------------------------------\n");
