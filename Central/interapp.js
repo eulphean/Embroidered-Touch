@@ -3,16 +3,12 @@
 // File: interapp.js
 // Description: Helper module to handle all interapp communication of sensor data. This
 // module is invoked from sockets module. 
-
-var socket = require('socket.io');
-
 let roomName = 'fabric';
 module.exports = {
     broadcastSensorData: function(socket, data) {
         // if it's here, it's already in the room. 
         // Don't check again, just emit data to everybody in the room except itself. 
         socket.to(roomName).emit('receiveSensorData', data);
-        console.log('Emiting data');
     },
 
     // User messages (figure out first). 

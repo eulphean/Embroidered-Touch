@@ -11,7 +11,10 @@ import { color, fontSize} from './CommonStyles';
 
 import { ReactComponent as Ear } from '../Assets/ear.svg';
 import AppStatusStore from '../Stores/AppStatusStore';
+import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import SensorDataStore from '../Stores/SensorDataStore';
 import Websocket from './Websocket';
+import AudioManager from './AudioManager';
 
 const styles = {
   container: {
@@ -71,21 +74,13 @@ class ConnectionMode extends React.Component {
   componentDidMount() {
     AppStatusStore.setMode('CONNECTION');
     Websocket.joinRoom(this.roomDataCallback.bind(this), this.sensorDataCallback.bind(this));
-  }
-
-  roomDataCallback(data) {
-    this.setState({
-      roomData: data
-    }); 
-  }
-
-  sensorDataCallback(data) {
-    console.log('Sensor Data Received'); 
+    this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
   }
 
   componentWillUnmount() {
     AppStatusStore.setMode('SETUP');
     Websocket.leaveRoom(); 
+    this.removeSubscription();  
   }
 
   render() {
@@ -102,6 +97,76 @@ class ConnectionMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  roomDataCallback(data) {
+    this.setState({
+      roomData: data
+    }); 
+  }
+
+  sensorDataCallback(data) {
+    if (data !== '') {
+      console.log ('Broadcast message: ' + data); 
+      let msg = data.split('-');
+      let sensorIdx = msg[0]; 
+      let adsr = msg[1]; 
+      let chipSide = msg[2]; 
+
+      // Parse the message and trigger the signal on this side. 
+      if (chipSide === 'L') {
+        if (adsr === 'T') {
+          AudioManager.trigger(sensorIdx, true); 
+        } else {
+          AudioManager.release(sensorIdx, true); 
+        }
+      } else {
+        if (adsr === 'T') {
+          AudioManager.trigger(sensorIdx, false);
+        } else {
+          AudioManager.release(sensorIdx, false);
+        }
+      }
+    }
+  }
+
+  onSensorData() {
+    // If someone has joined the room....
+    // Then only try and broadcast sensor data, else don't. 
+    if(this.state.roomData === 'roomComplete') {
+      console.log('Room Complete');
+      let config = DatabaseParamStore.getConfigJson(); 
+      let chipASensorData = SensorDataStore.getChipData(0)['f']; 
+      let chipBSensorData = SensorDataStore.getChipData(1)['f'];
+
+      // Chip A sensor lines. 
+      let chipACutoffVal = config[0]; 
+      for (let i = 0; i < chipASensorData.length; i++) {
+        let cutoffVal = chipACutoffVal[i]; 
+        let data = chipASensorData[i]; 
+        if (data < cutoffVal) {
+          Websocket.broadcastSensorData(i, 'T', 'L'); 
+          // N-T-L (left trigger)
+        } else {
+          // N-R-L (left release)
+          Websocket.broadcastSensorData(i, 'R', 'L'); 
+        }
+      }
+
+      // Chip B sensor lines. 
+      let chipBCutoffVal = config[1]; 
+      for (let i = 0; i < chipBSensorData.length; i++) {
+        let cutoffVal = chipBCutoffVal[i]; 
+        let data = chipBSensorData[i]; 
+        if (data < cutoffVal) {
+          // N-T-R (right trigger)
+          Websocket.broadcastSensorData(i, 'T', 'R'); 
+        } else {
+          // N-R-R (right release)
+          Websocket.broadcastSensorData(i, 'R', 'R'); 
+        }
+      }
+    }
   }
 
   getMessage() {
@@ -130,7 +195,6 @@ class ConnectionMode extends React.Component {
     }
     return message; 
   }
-
 }
 
 export default Radium(ConnectionMode);
