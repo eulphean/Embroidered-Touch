@@ -134,7 +134,6 @@ class ConnectionMode extends React.Component {
     // If someone has joined the room....
     // Then only try and broadcast sensor data, else don't. 
     if(this.state.roomData === 'roomComplete') {
-      console.log('Room Complete');
       let config = DatabaseParamStore.getConfigJson(); 
       let chipASensorData = SensorDataStore.getChipData(0)['f']; 
       let chipBSensorData = SensorDataStore.getChipData(1)['f'];
