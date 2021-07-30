@@ -32,10 +32,6 @@ module.exports = {
             onDeleteEntryFromDatabase(configName, socket);
         }
     },
-    
-    requestForConfigs: function(socket) {
-        onReadAllEntriesDatabase(socket); 
-    },
 
     queryUser: function(username, password, res) {
         onQueryUserTable(username, password, res);
@@ -74,19 +70,6 @@ function onUpdateDatabase(data, socket) {
         }
 
         console.log('Success: Updated entry in the database.');        
-    });
-}
-
-function onReadAllEntriesDatabase(socket) {
-    pool.query('SELECT * FROM configs', (error, result) => {
-        if (error) {
-            throw error;
-        }
-
-        let data = result.rows; 
-        // Emit all the data read. 
-        socket.emit('receiveAllConfigs', data); 
-        console.log('Success: All configs read.');
     });
 }
 

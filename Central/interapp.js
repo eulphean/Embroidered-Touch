@@ -10,13 +10,14 @@ let roomName = 'fabric';
 module.exports = {
     broadcastSensorData: function(socket, data) {
         // if it's here, it's already in the room. 
-        // Don't check again, just emit data to everybody in the room. 
+        // Don't check again, just emit data to everybody in the room except itself. 
         socket.to(roomName).emit('receiveSensorData', data);
         console.log('Emiting data');
     },
 
+    // User messages (figure out first). 
     updateRoom: function(io, socket) {
-        console.log('Update broadcast hit.');
+        console.log('Update Room.');
         // NOTE: MAYBE BLOCK the third user to join this room. 
         // How will the third user join the room? 
     
@@ -25,14 +26,17 @@ module.exports = {
         if (members === undefined) {
             // Room doesn't exist at all, so add the socket. 
             socket.join(roomName);
-    
-            // NOTE: Maybe send an event back saying two users are
-            // already in a room or something.
+            socket.emit('receiveRoomUpdate', 'userJoined');
             console.log('Socket added to the room.');
         } else if (members.has(socket.id)) {
+            socket.to(roomName).emit('receiveRoomUpdate', 'userLeft'); 
             socket.leave(roomName);
             console.log('Socket left the room.');
         } else {
+            // Room is complete. 
+            // Socket that has joined needs to know and everybody else needs to know. 
+            socket.emit('receiveRoomUpdate', 'roomComplete'); 
+            socket.to(roomName).emit('receiveRoomUpdate', 'roomComplete');  
             socket.join(roomName);
             console.log('Socket added to the room.');
         }

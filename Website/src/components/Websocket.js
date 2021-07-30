@@ -7,14 +7,14 @@
 
 import io  from 'socket.io-client'
 
-// const localhostURL = "http://localhost:5000";
-const herokuURL = "https://fabric-backend.herokuapp.com";
+const localhostURL = "http://localhost:5000";
+// const herokuURL = "https://fabric-backend.herokuapp.com";
 
 class Websocket {
     constructor() {
-        this.siteURL = herokuURL + '/app'; 
-        this.loginURL = herokuURL + '/login';
-        this.signupURL = herokuURL + '/signup';
+        this.siteURL = localhostURL + '/app'; 
+        this.loginURL = localhostURL + '/login';
+        this.signupURL = localhostURL + '/signup';
 
         this.socket = io(this.siteURL, {
             reconnection: true,
@@ -27,7 +27,7 @@ class Websocket {
 
         // ------------ Callbacks fired on response from sockets ------------------------ //
         this.sensorDataCallback = ''; // Fired when the client receives data from the sensors.
-        this.readAllConfigCallback = ''; // Fired when the client all configs from the database. 
+        this.roomDataCallback = ''; // Fired when the client receives data about the room. 
     }
 
     subscribe() {
@@ -36,14 +36,24 @@ class Websocket {
         // Subscribe to incoming events from the webserver here. 
         this.socket.on('time', this.logTime.bind(this));
         this.socket.on('receiveSensorData', this.handleSensorData.bind(this));
-        this.socket.on('receiveAllConfigs', this.handleAllConfigs.bind(this));
+        this.socket.on('receiveRoomUpdate', this.handleRoomUpdate.bind(this)); 
     }
 
     // ----------------------- SENSOR DATA BROADCAST--------------------- //
-    updateRoom(callback) {
+    joinRoom(roomDataCbk, sensorDataCbk) {
         this.socket.emit('room');
-        this.canBroadcast = !this.canBroadcast; 
-        this.sensorDataCallback = callback; 
+        this.canBroadcast = true; 
+        this.sensorDataCallback = sensorDataCbk; 
+        this.roomDataCallback = roomDataCbk; 
+    }
+
+    leaveRoom() {
+        this.socket.emit('room');
+        this.canBroadcast = false; 
+    }
+
+    handleRoomUpdate(data) {
+        this.roomDataCallback(data); 
     }
 
     broadcastText(text) {
@@ -68,17 +78,6 @@ class Websocket {
 
     deleteUserConfig(configName) {
         this.socket.emit('deleteUserConfig', configName);
-    }
-
-    // ------------------ LOAD ALL USER CONFIGS ------------------
-    requestForConfigs(callback) {
-        this.readAllConfigCallback = callback;
-        this.socket.emit('requestForConfigs');
-    }
-
-    // Fire the readAllConfigCallback registered before. 
-    handleAllConfigs(data) {
-        this.readAllConfigCallback(data); 
     }
 
     // -------------------- DON'T CHANGE THESE -------------------    

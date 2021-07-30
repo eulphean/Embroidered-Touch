@@ -65,10 +65,7 @@ function onWebClient(socket) {
     socket.on('deleteUserConfig', (data) => {
         database.handleUserConfig(data, 2);
     });
-    socket.on('requestForConfigs', () => {
-        database.requestForConfigs(socket);
-    }); 
-
+    
     socket.on('disconnect', () => console.log('Web client ' + socket.id + ' disconnected')); 
 }
 

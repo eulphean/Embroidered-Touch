@@ -22,9 +22,6 @@ class DatabaseParamStore {
 
         // Listeners for this database. 
         this.listeners = []; 
-
-        // Fire an async db call to load all configs.
-        // Websocket.requestForConfigs(this.onAllConfigsLoaded.bind(this)); 
     }
 
     subscribe(listener) {

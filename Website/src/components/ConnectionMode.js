@@ -11,6 +11,7 @@ import { color, fontSize} from './CommonStyles';
 
 import { ReactComponent as Ear } from '../Assets/ear.svg';
 import AppStatusStore from '../Stores/AppStatusStore';
+import Websocket from './Websocket';
 
 const styles = {
   container: {
@@ -63,24 +64,37 @@ class ConnectionMode extends React.Component {
   constructor(props) {
     super(props);
     this.state={
+      roomData: ''
     };
   }
 
   componentDidMount() {
-    AppStatusStore.setMode('CONNECTION'); 
+    AppStatusStore.setMode('CONNECTION');
+    Websocket.joinRoom(this.roomDataCallback.bind(this), this.sensorDataCallback.bind(this));
+  }
+
+  roomDataCallback(data) {
+    this.setState({
+      roomData: data
+    }); 
+  }
+
+  sensorDataCallback(data) {
+    console.log('Sensor Data Received'); 
   }
 
   componentWillUnmount() {
     AppStatusStore.setMode('SETUP');
+    Websocket.leaveRoom(); 
   }
 
   render() {
+    let message = this.getMessage(); 
     return (
       <div style={styles.container}>
         <DoubleSleeve />
         <div style={styles.content}>
-          <div style={styles.info}>Message Sent.</div> 
-          <div style={styles.info}>Waiting for a friend to connect...</div>
+          {message}
           <br /><br />
           <div style={styles.svgContainer}>
             <Ear style={styles.svg} />
@@ -88,6 +102,33 @@ class ConnectionMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  getMessage() {
+    let message = ''; 
+    if (this.state.roomData === 'userJoined') {
+      message = (
+        <React.Fragment>
+          <div style={styles.info}>Message Sent.</div> 
+          <div style={styles.info}>Waiting for a friend to connect...</div>
+        </React.Fragment>
+      );
+    } else if (this.state.roomData === 'roomComplete') {
+      message = (
+        <React.Fragment>
+          <div style={styles.info}>Your friend is connected. You are now sending Embroidered Touch sound messages to them.</div> 
+          <br /><br />
+          <div style={styles.info}>You may also receive sound messages in response.</div>
+        </React.Fragment>
+      ); 
+    } else if (this.state.roomData === 'userLeft') {
+      message = (
+        <React.Fragment>
+          <div style={styles.info}>Your friend has logged out.</div> 
+        </React.Fragment>
+      );
+    }
+    return message; 
   }
 
 }
