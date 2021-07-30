@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "77cd3d4ac3df7c6b038faa750f0ea071",
+    "revision": "44f18a92d4e5c10278ddc56f8cb361a6",
     "url": "/Fabric_Instrument/index.html"
   },
   {
-    "revision": "7fe4ba685c446acd438c",
+    "revision": "485fc2820bb1d4d5d5a9",
     "url": "/Fabric_Instrument/static/css/main.11adac6d.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Fabric_Instrument/static/js/2.4f921174.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "7fe4ba685c446acd438c",
-    "url": "/Fabric_Instrument/static/js/main.0a79ac44.chunk.js"
+    "revision": "485fc2820bb1d4d5d5a9",
+    "url": "/Fabric_Instrument/static/js/main.1fb83187.chunk.js"
   },
   {
     "revision": "753171d1d1123f6e4281",
