@@ -72,6 +72,9 @@ class SelectMode extends React.Component {
     this.state={
       isSoloActive: false
     };
+
+    this.leftTriggerMap = [];
+    this.rightTriggerMap = []; 
   }
 
   componentDidMount() {
@@ -128,9 +131,17 @@ class SelectMode extends React.Component {
         let cutoffVal = chipACutoffVal[i]; 
         let data = chipASensorData[i]; 
         if (data < cutoffVal) {
-          AudioManager.trigger(i, true); 
+          if (!this.leftTriggerMap.includes(i)) {
+            this.leftTriggerMap.push(i); 
+            AudioManager.trigger(i, true); 
+          }
         } else {
-          AudioManager.release(i, true); 
+          if (this.leftTriggerMap.includes(i)) {
+            AudioManager.release(i, true); 
+            // Remove that value from the map. 
+            let idx = this.leftTriggerMap.indexOf(i); 
+            this.leftTriggerMap.splice(idx, 1); 
+          }
         }
       }
 
@@ -140,9 +151,17 @@ class SelectMode extends React.Component {
         let cutoffVal = chipBCutoffVal[i]; 
         let data = chipBSensorData[i]; 
         if (data < cutoffVal) {
-          AudioManager.trigger(i, false); 
+          if (!this.rightTriggerMap.includes(i)) {
+            this.rightTriggerMap.push(i); 
+            AudioManager.trigger(i, false); 
+          }
         } else {
-          AudioManager.release(i, false); 
+          // Remove that value from the map.
+          if (this.rightTriggerMap.includes(i)) {
+            AudioManager.release(i, false); 
+            let idx = this.rightTriggerMap.indexOf(i); 
+            this.rightTriggerMap.splice(idx, 1); 
+          }
         }
       }
     }

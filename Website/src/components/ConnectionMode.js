@@ -69,6 +69,9 @@ class ConnectionMode extends React.Component {
     this.state={
       roomData: ''
     };
+    
+    this.leftTriggerMap = []; 
+    this.rightTriggerMap = []; 
   }
 
   componentDidMount() {
@@ -80,6 +83,7 @@ class ConnectionMode extends React.Component {
   componentWillUnmount() {
     AppStatusStore.setMode('SETUP');
     Websocket.leaveRoom(); 
+    AudioManager.resetPallete(); 
     this.removeSubscription();  
   }
 
@@ -107,7 +111,6 @@ class ConnectionMode extends React.Component {
 
   sensorDataCallback(data) {
     if (data !== '') {
-      console.log ('Broadcast message: ' + data); 
       let msg = data.split('-');
       let sensorIdx = msg[0]; 
       let adsr = msg[1]; 
@@ -130,6 +133,10 @@ class ConnectionMode extends React.Component {
     }
   }
 
+  // We are broadcasting a lot of data right now. How should we avoid this? 
+  // Should we call release for only that which has been triggered? 
+  // If triggered, add that in a map.
+  // When calling release, check if that sensor was triggered. Then call release, else ignore. 
   onSensorData() {
     // If someone has joined the room....
     // Then only try and broadcast sensor data, else don't. 
@@ -144,11 +151,20 @@ class ConnectionMode extends React.Component {
         let cutoffVal = chipACutoffVal[i]; 
         let data = chipASensorData[i]; 
         if (data < cutoffVal) {
-          Websocket.broadcastSensorData(i, 'T', 'L'); 
+          // Left trigger map. 
+          if (!this.leftTriggerMap.includes(i)) {
+            this.leftTriggerMap.push(i); 
+            Websocket.broadcastSensorData(i, 'T', 'L'); 
+          }
           // N-T-L (left trigger)
         } else {
           // N-R-L (left release)
-          Websocket.broadcastSensorData(i, 'R', 'L'); 
+          if (this.leftTriggerMap.includes(i)) {
+            Websocket.broadcastSensorData(i, 'R', 'L'); 
+            // Remove that value from the map. 
+            let idx = this.leftTriggerMap.indexOf(i); 
+            this.leftTriggerMap.splice(idx, 1); 
+          }
         }
       }
 
@@ -159,10 +175,18 @@ class ConnectionMode extends React.Component {
         let data = chipBSensorData[i]; 
         if (data < cutoffVal) {
           // N-T-R (right trigger)
-          Websocket.broadcastSensorData(i, 'T', 'R'); 
+          if (!this.rightTriggerMap.includes(i)) {
+            this.rightTriggerMap.push(i); 
+            Websocket.broadcastSensorData(i, 'T', 'R'); 
+          }
         } else {
           // N-R-R (right release)
-          Websocket.broadcastSensorData(i, 'R', 'R'); 
+          // Remove that value from the map.
+          if (this.rightTriggerMap.includes(i)) {
+            Websocket.broadcastSensorData(i, 'R', 'R'); 
+            let idx = this.rightTriggerMap.indexOf(i); 
+            this.rightTriggerMap.splice(idx, 1); 
+          } 
         }
       }
     }
