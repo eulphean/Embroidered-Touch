@@ -71,7 +71,7 @@ var sketch = (s) => {
     }
 };
 
-const TimeInterval = 5000; 
+const TimeInterval = 5 * 60 * 1000; // 5 minutes
 // Keeps track of the current pallete and is responsible for cycling the palletes. 
 class AudioManager {
     constructor() {
@@ -90,7 +90,8 @@ class AudioManager {
         this.stopAllSounds(); 
 
         // Set new pallete. 
-        this.curPaletteIdx = (this.curPaletteIdx + 1) % 5; 
+        // this.curPaletteIdx = (this.curPaletteIdx + 1) % 5; 
+        this.curPaletteIdx = 0;
         this.setPallete(); 
     }
 

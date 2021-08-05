@@ -1,21 +1,21 @@
 // Load audio files here. 
-import a0 from '../Audio/2hit.wav';
-import a1 from '../Audio/2minor.wav';
-import a2 from '../Audio/2softhit.wav';
-import a3 from '../Audio/3minor.wav';
-import a4 from '../Audio/3tone.wav';
-import a5 from '../Audio/4hit.wav';
-import a6 from '../Audio/4minor.wav';
-import a7 from '../Audio/bells.wav';
-import a8 from '../Audio/bells2.wav';
-import a9 from '../Audio/bells3.wav';
-import a10 from '../Audio/birds1.wav';
-import a11 from '../Audio/birds2.wav';
-import a12 from '../Audio/birds3.wav';
-import a13 from '../Audio/birds4.wav';
-import a14 from '../Audio/birds5.wav';
-import a15 from '../Audio/cicada.wav';
-import a16 from '../Audio/creak.wav';
+import a0 from '../Audio/drone.mp3';
+import a1 from '../Audio/drone2.mp3';
+import a2 from '../Audio/drone3.mp3';
+import a3 from '../Audio/scale.mp3';
+import a4 from '../Audio/song.mp3';
+import a5 from '../Audio/gibber.mp3';
+import a6 from '../Audio/clear.mp3';
+import a7 from '../Audio/consider.mp3';
+import a8 from '../Audio/mountainside.mp3';
+import a9 from '../Audio/gibber.mp3';
+import a10 from '../Audio/clear.mp3';
+import a11 from '../Audio/scale.mp3';
+import a12 from '../Audio/bird.mp3';
+import a13 from '../Audio/desert.mp3';
+import a14 from '../Audio/forest.mp3';
+import a15 from '../Audio/ocean.mp3';
+import a16 from '../Audio/thunder.mp3';
 import a17 from '../Audio/flick.wav';
 import a18 from '../Audio/flutter.wav';
 import a19 from '../Audio/histring.wav';
@@ -45,54 +45,53 @@ export let audioFiles = [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, 
 let ap1 = {
     0 : {
         'sound': 0, // File index. 
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0] // Attack time, attack level (0-1), decay time, decay level (0-1), releaseTime, releaseLevel (0-1)
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0] // Attack time, attack level (0-1), decay time, decay level (0-1), releaseTime, releaseLevel (0-1)
     },
     1 : {
         'sound': 1,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     2: {
         'sound': 2,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     3: {
         'sound': 3,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     4: {
         'sound': 4,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     5: {
         'sound': 5,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     6: {
         'sound': 6,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     7: {
         'sound': 7,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     8: {
         'sound': 8,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     9: {
         'sound': 9,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     10: {
         'sound': 10,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     },
     11: {
         'sound': 11,
-        'adsr': [0.1, 0.7, 0.3, 0.1, 0.5, 0.0]
+        'adsr': [5.0, 0.7, 1.0, 0.7, 5.0, 0.0]
     }
 };
-
 
 let ap2 = {
     0 : {
