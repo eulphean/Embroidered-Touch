@@ -87,15 +87,16 @@ class BLE {
     sensorData = a[1].split(','); 
     
     // Debug: Uncomment for raw sensor data received from bluetooth. 
-    //console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
+    console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
     sensorDataStore.setState(chipsetIdx, sensorDataType, sensorData); 
   }
 
   // Data buffer must be uint8Array data type of javascript.
   sendBuffer(dataBuffer) {
       if (this.myTxCharacteristic !== '') {
-          this.myTxCharacteristic.writeValue(dataBuffer);
-          console.log('BLE: Buffer sent: ' + dataBuffer);
+        let a = Uint8Array.of('10', '11');  // We should be sending just a 0 or 1 signal here. 
+        this.myTxCharacteristic.writeValue(a);
+        console.log('BLE: Buffer sent: ' + a);
       } else {
           console.warn('BLE: Ensure Bluetooth is connected.');
       }

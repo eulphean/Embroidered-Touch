@@ -16,7 +16,7 @@ void setup()
 {
   Serial.begin(115200);
   // Uncomment if you want Arduino operation to be linked with Serial communication.
-//  while ( !Serial ) delay(10);   // for nrf52840 with native usb
+  while ( !Serial ) delay(10);   // for nrf52840 with native usb
   
   Serial.println("Fabric Instrument Initialization Routine.");
   Serial.println("-------------------------------------\n");
@@ -37,22 +37,24 @@ void loop() {
       }
   }
 
+  // Trigger life from here when data is received. 
+  // We will receive a trigger on / off signal only. 
   if (BLE::hasReceivedData) {
-    uint8_t chipsetIdx = BLE::rxBuffer[0]; 
-    uint8_t command = BLE::rxBuffer[1]; 
-    uint8_t threshold = BLE::rxBuffer[2];
-    uint8_t release = BLE::rxBuffer[3];
-
-    if (command == RESET_COMMAND) {
-      touchChipsets.resetChipset(chipsetIdx); 
-    }
-
-    if (command == SENSITIVITY_COMMAND) {
-      touchChipsets.updateSensitivity(chipsetIdx, threshold, release); 
-    }
-
-    // Mark the flag dirty so we can read the next payload. 
-    BLE::hasReceivedData = false; 
+//    uint8_t chipsetIdx = BLE::rxBuffer[0]; 
+//    uint8_t command = BLE::rxBuffer[1]; 
+//    uint8_t threshold = BLE::rxBuffer[2];
+//    uint8_t release = BLE::rxBuffer[3];
+//
+//    if (command == RESET_COMMAND) {
+//      touchChipsets.resetChipset(chipsetIdx); 
+//    }
+//
+//    if (command == SENSITIVITY_COMMAND) {
+//      touchChipsets.updateSensitivity(chipsetIdx, threshold, release); 
+//    }
+//
+//    // Mark the flag dirty so we can read the next payload. 
+//    BLE::hasReceivedData = false; 
   }
 
   // To enable arduino senssor logs, uncomment below. 

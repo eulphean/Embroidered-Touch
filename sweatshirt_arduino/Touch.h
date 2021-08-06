@@ -63,15 +63,29 @@ class Touch {
           String dataString = ""; 
           dataString = dataString + String(chipsetIdx) + sensorDataType + "-"; 
           uint8_t v; 
-          for (uint8_t i = minSensorIdx; i <= maxSensorIdx; i++) {
-            if (sensorDataType == 'f') {
-              v = chipsets[chipsetIdx].filteredData(i);  
-            } else {
-              v = chipsets[chipsetIdx].baselineData(i); 
+          if (chipsetIdx == 0) { // For the first chip, go from 0 - 11.
+            for (uint8_t i = minSensorIdx; i <= maxSensorIdx; i++) {
+              if (sensorDataType == 'f') {
+                v = chipsets[chipsetIdx].filteredData(i);  
+              } else {
+                v = chipsets[chipsetIdx].baselineData(i); 
+              }
+              dataString += v; 
+              if (i != maxSensorIdx) {
+                dataString += ","; 
+              }
             }
-            dataString += v; 
-            if (i != maxSensorIdx) {
-              dataString += ","; 
+          } else if (chipsetIdx == 1) { // For second chip, go from 11 - 0.
+            for (int i = maxSensorIdx; i >= minSensorIdx; i--) {
+              if (sensorDataType == 'f') {
+                v = chipsets[chipsetIdx].filteredData(i);  
+              } else {
+                v = chipsets[chipsetIdx].baselineData(i); 
+              }
+              dataString += v; 
+              if (i != minSensorIdx) {
+                dataString += ","; 
+              }
             }
           }
           

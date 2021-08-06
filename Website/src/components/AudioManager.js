@@ -90,8 +90,8 @@ class AudioManager {
         this.stopAllSounds(); 
 
         // Set new pallete. 
-        // this.curPaletteIdx = (this.curPaletteIdx + 1) % 5; 
-        this.curPaletteIdx = 0;
+        this.curPaletteIdx = (this.curPaletteIdx + 1) % 5; 
+        // this.curPaletteIdx = 0;
         this.setPallete(); 
     }
 

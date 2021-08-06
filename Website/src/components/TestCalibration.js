@@ -11,7 +11,7 @@ import { Redirect } from 'react-router-dom';
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
-
+import BLE from './BLE';
 
 const styles = {
   container: {
