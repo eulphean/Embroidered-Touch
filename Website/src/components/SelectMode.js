@@ -15,6 +15,7 @@ import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import SensorDataStore from '../Stores/SensorDataStore';
 import AudioManager from './AudioManager';
+import BLE from './BLE';
 
 const RadiumLink = Radium(Link);
 
@@ -134,6 +135,9 @@ class SelectMode extends React.Component {
           if (!this.leftTriggerMap.includes(i)) {
             this.leftTriggerMap.push(i); 
             AudioManager.trigger(i, true); 
+            if (i === 0) {
+              BLE.setLife(0, 1); // chip, signal (active)
+            }
           }
         } else {
           if (this.leftTriggerMap.includes(i)) {
@@ -141,6 +145,9 @@ class SelectMode extends React.Component {
             // Remove that value from the map. 
             let idx = this.leftTriggerMap.indexOf(i); 
             this.leftTriggerMap.splice(idx, 1); 
+            if (i === 0) {
+              BLE.setLife(0, 0); // chip, signal (deactive)
+            }
           }
         }
       }
@@ -154,6 +161,9 @@ class SelectMode extends React.Component {
           if (!this.rightTriggerMap.includes(i)) {
             this.rightTriggerMap.push(i); 
             AudioManager.trigger(i, false); 
+            if (i === 0) {
+              BLE.setLife(1, 1); // chip, signal (active)
+            }
           }
         } else {
           // Remove that value from the map.
@@ -161,6 +171,9 @@ class SelectMode extends React.Component {
             AudioManager.release(i, false); 
             let idx = this.rightTriggerMap.indexOf(i); 
             this.rightTriggerMap.splice(idx, 1); 
+            if (i === 0) {
+              BLE.setLife(1, 0); // chip, signal (deactive)
+            }
           }
         }
       }

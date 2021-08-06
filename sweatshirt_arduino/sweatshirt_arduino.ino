@@ -11,6 +11,8 @@ BLE gridBle;
 
 const uint8_t RESET_COMMAND = 0; 
 const uint8_t SENSITIVITY_COMMAND = 1;
+const uint8_t LEFT_LIFE_PIN = 10; 
+const uint8_t RIGHT_LIFE_PIN = 2; 
 
 void setup()
 {
@@ -20,6 +22,9 @@ void setup()
   
   Serial.println("Fabric Instrument Initialization Routine.");
   Serial.println("-------------------------------------\n");
+
+  pinMode(LEFT_LIFE_PIN, OUTPUT); 
+  pinMode(RIGHT_LIFE_PIN, OUTPUT);
 
   gridBle.init();
   touchChipsets.init();
@@ -37,26 +42,30 @@ void loop() {
       }
   }
 
-  // Trigger life from here when data is received. 
-  // We will receive a trigger on / off signal only. 
-  if (BLE::hasReceivedData) {
-//    uint8_t chipsetIdx = BLE::rxBuffer[0]; 
-//    uint8_t command = BLE::rxBuffer[1]; 
-//    uint8_t threshold = BLE::rxBuffer[2];
-//    uint8_t release = BLE::rxBuffer[3];
-//
-//    if (command == RESET_COMMAND) {
-//      touchChipsets.resetChipset(chipsetIdx); 
-//    }
-//
-//    if (command == SENSITIVITY_COMMAND) {
-//      touchChipsets.updateSensitivity(chipsetIdx, threshold, release); 
-//    }
-//
-//    // Mark the flag dirty so we can read the next payload. 
-//    BLE::hasReceivedData = false; 
-  }
+  // Handle the logic for life. 
+  handleLife(); 
 
   // To enable arduino senssor logs, uncomment below. 
   //touchChips.localDebug(0,6,11);
+}
+
+void handleLife() {
+  uint8_t leftSignal = BLE::rxBuffer[0]; 
+  uint8_t rightSignal = BLE::rxBuffer[1]; 
+
+  if (leftSignal == 1) {
+    digitalWrite(LEFT_LIFE_PIN, HIGH); 
+    Serial.println("LEFT LIFE ON"); 
+  } else if (leftSignal == 0) {
+    digitalWrite(LEFT_LIFE_PIN, LOW);      
+    Serial.println("LEFT LIFE OFF"); 
+  }
+
+  if (rightSignal == 1) {
+    digitalWrite(RIGHT_LIFE_PIN, HIGH);
+    Serial.println("RIGHT LIFE ON"); 
+  } else if (rightSignal == 0) {
+    digitalWrite(RIGHT_LIFE_PIN, LOW);
+    Serial.println("RIGHT LIFE OFF"); 
+  }
 }

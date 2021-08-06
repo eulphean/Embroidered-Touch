@@ -13,7 +13,7 @@
 #endif
 
 // Size of the RX buffer from p5.js [chipsetIdx, command, val, val]
-const uint8_t buffSize = 4; 
+const uint8_t buffSize = 2; 
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
@@ -30,6 +30,8 @@ class BLE {
     BLE() {}
     
     void init() {
+      rxBuffer[0] = 0; rxBuffer[1] = 0; 
+      
       // Initialise the Bluefruit module.
       Serial.println("BLE Init: Bluefruit nRF52 subsystem initialization....");
 
