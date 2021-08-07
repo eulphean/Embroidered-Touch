@@ -15,6 +15,8 @@ import SensorDataStore from '../Stores/SensorDataStore';
 const lifeId = 'life'; 
 const numbersId = 'numbers'; 
 const linePrefix = 'line';
+const life_left_id = 'life_right';
+const life_right_id = 'life_left';
 
 const styles = {
   svgContainer: {
@@ -76,9 +78,19 @@ class DoubleSleeve extends React.Component {
       let cutoffVal = chipACutoffVal[i]; 
       let data = chipASensorData[i]; 
       if (data < cutoffVal) {
+        // Life activate. 
+        if (i === 0) {
+          let life_left = document.getElementById(life_left_id);
+          life_left.style.stroke = color.sensorActive; 
+        }
         let sensor = this.getSensorComponent(true, i); 
         sensor.style.stroke = color.sensorActive;
       } else {
+        // Life deactivate. 
+        if (i === 0) {
+          let life_left = document.getElementById(life_left_id);
+          life_left.style.stroke = color.lifeDefault; 
+        }
         let sensor = this.getSensorComponent(true, i); 
         sensor.style.stroke = color.sensorDefault; 
       }
@@ -92,7 +104,17 @@ class DoubleSleeve extends React.Component {
       if (data < cutoffVal) {
         let sensor = this.getSensorComponent(false, i);
         sensor.style.stroke = color.sensorActive;
+        // Life activate. 
+        if (i === 0) {
+          let life_right = document.getElementById(life_right_id);
+          life_right.style.stroke = color.sensorActive; 
+        }
       } else {
+        // Life deactivate. 
+        if (i === 0) {
+          let life_right = document.getElementById(life_right_id);
+          life_right.style.stroke = color.lifeDefault; 
+        }
         let sensor = this.getSensorComponent(false, i);
         sensor.style.stroke = color.sensorDefault;
       }

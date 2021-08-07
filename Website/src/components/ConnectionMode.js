@@ -17,6 +17,20 @@ import Websocket from './Websocket';
 import AudioManager from './AudioManager';
 import BLE from './BLE';
 
+const animation = {
+  pulse: Radium.keyframes({
+    '0%': {
+      transform: 'scale(0.5)'
+    },
+    '50%': {
+      transform: 'scale(1)',
+    },
+    '100%': {
+      transform: 'scale(0.5)',
+    }
+  })
+}
+
 const styles = {
   container: {
     color: color.white,
@@ -47,20 +61,31 @@ const styles = {
       fontSize: fontSize.veryBig
     }
   },
+
+  svgSimplePulse: {
+    animation: 'x 10s linear infinite',
+    animationName: animation.pulse
+  },
+
+  svgAttackPulse: {
+    animation: 'x 5s cubic-bezier(0.25,0.1,0.25,1) 1',
+    animationName: animation.pulse
+  },
   
   svgContainer: {
-    width: '50%',
-    height: '50%',
+    position: 'relative',
+    width: '150px',
+    height: '150px',
     textAlign: 'center',
     '@media (min-width: 1200px)': {
-      width: '75%',
-      height: '75%'
+      width: '250px',
+      height: '250px'
     }
   },
 
   svg: {
-    width: '50%',
-    height: '50%'
+    width: '100%',
+    height: '100%'
   }
 };
 
@@ -68,7 +93,8 @@ class ConnectionMode extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      roomData: ''
+      roomData: '',
+      audioReceived: false
     };
     
     this.leftTriggerMap = []; 
@@ -90,18 +116,28 @@ class ConnectionMode extends React.Component {
 
   render() {
     let message = this.getMessage(); 
+    let svgStyle = this.state.roomData === 'userJoined' ? [styles.svgContainer, styles.svgSimplePulse] : 
+                    this.state.roomData === 'roomComplete' && this.state.audioReceived ? [styles.svgContainer, styles.svgAttackPulse]:
+                      [styles.svgContainer];
     return (
       <div style={styles.container}>
-        <DoubleSleeve />
+        <DoubleSleeve showLife={true} />
         <div style={styles.content}>
           {message}
           <br /><br />
-          <div style={styles.svgContainer}>
+          <div style={svgStyle} onAnimationEnd={this.earAnimationEnd.bind(this)}>
             <Ear style={styles.svg} />
           </div>
         </div>
       </div>
     );
+  }
+
+  earAnimationEnd() {
+    console.log('Animation Ending');
+    this.setState({
+      audioReceived: false
+    });
   }
 
   roomDataCallback(data) {
@@ -122,6 +158,12 @@ class ConnectionMode extends React.Component {
       if (chipSide === 'L') {
         if (adsr === 'T') {
           AudioManager.trigger(sensorIdx, true); 
+          if (!this.state.audioReceived) {
+            // Trigger the animation. 
+            this.setState({
+              audioReceived: true
+            });
+          }
         } else {
           AudioManager.release(sensorIdx, true); 
         }
@@ -131,6 +173,12 @@ class ConnectionMode extends React.Component {
       } else {
         if (adsr === 'T') {
           AudioManager.trigger(sensorIdx, false);
+          if (!this.state.audioReceived) {
+            // Trigger the animation. 
+            this.setState({
+              audioReceived: true
+            });
+          }
         } else {
           AudioManager.release(sensorIdx, false);
         }
@@ -230,7 +278,7 @@ class ConnectionMode extends React.Component {
       message = (
         <React.Fragment>
           <div style={styles.info}>Your friend is connected. You are now sending Embroidered Touch sound messages to them.</div> 
-          <br /><br />
+          <br />
           <div style={styles.info}>You may also receive sound messages in response.</div>
         </React.Fragment>
       ); 

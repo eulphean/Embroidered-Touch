@@ -14,6 +14,8 @@
 
 // Size of the RX buffer from p5.js [chipsetIdx, command, val, val]
 const uint8_t buffSize = 2; 
+
+const char* bleName = "TOUCHB"; 
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
@@ -41,7 +43,7 @@ class BLE {
       Bluefruit.begin();
       // Tweak this if you want to control battery life / distance to central client. 
       Bluefruit.setTxPower(4); 
-      Bluefruit.setName("BLE-Fabric");
+      Bluefruit.setName(bleName);
 
       // Assign connect/disconnect callback handlers.
       Bluefruit.Periph.setConnectCallback(connect_callback);
