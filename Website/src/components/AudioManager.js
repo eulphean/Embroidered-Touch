@@ -11,10 +11,11 @@ import 'p5/lib/addons/p5.sound'
 import {audioFiles, palettes} from './AudioPalettes';
 
 class Audio {
-    constructor(soundObj, env) {
+    constructor(soundObj, env, isLeft) {
         this.soundObject = soundObj;
         this.adsr = env; 
         this.isActive = false; 
+        this.isLeft = isLeft; 
     }
 
     setAdsr(attackTime, attackLevel, decayTime, decayLevel, releaseTime, releaseLevel) {
@@ -23,13 +24,23 @@ class Audio {
     }
 
     trigger() {
-        this.soundObject.stop();
-        this.soundObject.loop(); 
+        // if (this.isLeft) {
+        //     this.soundObject.pan(-1); 
+        // } else {
+        //     this.soundObject.pan(1); 
+        // }
+
+        if (this.soundObject.isPlaying()) {
+            this.soundObject.stop();
+        }
+        this.soundObject.playMode('restart');
         this.adsr.triggerAttack(this.soundObject); 
+        this.soundObject.loop();
         this.isActive = true; 
     }
 
     release() {
+        // this.soundObject.stop();
         this.adsr.triggerRelease(this.soundObject);
         this.isActive = false; 
     }
@@ -42,10 +53,12 @@ var sketch = (s) => {
     let rightAudio = [];
     s.preload = () => {
         for (let i = 0; i < audioFiles.length; i++) {
-            let sound = s.loadSound(audioFiles[i]); 
-            let env = new p5.Envelope(0.1, 0.5, 0.1, 0.5); // Default envelope. 
-            let a = new Audio(sound, env); 
-            let b = new Audio(sound, env); 
+            let soundA = s.loadSound(audioFiles[i]); 
+            let soundB = s.loadSound(audioFiles[i]);
+            let envA = new p5.Envelope(0.1, 0.5, 0.1, 0.5); // Default envelope. 
+            let envB = new p5.Envelope(0.1, 0.5, 0.1, 0.5); // Default envelope. 
+            let a = new Audio(soundA, envA, false); 
+            let b = new Audio(soundB, envB, true); 
 
             // Left handles left side.
             // Right handles right side. 
@@ -131,6 +144,7 @@ class AudioManager {
         // ChipA is left and ChipB is right. 
         let audio = this.getAudioByPaletteIdx(idx, isChipA); 
         if (!audio.isActive) {
+            console.log('Trigger Audio: ' + idx); 
             audio.trigger(); 
         }
     }
@@ -138,6 +152,7 @@ class AudioManager {
     release(idx, isChipA) {
         let audio = this.getAudioByPaletteIdx(idx, isChipA); 
         audio.release(); 
+        console.log('Release Audio: ' + idx);
     }
 
     getAudioByPaletteIdx(idx, isChipA) {

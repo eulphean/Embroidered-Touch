@@ -15,6 +15,7 @@ import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import SensorDataStore from '../Stores/SensorDataStore';
 import Websocket from './Websocket';
 import AudioManager from './AudioManager';
+import BLE from './BLE';
 
 const styles = {
   container: {
@@ -115,6 +116,7 @@ class ConnectionMode extends React.Component {
       let sensorIdx = msg[0]; 
       let adsr = msg[1]; 
       let chipSide = msg[2]; 
+      let lifeSignal = msg[3];
 
       // Parse the message and trigger the signal on this side. 
       if (chipSide === 'L') {
@@ -123,12 +125,18 @@ class ConnectionMode extends React.Component {
         } else {
           AudioManager.release(sensorIdx, true); 
         }
+
+        // Set signal on left chip. 
+        BLE.setLife(0, lifeSignal); 
       } else {
         if (adsr === 'T') {
           AudioManager.trigger(sensorIdx, false);
         } else {
           AudioManager.release(sensorIdx, false);
         }
+
+        // Set signal on right chip. 
+        BLE.setLife(1, lifeSignal); 
       }
     }
   }
@@ -144,6 +152,7 @@ class ConnectionMode extends React.Component {
       let config = DatabaseParamStore.getConfigJson(); 
       let chipASensorData = SensorDataStore.getChipData(0)['f']; 
       let chipBSensorData = SensorDataStore.getChipData(1)['f'];
+      let lifeSignal = 0; 
 
       // Chip A sensor lines. 
       let chipACutoffVal = config[0]; 
@@ -154,13 +163,21 @@ class ConnectionMode extends React.Component {
           // Left trigger map. 
           if (!this.leftTriggerMap.includes(i)) {
             this.leftTriggerMap.push(i); 
-            Websocket.broadcastSensorData(i, 'T', 'L'); 
+            // Turn on life. 
+            if (i === 0) {
+              lifeSignal = 1; 
+            }
+            Websocket.broadcastSensorData(i, 'T', 'L', lifeSignal); 
           }
           // N-T-L (left trigger)
         } else {
           // N-R-L (left release)
           if (this.leftTriggerMap.includes(i)) {
-            Websocket.broadcastSensorData(i, 'R', 'L'); 
+            // Turn off life. 
+            if (i === 0) {
+              lifeSignal = 0; 
+            }
+            Websocket.broadcastSensorData(i, 'R', 'L', lifeSignal); 
             // Remove that value from the map. 
             let idx = this.leftTriggerMap.indexOf(i); 
             this.leftTriggerMap.splice(idx, 1); 
@@ -177,13 +194,21 @@ class ConnectionMode extends React.Component {
           // N-T-R (right trigger)
           if (!this.rightTriggerMap.includes(i)) {
             this.rightTriggerMap.push(i); 
-            Websocket.broadcastSensorData(i, 'T', 'R'); 
+            // Turn on life. 
+            if (i === 0) {
+              lifeSignal = 1; 
+            }
+            Websocket.broadcastSensorData(i, 'T', 'R', lifeSignal); 
           }
         } else {
           // N-R-R (right release)
           // Remove that value from the map.
           if (this.rightTriggerMap.includes(i)) {
-            Websocket.broadcastSensorData(i, 'R', 'R'); 
+            // Turn off life. 
+            if (i === 0) {
+              lifeSignal = 0; 
+            }
+            Websocket.broadcastSensorData(i, 'R', 'R', lifeSignal); 
             let idx = this.rightTriggerMap.indexOf(i); 
             this.rightTriggerMap.splice(idx, 1); 
           } 

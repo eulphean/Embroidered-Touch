@@ -57,8 +57,8 @@ class Websocket {
     }
 
     // Called from ConnectionMode
-    broadcastSensorData(sensorNum, adsr, chipSide) {
-        let msg = sensorNum + '-' + adsr + '-' + chipSide;
+    broadcastSensorData(sensorNum, adsr, chipSide, lifeSignal) {
+        let msg = sensorNum + '-' + adsr + '-' + chipSide + '-' + lifeSignal;
         if (this.canBroadcast) {
             this.socket.emit('sensorData', msg); 
         }
