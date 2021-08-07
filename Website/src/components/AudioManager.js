@@ -24,11 +24,11 @@ class Audio {
     }
 
     trigger() {
-        // if (this.isLeft) {
-        //     this.soundObject.pan(-1); 
-        // } else {
-        //     this.soundObject.pan(1); 
-        // }
+        if (this.isLeft) {
+            this.soundObject.pan(-1); 
+        } else {
+            this.soundObject.pan(1); 
+        }
 
         if (this.soundObject.isPlaying()) {
             this.soundObject.stop();
