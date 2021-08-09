@@ -150,7 +150,7 @@ class Login extends React.Component {
       let username = this.state.username;
       let password = this.state.password;
       // For first time sign up, this default config is sent to the DB. 
-      let defaultConfig = DatabaseParamStore.getConfigJson(); 
+      let defaultConfig = DatabaseParamStore.getDefaultJson(); 
       
       // Initial config is always sent as a HTTP request. 
       const request = new Request(this.signupURL, { method: 'POST', headers: {'Content-Type': 'application/json'}, 

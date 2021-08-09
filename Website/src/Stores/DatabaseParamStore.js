@@ -63,6 +63,23 @@ class DatabaseParamStore {
         Websocket.updateUserConfig(dbPayload);
     }
 
+    // Default JSON where everything is set to default 0. 
+    getDefaultJson() {
+        let jsonObject = {}; 
+        for (let i = 0; i < 2; i++) { // Num chips = 2
+            let chipsetData = []; 
+            for (let j = 0; j < 12; j++) { // Num sensors = 12
+                chipsetData[j] = 0;
+            }
+
+            jsonObject[i.toString()] = chipsetData; 
+        }
+
+        // Save this flag in the config. 
+        jsonObject['hasCalibrated'] = false;
+        return jsonObject; 
+    }
+
     getConfigJson() {
         let jsonObject = {}; 
         for (let i = 0; i < 2; i++) { // Num chips = 2
