@@ -78,15 +78,12 @@ class DoubleSleeve extends React.Component {
       let cutoffVal = chipACutoffVal[i]; 
       let data = chipASensorData[i]; 
       if (data < cutoffVal) {
-        // Life activate. 
-        if (i === 0) {
-          let life_left = document.getElementById(life_left_id);
-          life_left.style.stroke = color.sensorActive; 
-        }
         let sensor = this.getSensorComponent(true, i); 
         sensor.style.stroke = color.sensorActive;
-
-        console.log('[On Left] Sensor Idx: ' + i + ", Sensor Val: " + data + ", Cutoff Val: " + cutoffVal);
+        // Life activate. 
+        let life_left = document.getElementById(life_left_id);
+        life_left.style.stroke = color.sensorActive; 
+        //console.log('[On Left] Sensor Idx: ' + i + ", Sensor Val: " + data + ", Cutoff Val: " + cutoffVal);
       } else {
         // Life deactivate. 
         if (i === 0) {
@@ -107,10 +104,8 @@ class DoubleSleeve extends React.Component {
         let sensor = this.getSensorComponent(false, i);
         sensor.style.stroke = color.sensorActive;
         // Life activate. 
-        if (i === 0) {
-          let life_right = document.getElementById(life_right_id);
-          life_right.style.stroke = color.sensorActive; 
-        }
+        let life_right = document.getElementById(life_right_id);
+        life_right.style.stroke = color.sensorActive; 
         // console.log('[On Right] Sensor Idx: ' + i + ", Sensor Val: " + data + ", Cutoff Val: " + cutoffVal);
       } else {
         // Life deactivate. 

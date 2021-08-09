@@ -138,7 +138,6 @@ class SelectMode extends React.Component {
             this.leftTriggerMap.push(i); 
             AudioManager.trigger(i, true); 
             if (BLE.getLife(0) === 0) { // 0: left chip.
-              console.log("Activate Left: " + i);
               BLE.activateLife(0); // chip, signal (active)
             }
           }
@@ -153,7 +152,6 @@ class SelectMode extends React.Component {
           // Nothing is triggered on this side, so deactivate life. 
           if (this.leftTriggerMap.length === 0) {
             if (BLE.getLife(0) === 1) {
-              console.log("Deactivate Left: " + i);
               BLE.deactivateLife(0); 
             }
           }
@@ -169,9 +167,7 @@ class SelectMode extends React.Component {
           if (!this.rightTriggerMap.includes(i)) {
             this.rightTriggerMap.push(i); 
             AudioManager.trigger(i, false); 
-            console.log(i); 
             if (BLE.getLife(1) === 0) { // 1: right chip.
-              console.log("Activate Right: " + i);
               BLE.activateLife(1); // chip, signal (active)
             }
           }
@@ -186,7 +182,6 @@ class SelectMode extends React.Component {
           // Nothing is triggered on this side, so deactivate life. 
           if (this.rightTriggerMap.length === 0) {
             if (BLE.getLife(1) === 1) {
-              console.log("Deactivate Left: " + i);
               BLE.deactivateLife(1); 
             }
           }
