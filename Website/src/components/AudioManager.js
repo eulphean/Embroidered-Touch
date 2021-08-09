@@ -139,7 +139,8 @@ class AudioManager {
     getAudioByPaletteIdx(idx, isChipA) {
         let p = palettes[this.curPaletteIdx]; 
         // Incoming index is always between 0 - 11. Offset it based on what chip is it. 
-        let newIdx = isChipA ? idx : idx + 12; 
+        let newIdx = isChipA ? parseInt(idx) : parseInt(idx) + 12; 
+        console.log('Idx, NewIdx: ' + idx + ', ' + newIdx); 
         let soundIdx = p[newIdx]['sound']; 
         let audio = this.myP5.getAudio()[soundIdx];
         return audio; 
