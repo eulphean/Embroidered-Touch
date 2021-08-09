@@ -19,6 +19,8 @@ import BLE from './BLE';
 
 const RadiumLink = Radium(Link);
 
+
+const DeactivateWaitTime = 2000; // 2 seconds.
 const styles = {
   container: {
     position: 'relative',
@@ -135,8 +137,9 @@ class SelectMode extends React.Component {
           if (!this.leftTriggerMap.includes(i)) {
             this.leftTriggerMap.push(i); 
             AudioManager.trigger(i, true); 
-            if (i === 0) {
-              BLE.setLife(0, 1); // chip, signal (active)
+            if (BLE.getLife(0) === 0) { // 0: left chip.
+              console.log("Activate Left: " + i);
+              BLE.activateLife(0); // chip, signal (active)
             }
           }
         } else {
@@ -144,9 +147,14 @@ class SelectMode extends React.Component {
             AudioManager.release(i, true); 
             // Remove that value from the map. 
             let idx = this.leftTriggerMap.indexOf(i); 
-            this.leftTriggerMap.splice(idx, 1); 
-            if (i === 0) {
-              BLE.setLife(0, 0); // chip, signal (deactive)
+            this.leftTriggerMap.splice(idx, 1);
+          }
+
+          // Nothing is triggered on this side, so deactivate life. 
+          if (this.leftTriggerMap.length === 0) {
+            if (BLE.getLife(0) === 1) {
+              console.log("Deactivate Left: " + i);
+              BLE.deactivateLife(0); 
             }
           }
         }
@@ -161,8 +169,10 @@ class SelectMode extends React.Component {
           if (!this.rightTriggerMap.includes(i)) {
             this.rightTriggerMap.push(i); 
             AudioManager.trigger(i, false); 
-            if (i === 0) {
-              BLE.setLife(1, 1); // chip, signal (active)
+            console.log(i); 
+            if (BLE.getLife(1) === 0) { // 1: right chip.
+              console.log("Activate Right: " + i);
+              BLE.activateLife(1); // chip, signal (active)
             }
           }
         } else {
@@ -171,13 +181,22 @@ class SelectMode extends React.Component {
             AudioManager.release(i, false); 
             let idx = this.rightTriggerMap.indexOf(i); 
             this.rightTriggerMap.splice(idx, 1); 
-            if (i === 0) {
-              BLE.setLife(1, 0); // chip, signal (deactive)
+          }
+
+          // Nothing is triggered on this side, so deactivate life. 
+          if (this.rightTriggerMap.length === 0) {
+            if (BLE.getLife(1) === 1) {
+              console.log("Deactivate Left: " + i);
+              BLE.deactivateLife(1); 
             }
           }
         }
       }
     }
+  }
+
+  deactivateLife(chipIdx) {
+
   }
 
   onClickSolo() {

@@ -85,6 +85,8 @@ class DoubleSleeve extends React.Component {
         }
         let sensor = this.getSensorComponent(true, i); 
         sensor.style.stroke = color.sensorActive;
+
+        console.log('[On Left] Sensor Idx: ' + i + ", Sensor Val: " + data + ", Cutoff Val: " + cutoffVal);
       } else {
         // Life deactivate. 
         if (i === 0) {
@@ -109,6 +111,7 @@ class DoubleSleeve extends React.Component {
           let life_right = document.getElementById(life_right_id);
           life_right.style.stroke = color.sensorActive; 
         }
+        // console.log('[On Right] Sensor Idx: ' + i + ", Sensor Val: " + data + ", Cutoff Val: " + cutoffVal);
       } else {
         // Life deactivate. 
         if (i === 0) {

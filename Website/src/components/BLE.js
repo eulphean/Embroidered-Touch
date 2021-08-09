@@ -92,6 +92,14 @@ class BLE {
     sensorDataStore.setState(chipsetIdx, sensorDataType, sensorData); 
   }
 
+  activateLife(chipIdx) {
+    this.setLife(chipIdx, 1);
+  }
+
+  deactivateLife(chipIdx) {
+    this.setLife(chipIdx, 0);
+  }
+
   // Data buffer must be uint8Array data type of javascript.
   setLife(chipIdx, lifeSignal) {
       if (this.myTxCharacteristic !== '') {
@@ -100,14 +108,25 @@ class BLE {
           this.lifeData[0] = lifeSignal; 
         } else if (chipIdx === 1) {
           this.lifeData[1] = lifeSignal; 
-        }
-        
+        }        
         let data = Uint8Array.of(this.lifeData[0], this.lifeData[1]);  // We should be sending just a 0 or 1 signal here. 
-        this.myTxCharacteristic.writeValue(data);
+        this.myTxCharacteristic.writeValue(data)
+        .catch((() => {
+          console.log('GATT Operation in progress');
+        }));
         console.log('BLE: Buffer sent: ' + data);
       } else {
           console.warn('BLE: Ensure Bluetooth is connected.');
       }
+  }
+
+  // Checks if life signal is activate. 
+  getLife(chipNum) {
+    if (chipNum === 0) {
+      return this.lifeData[0];
+    } else {
+      return this.lifeData[1];
+    }
   }
 }
 
