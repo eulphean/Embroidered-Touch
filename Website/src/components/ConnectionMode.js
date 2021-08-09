@@ -149,10 +149,10 @@ class ConnectionMode extends React.Component {
   sensorDataCallback(data) {
     if (data !== '') {
       let msg = data.split('-');
-      let sensorIdx = msg[0]; 
+      let sensorIdx = parseInt(msg[0]); 
       let adsr = msg[1]; 
       let chipSide = msg[2]; 
-      let lifeSignal = msg[3];
+      let lifeSignal = parseInt(msg[3]);
 
       // Parse the message and trigger the signal on this side. 
       if (chipSide === 'L') {
