@@ -38,7 +38,7 @@ void loop() {
         gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize());
         bleBuffer = touchChipsets.getSensorData(i, 'b');
         gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
-        delay(50); // Don't overwhelm the stream
+        delay(100); // Don't overwhelm the stream
       }
   }
 

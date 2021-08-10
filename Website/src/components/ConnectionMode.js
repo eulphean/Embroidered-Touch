@@ -105,6 +105,7 @@ class ConnectionMode extends React.Component {
     AppStatusStore.setMode('CONNECTION');
     Websocket.joinRoom(this.roomDataCallback.bind(this), this.sensorDataCallback.bind(this));
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
+    AudioManager.resetPallete(); 
   }
 
   componentWillUnmount() {

@@ -77,7 +77,7 @@ class BLE {
   // Parse sensor data based on the above format in which 
   // the data is sent from the arduino. 
   handleIncomingData(event) {
-    let decoder = new TextDecoder('utf8');
+    let decoder = new TextDecoder('utf-8', {fatal: true});
     let data = decoder.decode(event.target.value);
     //   // Clean the string with end of line characters. 
     data = data.replace(/\0[\s\S]*$/g,'');
@@ -86,9 +86,9 @@ class BLE {
     chipsetIdx = a[0][0];
     sensorDataType = a[0][1];   
     sensorData = a[1].split(','); 
-    
-    // Debug: Uncomment for raw sensor data received from bluetooth. 
-    // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
+
+    // // Debug: Uncomment for raw sensor data received from bluetooth. 
+    // // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
     sensorDataStore.setState(chipsetIdx, sensorDataType, sensorData); 
   }
 
