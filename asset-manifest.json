@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/Fabric_Instrument/static/css/main.11adac6d.chunk.css",
-    "main.js": "/Fabric_Instrument/static/js/main.d07911b1.chunk.js",
-    "main.js.map": "/Fabric_Instrument/static/js/main.d07911b1.chunk.js.map",
+    "main.js": "/Fabric_Instrument/static/js/main.84670202.chunk.js",
+    "main.js.map": "/Fabric_Instrument/static/js/main.84670202.chunk.js.map",
     "runtime-main.js": "/Fabric_Instrument/static/js/runtime-main.8afa2e3a.js",
     "runtime-main.js.map": "/Fabric_Instrument/static/js/runtime-main.8afa2e3a.js.map",
     "static/js/2.140f3f78.chunk.js": "/Fabric_Instrument/static/js/2.140f3f78.chunk.js",
     "static/js/2.140f3f78.chunk.js.map": "/Fabric_Instrument/static/js/2.140f3f78.chunk.js.map",
     "index.html": "/Fabric_Instrument/index.html",
-    "precache-manifest.48d27f89c47ef89a578eca503bc15b50.js": "/Fabric_Instrument/precache-manifest.48d27f89c47ef89a578eca503bc15b50.js",
+    "precache-manifest.599f67fb618004f9c2306b14582457db.js": "/Fabric_Instrument/precache-manifest.599f67fb618004f9c2306b14582457db.js",
     "service-worker.js": "/Fabric_Instrument/service-worker.js",
     "static/css/main.11adac6d.chunk.css.map": "/Fabric_Instrument/static/css/main.11adac6d.chunk.css.map",
     "static/js/2.140f3f78.chunk.js.LICENSE.txt": "/Fabric_Instrument/static/js/2.140f3f78.chunk.js.LICENSE.txt",
@@ -87,6 +87,6 @@
     "static/js/runtime-main.8afa2e3a.js",
     "static/js/2.140f3f78.chunk.js",
     "static/css/main.11adac6d.chunk.css",
-    "static/js/main.d07911b1.chunk.js"
+    "static/js/main.84670202.chunk.js"
   ]
 }
