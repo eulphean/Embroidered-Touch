@@ -19,6 +19,8 @@ class BLE {
     this.isReceivingData = false;
     this.device = ''; 
     this.lifeData = [0, 0]; // Left signal, right signal.
+    this.chipIdx = '';
+    this.sensorData = [];
   }
 
   connect(hasPaired) {
@@ -79,18 +81,30 @@ class BLE {
   handleIncomingData(event) {
     let decoder = new TextDecoder('utf-8', {fatal: true});
     let data = decoder.decode(event.target.value);
-    console.log(data);
-    //   // Clean the string with end of line characters. 
+    // Clean the string with end of line characters. 
     data = data.replace(/\0[\s\S]*$/g,'');
-    let chipsetIdx; let sensorDataType; let sensorData = []; 
-    let a = data.split('-');
-    chipsetIdx = a[0][0];
-    sensorDataType = a[0][1];   
-    sensorData = a[1].split(','); 
+    
+    if (data.includes('C')) {
+      // Is there any pending data that needs to be attended?
+      if (this.sensorData.length > 0) {
+        //console.log('Chip Idx, Collected Sensor Data: ' + this.chipIdx + ", " + this.sensorData);
+        // Set sensorData store
+        if (this.chipIdx !== "" && this.sensorData.length === 12) {
+          sensorDataStore.setState(this.chipIdx, this.sensorData); 
+        } else {
+          // Ignore this data and move on.
+        }
+        // Empty this data
+        this.sensorData = []; 
+        this.chipIdx = "";
+      }
 
-    // // Debug: Uncomment for raw sensor data received from bluetooth. 
-    // // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
-    //sensorDataStore.setState(chipsetIdx, sensorDataType, sensorData); 
+      // This is the beginning of the chip data
+      this.chipIdx = parseInt(data[1]);
+    } else {
+      // Keep pushing sensor data in here. 
+      this.sensorData.push(data); 
+    }
   }
 
   activateLife(chipIdx) {
@@ -128,39 +142,6 @@ class BLE {
     } else {
       return this.lifeData[1];
     }
-  }
-
-  Utf8ArrayToStr(array) {
-    var out, i, len, c;
-    var char2, char3;
-
-    out = "";
-    len = array.length;
-    i = 0;
-    while(i < len) {
-    c = array[i++];
-    switch(c >> 4)
-    { 
-      case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-        // 0xxxxxxx
-        out += String.fromCharCode(c);
-        break;
-      case 12: case 13:
-        // 110x xxxx   10xx xxxx
-        char2 = array[i++];
-        out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
-        break;
-      case 14:
-        // 1110 xxxx  10xx xxxx  10xx xxxx
-        char2 = array[i++];
-        char3 = array[i++];
-        out += String.fromCharCode(((c & 0x0F) << 12) |
-                       ((char2 & 0x3F) << 6) |
-                       ((char3 & 0x3F) << 0));
-        break;
-    }
-    }
-    return out;
   }
 }
 

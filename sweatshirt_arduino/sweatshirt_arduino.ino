@@ -33,12 +33,15 @@ void setup()
 void loop() {
   if (BLE::isConnected) { // Start transmitting only when a connection is developed. 
       for (int i = 0; i < touchChipsets.length(); i++) {
+        touchChipsets.transmitSensorData(i, gridBle); 
         // Reqest filtered data. 
-        char *bleBuffer = touchChipsets.getSensorData(i, 'f'); 
-        gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize());
-        bleBuffer = touchChipsets.getSensorData(i, 'b');
-        gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
-        delay(100); // Don't overwhelm the stream
+        //char *bleBuffer = touchChipsets.getSensorData(i, 'f'); 
+        //gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize());
+        //Serial.println(touchChipsets.bleBufferSize());
+        //Serial.println(bleBuffer);
+        //bleBuffer = touchChipsets.getSensorData(i, 'b');
+        //gridBle.transmit(bleBuffer, touchChipsets.bleBufferSize()); 
+        //delay(100); // Don't overwhelm the stream
       }
   }
 
@@ -55,17 +58,17 @@ void handleLife() {
 
   if (leftSignal == 1) {
     digitalWrite(LEFT_LIFE_PIN, HIGH); 
-    Serial.println("LEFT LIFE ON"); 
+    //Serial.println("LEFT LIFE ON"); 
   } else if (leftSignal == 0) {
     digitalWrite(LEFT_LIFE_PIN, LOW);      
-    Serial.println("LEFT LIFE OFF"); 
+    //Serial.println("LEFT LIFE OFF"); 
   }
 
   if (rightSignal == 1) {
     digitalWrite(RIGHT_LIFE_PIN, HIGH);
-    Serial.println("RIGHT LIFE ON"); 
+    //Serial.println("RIGHT LIFE ON"); 
   } else if (rightSignal == 0) {
     digitalWrite(RIGHT_LIFE_PIN, LOW);
-    Serial.println("RIGHT LIFE OFF"); 
+    //Serial.println("RIGHT LIFE OFF"); 
   }
 }

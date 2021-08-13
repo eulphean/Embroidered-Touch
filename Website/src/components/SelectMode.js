@@ -19,8 +19,6 @@ import BLE from './BLE';
 
 const RadiumLink = Radium(Link);
 
-
-const DeactivateWaitTime = 2000; // 2 seconds.
 const styles = {
   container: {
     position: 'relative',

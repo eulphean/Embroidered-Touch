@@ -20,11 +20,9 @@ class SensorDataStore {
         // Initial state.
         // Array of two objects. Each object holds data from each chip.
         this.state = [{
-            'f' : new Array(12).fill(0),
-            'b' : new Array(12).fill(0)
+            'f' : new Array(12).fill(0)
         }, {
-            'f' : new Array(12).fill(0),
-            'b' : new Array(12).fill(0)
+            'f' : new Array(12).fill(0)
         }]; 
 
         this.listeners = []; 
@@ -42,12 +40,11 @@ class SensorDataStore {
     }
 
     // Populates the store. 
-    setState(chipsetIdx, sensorDataType, sensorData) {
-        // console.log('Chipset Idx, Data type, sensor Data: ' + chipsetIdx + ", " + sensorDataType + ", " + sensorData);
+    setState(chipsetIdx, sensorData) {
         // Populate the state. 
         for (let i = 0; i < sensorData.length; i++) {
             let v = Number(sensorData[i]); 
-            this.state[chipsetIdx][sensorDataType][i] = v; 
+            this.state[chipsetIdx]['f'][i] = v; 
         }
 
         // Alert all the listeners that new data is received. 

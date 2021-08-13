@@ -15,7 +15,7 @@
 // Size of the RX buffer from p5.js [chipsetIdx, command, val, val]
 const uint8_t buffSize = 2; 
 
-const char* bleName = "TOUCHB"; 
+const char* bleName = "OLDTOUCH"; 
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
@@ -57,7 +57,7 @@ class BLE {
 
       // Configure and start BLE Uart service. 
       BLE::bleuart.begin(); 
-
+      
       // Setup callback function when data received. 
       BLE::bleuart.setRxCallback(uartCallback); 
 
