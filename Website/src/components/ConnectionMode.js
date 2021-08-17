@@ -111,8 +111,8 @@ class ConnectionMode extends React.Component {
   componentWillUnmount() {
     AppStatusStore.setMode('SETUP');
     Websocket.leaveRoom(); 
-    AudioManager.resetPallete(); 
     this.removeSubscription();  
+    AudioManager.resetPallete(); 
   }
 
   render() {
@@ -145,10 +145,17 @@ class ConnectionMode extends React.Component {
     this.setState({
       roomData: data
     }); 
+
+    // Reset audio if the user left and didn't release the signals
+    // on the other side. 
+    if (data === 'userLeft') {
+      AudioManager.resetPallete();
+    }
   }
 
+  // Here the message from the other client is decoded. 
   sensorDataCallback(data) {
-    if (data !== '') {
+    if (data !== '' && this.state.roomData === 'roomComplete') {
       let msg = data.split('-');
       let sensorIdx = parseInt(msg[0]); 
       let adsr = msg[1]; 
@@ -214,10 +221,7 @@ class ConnectionMode extends React.Component {
     }
   }
 
-  // We are broadcasting a lot of data right now. How should we avoid this? 
-  // Should we call release for only that which has been triggered? 
-  // If triggered, add that in a map.
-  // When calling release, check if that sensor was triggered. Then call release, else ignore. 
+  // Here the message from the current client is encoded. 
   onSensorData() {
     // If someone has joined the room....
     // Then only try and broadcast sensor data, else don't. 
@@ -240,7 +244,6 @@ class ConnectionMode extends React.Component {
             lifeSignal = 1; 
             Websocket.broadcastSensorData(i, 'T', 'L', lifeSignal); 
           }
-          // N-T-L (left trigger)
         } else {
           // N-R-L (left release)
           if (this.leftTriggerMap.includes(i)) {
