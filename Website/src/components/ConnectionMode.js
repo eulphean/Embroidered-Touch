@@ -28,6 +28,18 @@ const animation = {
     '100%': {
       transform: 'scale(0.5)',
     }
+  }),
+
+  attackPulse: Radium.keyframes({
+    '0%': {
+      transform: 'scale(1.0)'
+    },
+    '50%': {
+      transform: 'scale(0.5)',
+    },
+    '100%': {
+      transform: 'scale(1.0)'
+    }
   })
 }
 
@@ -68,8 +80,8 @@ const styles = {
   },
 
   svgAttackPulse: {
-    animation: 'x 5s cubic-bezier(0.25,0.1,0.25,1) 1',
-    animationName: animation.pulse
+    animation: 'x 2s cubic-bezier(0.0,0.1,0.25,1) infinite',
+    animationName: animation.attackPulse
   },
   
   svgContainer: {
@@ -94,11 +106,13 @@ class ConnectionMode extends React.Component {
     super(props);
     this.state={
       roomData: '',
-      audioReceived: false
+      isAnimating: false
     };
     
     this.leftTriggerMap = []; 
     this.rightTriggerMap = []; 
+    this.leftCallbackMap = []; 
+    this.rightCallbackMap = []; 
   }
 
   componentDidMount() {
@@ -118,8 +132,7 @@ class ConnectionMode extends React.Component {
   render() {
     let message = this.getMessage(); 
     let svgStyle = this.state.roomData === 'userJoined' ? [styles.svgContainer, styles.svgSimplePulse] : 
-                    this.state.roomData === 'roomComplete' && this.state.audioReceived ? [styles.svgContainer, styles.svgAttackPulse]:
-                      [styles.svgContainer];
+                    (this.state.roomData === 'roomComplete' && this.state.isAnimating) ? [styles.svgContainer, styles.svgAttackPulse]: [styles.svgContainer];
     return (
       <div style={styles.container}>
         <DoubleSleeve showLife={true} />
@@ -136,9 +149,11 @@ class ConnectionMode extends React.Component {
 
   earAnimationEnd() {
     console.log('Animation Ending');
-    this.setState({
-      audioReceived: false
-    });
+    // Is it still in the trigger state??? 
+    // Are we still continuing to trigger signals??
+    // this.setState({
+    //   isAnimating: false
+    // });
   }
 
   roomDataCallback(data) {
@@ -166,14 +181,20 @@ class ConnectionMode extends React.Component {
       if (chipSide === 'L') {
         if (adsr === 'T') {
           AudioManager.trigger(sensorIdx, true); 
-          if (!this.state.audioReceived) {
-            // Trigger the animation. 
-            this.setState({
-              audioReceived: true
-            });
-          }
+          if (!this.leftCallbackMap.includes(sensorIdx)) {
+            this.leftCallbackMap.push(sensorIdx);
+            if (!this.state.isAnimating) {
+              this.setState({
+                isAnimating: true
+              });
+            }
+           }
         } else {
-          AudioManager.release(sensorIdx, true); 
+          if (this.leftCallbackMap.includes(sensorIdx)) {
+            let idx = this.leftCallbackMap.indexOf(sensorIdx); 
+            this.leftCallbackMap.splice(idx, 1); 
+            AudioManager.release(sensorIdx, true); 
+          }
         }
 
         // Activate life if it's not already active. 
@@ -192,15 +213,22 @@ class ConnectionMode extends React.Component {
         }
       } else {
         if (adsr === 'T') {
-          AudioManager.trigger(sensorIdx, false);
-          if (!this.state.audioReceived) {
-            // Trigger the animation. 
-            this.setState({
-              audioReceived: true
-            });
-          }
+          if (!this.rightCallbackMap.includes(sensorIdx)) {
+            this.rightCallbackMap.push(sensorIdx);
+            AudioManager.trigger(sensorIdx, false);
+            if (!this.state.isAnimating) {
+              // Trigger the animation. 
+              this.setState({
+                isAnimating: true
+              });
+            }
+          }         
         } else {
-          AudioManager.release(sensorIdx, false);
+          if (this.rightCallbackMap.includes(sensorIdx)) {
+            let idx = this.rightCallbackMap.indexOf(sensorIdx);
+            this.rightCallbackMap.splice(idx, 1);
+            AudioManager.release(sensorIdx, false);
+          }
         }
 
         // Activate life if it's not already active. 
@@ -217,6 +245,14 @@ class ConnectionMode extends React.Component {
             BLE.deactivateLife(1);
           }
         }
+      }
+
+      // Animation end. 
+      if (this.leftCallbackMap.length === 0 && this.rightCallbackMap.length === 0) {
+        // All sensors are off now, so stop animating the ear. 
+        this.setState({
+          isAnimating: false
+        }); 
       }
     }
   }
