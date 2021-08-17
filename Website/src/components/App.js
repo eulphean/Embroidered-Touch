@@ -5,7 +5,7 @@
 
 import React from 'react'
 import Radium from 'radium'
-import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Redirect, HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 import StaticSleeve from './StaticSleeve.js'
 import Title from './Title.js'
@@ -48,7 +48,7 @@ class App extends React.Component {
     return (
       <div style={styles.container}>
           <Title onLogout={this.logOut.bind(this)} />
-          <Router>
+          <Router basename={process.env.PUBLIC_URL}>
             <Switch>
               {calibrationPages}
               <Route path="/connection">{connectionModePage}</Route>

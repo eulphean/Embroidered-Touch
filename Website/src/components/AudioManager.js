@@ -4,11 +4,16 @@
 // Description: Class reponsible to load all audio files and provide a shim to play these files 
 // at the right moment.
 
-import p5 from 'p5'
-import 'p5/lib/addons/p5.sound'
+// If we want to import from npm package, use this. 
+// import p5 from 'p5';
+// import 'p5/lib/addons/p5.sound'
 
 // Import all audio files and palettes. 
 import {audioFiles, palettes} from './AudioPalettes';
+
+// NOTE: p5 library is now loaded through index.html
+// We assign it to a variable that we want to use. 
+let p5 = window.p5;  
 
 class Audio {
     constructor(soundObj, env) {
@@ -54,10 +59,10 @@ var sketch = (s) => {
             let sound = s.loadSound(audioFiles[i]); 
             let env = new p5.Envelope(0.1, 0.5, 0.1, 0.5); // Default envelope. 
             let a = new Audio(sound, env); 
-            audio.push(a); 
+            audio.push(a);
         }
     }
-    
+
     s.setup = () => {
         s.noCanvas();
     };
@@ -78,7 +83,7 @@ class AudioManager {
         this.myP5 = new p5(sketch);
         this.curPaletteIdx = 0; 
         // We give this a little timeout because the files are being loaded in the beginning. 
-        setTimeout(this.setPallete.bind(this), 5000); 
+        setTimeout(this.setPallete.bind(this), 10000); 
     }
 
     startPalleteTimer() {
@@ -127,6 +132,7 @@ class AudioManager {
         // ChipA is left and ChipB is right. 
         let audio = this.getAudioByPaletteIdx(idx, isChipA); 
         if (!audio.isActive) {
+            console.log('Trigger');
             audio.trigger(isChipA); 
         }
     }
