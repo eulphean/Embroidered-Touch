@@ -101,6 +101,7 @@ class TestCalibration extends React.Component {
             <div style={styles.info}>The lines of the above grid should turn blue when a touch on the garment is detected.</div>
             <br />
             <div style={styles.info}>To adjust the calibration for a specific sensor line, enter the number for that sensor line below and click enter.</div>
+            <div style={styles.info}>After you are finished calibrating that sensor line, hit the BACK button on the browser.</div>
             <br />
             <div style={styles.inputContainer}>
               <input style={styles.input} type='number' onChange={this.onInputChange.bind(this)} value={this.state.sensorNum}></input>

@@ -8,6 +8,7 @@ import Radium from 'radium'
 
 import DoubleSleeve from './DoubleSleeve';
 import { color, fontSize} from './CommonStyles';
+import { Link } from 'react-router-dom'
 
 import { ReactComponent as Ear } from '../Assets/ear.svg';
 import AppStatusStore from '../Stores/AppStatusStore';
@@ -16,6 +17,9 @@ import SensorDataStore from '../Stores/SensorDataStore';
 import Websocket from './Websocket';
 import AudioManager from './AudioManager';
 import BLE from './BLE';
+import CustomButton from './CustomButton';
+
+const RadiumLink = Radium(Link);
 
 const animation = {
   pulse: Radium.keyframes({
@@ -142,6 +146,11 @@ class ConnectionMode extends React.Component {
           <div style={svgStyle} onAnimationEnd={this.earAnimationEnd.bind(this)}>
             <Ear style={styles.svg} />
           </div>
+          <br />
+          <CustomButton>
+            <RadiumLink to="/selectmode">BACK</RadiumLink>
+          </CustomButton>
+          <br />
         </div>
       </div>
     );
@@ -149,11 +158,6 @@ class ConnectionMode extends React.Component {
 
   earAnimationEnd() {
     console.log('Animation Ending');
-    // Is it still in the trigger state??? 
-    // Are we still continuing to trigger signals??
-    // this.setState({
-    //   isAnimating: false
-    // });
   }
 
   roomDataCallback(data) {
@@ -332,7 +336,6 @@ class ConnectionMode extends React.Component {
     if (this.state.roomData === 'userJoined') {
       message = (
         <React.Fragment>
-          <div style={styles.info}>Message Sent.</div> 
           <div style={styles.info}>Waiting for a friend to connect...</div>
         </React.Fragment>
       );

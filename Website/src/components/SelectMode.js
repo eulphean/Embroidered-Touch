@@ -88,6 +88,10 @@ class SelectMode extends React.Component {
   componentWillUnmount() {
     // Unsubscribe from the sensor data store.
     this.removeSubscription();  
+
+    // Stop all sounds when this component gets unmounted. 
+    // User might try to leave the page without deactivating Solo mode.
+    AudioManager.resetPallete();
   }
 
   render() {
@@ -186,10 +190,6 @@ class SelectMode extends React.Component {
         }
       }
     }
-  }
-
-  deactivateLife(chipIdx) {
-
   }
 
   onClickSolo() {
