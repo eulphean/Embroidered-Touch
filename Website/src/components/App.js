@@ -31,7 +31,7 @@ class App extends React.Component {
     this.state={
       isConnected: false,
       receiveVal: 'Receive Text',
-      isLoggedIn: true
+      isLoggedIn: false
     };
   }
 
