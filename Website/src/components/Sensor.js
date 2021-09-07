@@ -7,10 +7,11 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import CustomButton from './CustomButton';
 
+import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore'
 import SensorDataStore from '../Stores/SensorDataStore';
 
@@ -59,7 +60,8 @@ class Sensor extends React.Component {
     this.state={
       sensorVal: v,
       time: calibrationTime,
-      calibration: CALIBRATIONSTATE.NOTSTARTED
+      calibration: CALIBRATIONSTATE.NOTSTARTED,
+      redirectToPair: false
     };
 
     // Calibration parameters. 
@@ -70,10 +72,12 @@ class Sensor extends React.Component {
 
   componentDidMount() {
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this)); 
+    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
   }
 
   componentWillUnmount() {
     this.removeSubscription();
+    this.appStoreRemover();
   }
 
   render() {
@@ -88,7 +92,7 @@ class Sensor extends React.Component {
     let firstMessage = this.getFirstMessage(isLeftSleeve, isContinuing); 
     let secondMessage = this.getSecondMessage(isLeftSleeve, isContinuing); 
     //let thirdMessage = this.getThirdMessage(isLeftSleeve, isContinuing); 
-    return (
+    return this.state.redirectToPair ?  (<Redirect to="/setup" />) : (
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
         <br />
@@ -103,6 +107,16 @@ class Sensor extends React.Component {
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
     );
+  }
+
+  onAppStatusUpdated() {
+    let data = AppStatusStore.getData();
+    if (data['bleStatus'] === false) {
+      // Component gets unmounted and cleans up its state.
+      this.setState({
+        redirectToPair: true
+      });
+    }
   }
 
   getFirstMessage(isLeftSleeve, isContinuing) {

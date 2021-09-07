@@ -47,8 +47,8 @@ class App extends React.Component {
 
     return (
       <div style={styles.container}>
-          <Title onLogout={this.logOut.bind(this)} />
-          <Router basename={process.env.PUBLIC_URL}>
+        <Title onLogout={this.logOut.bind(this)} />
+        <Router basename={process.env.PUBLIC_URL}>
             <Switch>
               {calibrationPages}
               <Route path="/connection">{connectionModePage}</Route>

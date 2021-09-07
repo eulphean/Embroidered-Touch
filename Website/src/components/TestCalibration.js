@@ -8,6 +8,7 @@ import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
 import { Redirect } from 'react-router-dom';
 
+import AppStatusStore from '../Stores/AppStatusStore';
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
@@ -78,18 +79,26 @@ class TestCalibration extends React.Component {
     super(props);
     this.state={
       sensorNum: '',
-      redirectPath: ''
+      redirectPath: '',
+      redirectToPair: false
     };
   }
 
   componentDidMount() {
     let config = JSON.stringify(DatabaseParamStore.getConfigJson());
     console.log("Config: " + config);
+    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+  }
+
+  componentWillUnmount() {
+    // Remove the app status store subscription.
+    this.appStoreRemover();
   }
 
   render() {
-    // Push a new path on to the history, so I can come back here. 
-    if (this.state.redirectPath !== '') {
+    if (this.state.redirectToPair) {
+      return (<Redirect to="/setup" />);
+    } else if (this.state.redirectPath !== '') { // Push a new path on to the history, so I can come back here. 
       return (<Redirect push to={this.state.redirectPath} />);
     } else {
       return (
@@ -113,6 +122,16 @@ class TestCalibration extends React.Component {
           </div>
         </div>
       );
+    }
+  }
+
+  onAppStatusUpdated() {
+    let data = AppStatusStore.getData();
+    if (data['bleStatus'] === false) {
+      // Component gets unmounted and cleans up its state.
+      this.setState({
+        redirectToPair: true
+      });
     }
   }
 

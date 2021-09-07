@@ -61,7 +61,9 @@ class BLE {
   }
 
   disconnect() {
-    this.device.gatt.disconnect();
+    if (this.device) {
+      this.device.gatt.disconnect();
+    }
   }
 
   stop() {

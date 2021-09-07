@@ -8,7 +8,7 @@ import Radium from 'radium'
 
 import DoubleSleeve from './DoubleSleeve';
 import { color, fontSize} from './CommonStyles';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 import { ReactComponent as Ear } from '../Assets/ear.svg';
 import AppStatusStore from '../Stores/AppStatusStore';
@@ -110,7 +110,8 @@ class ConnectionMode extends React.Component {
     super(props);
     this.state={
       roomData: '',
-      isAnimating: false
+      isAnimating: false,
+      redirectToPair: false
     };
     
     this.leftTriggerMap = []; 
@@ -121,6 +122,7 @@ class ConnectionMode extends React.Component {
 
   componentDidMount() {
     AppStatusStore.setMode('CONNECTION');
+    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
     Websocket.joinRoom(this.roomDataCallback.bind(this), this.sensorDataCallback.bind(this));
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
     AudioManager.resetPallete(); 
@@ -128,6 +130,7 @@ class ConnectionMode extends React.Component {
 
   componentWillUnmount() {
     AppStatusStore.setMode('SETUP');
+    this.appStoreRemover();
     Websocket.leaveRoom(); 
     this.removeSubscription();  
     AudioManager.resetPallete(); 
@@ -137,8 +140,9 @@ class ConnectionMode extends React.Component {
     let message = this.getMessage(); 
     let svgStyle = this.state.roomData === 'userJoined' ? [styles.svgContainer, styles.svgSimplePulse] : 
                     (this.state.roomData === 'roomComplete' && this.state.isAnimating) ? [styles.svgContainer, styles.svgAttackPulse]: [styles.svgContainer];
-    return (
-      <div style={styles.container}>
+    
+    return this.state.redirectToPair ? (<Redirect to="/setup" />) :
+      (<div style={styles.container}>
         <DoubleSleeve showLife={true} />
         <div style={styles.content}>
           {message}
@@ -154,6 +158,16 @@ class ConnectionMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  onAppStatusUpdated() {
+    let data = AppStatusStore.getData();
+    if (data['bleStatus'] === false) {
+      // Component gets unmounted and cleans up its state.
+      this.setState({
+        redirectToPair: true
+      });
+    }
   }
 
   earAnimationEnd() {
@@ -351,6 +365,12 @@ class ConnectionMode extends React.Component {
       message = (
         <React.Fragment>
           <div style={styles.info}>Your friend has logged out.</div> 
+        </React.Fragment>
+      );
+    } else {
+      message = (
+        <React.Fragment>
+          <div style={styles.info}>Waiting for a friend to connect...</div>
         </React.Fragment>
       );
     }

@@ -6,8 +6,9 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
+import AppStatusStore from '../Stores/AppStatusStore';
 import CustomButton from './CustomButton';
 const RadiumLink = Radium(Link);
 
@@ -45,11 +46,20 @@ class Calibration extends React.Component {
   constructor(props) {
     super(props);
     this.state={
+      redirectToPair: false
     };
+  }
+  
+  componentDidMount() {
+    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+  }
+
+  componentWillUnmount() {
+    this.appStoreRemover();
   }
 
   render() {
-    return (
+    return this.state.redirectToPair ? (<Redirect to={'/setup'} />) : (
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
         <br /><br />
@@ -61,6 +71,16 @@ class Calibration extends React.Component {
         </CustomButton>
       </div>
     );
+  }
+
+  onAppStatusUpdated() {
+    let data = AppStatusStore.getData();
+    if (data['bleStatus'] === false) {
+      // Component gets unmounted and cleans up its state.
+      this.setState({
+        redirectToPair: true
+      });
+    }
   }
 }
 

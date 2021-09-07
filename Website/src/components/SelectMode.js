@@ -6,7 +6,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import DoubleSleeve from './DoubleSleeve';
 import CustomButton from './CustomButton';
@@ -71,7 +71,8 @@ class SelectMode extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      isSoloActive: false
+      isSoloActive: false,
+      redirectToPair: false
     };
 
     this.leftTriggerMap = [];
@@ -83,20 +84,21 @@ class SelectMode extends React.Component {
     // We can trigger the audio engine by correlating the parameters with the 
     // DatabaseParamStore (where the current configuration for calibration is stored.)
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
+    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
   }
 
   componentWillUnmount() {
     // Unsubscribe from the sensor data store.
     this.removeSubscription();  
-
+    this.appStoreRemover();
     // Stop all sounds when this component gets unmounted. 
     // User might try to leave the page without deactivating Solo mode.
     AudioManager.resetPallete();
   }
 
   render() {
-    return (
-      <div style={styles.container}>
+    return this.state.redirectToPair ? (<Redirect to="/setup" />) :
+      (<div style={styles.container}>
         <DoubleSleeve showLife={true} />
         <div style={styles.content}>
           <div style={styles.buttonContainer}>
@@ -121,6 +123,16 @@ class SelectMode extends React.Component {
         </div>
       </div>
     );
+  }
+
+  onAppStatusUpdated() {
+    let data = AppStatusStore.getData();
+    if (data['bleStatus'] === false) {
+      // Component gets unmounted and cleans up its state.
+      this.setState({
+        redirectToPair: true
+      });
+    }
   }
 
   onSensorData() {
