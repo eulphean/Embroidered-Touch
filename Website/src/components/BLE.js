@@ -129,7 +129,7 @@ class BLE {
         .catch((() => {
           console.log('GATT Operation in progress');
         }));
-        console.log('BLE: Buffer sent: ' + data);
+        // console.log('BLE: Buffer sent: ' + data);
       } else {
           console.warn('BLE: Ensure Bluetooth is connected.');
       }

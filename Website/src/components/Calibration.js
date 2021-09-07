@@ -53,7 +53,7 @@ class Calibration extends React.Component {
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
         <br /><br />
-        <div style={styles.info}>For calibration, you will be prompted to touch<div>each of the grid lines one by one.</div></div>
+        <div style={styles.info}>For calibration, you will be prompted to touch<div>various areas on the sleeves with your hand.</div></div>
         <br /><br /><div style={styles.info}>When you are ready to begin,<div>click on CALIBRATE below.</div></div>
         <br /><br />
         <CustomButton>

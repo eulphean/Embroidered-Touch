@@ -1,8 +1,8 @@
 {
-  "name": "theabc.today",
+  "name": "embroideredtouch.art",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://theabc.today",
+  "homepage": "https://embroideredtouch.art",
   "dependencies": {
     "gh-pages": "^2.1.1",
     "lodash": "^4.17.21",

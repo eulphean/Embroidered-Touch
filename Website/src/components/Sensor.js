@@ -87,18 +87,18 @@ class Sensor extends React.Component {
     // Pending messages. 
     let firstMessage = this.getFirstMessage(isLeftSleeve, isContinuing); 
     let secondMessage = this.getSecondMessage(isLeftSleeve, isContinuing); 
-    let thirdMessage = this.getThirdMessage(isLeftSleeve, isContinuing); 
+    //let thirdMessage = this.getThirdMessage(isLeftSleeve, isContinuing); 
     return (
       <div style={styles.container}>
         <div style={styles.title}>Calibration</div>
         <br />
         {firstMessage}
         {secondMessage}
-        {thirdMessage}
+        <br />
         {calibrationMessage}
         <br />
         <div style={styles.info}>Then click NEXT below.</div>
-        <div style={styles.info}>Debug Sensor Val: {this.state.sensorVal}</div>
+        <div style={styles.info}>Sensor Value: {this.state.sensorVal}</div>
         <br />
         <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>    
       </div>
@@ -128,12 +128,58 @@ class Sensor extends React.Component {
 
   getSecondMessage(isLeftSleeve, isContinuing) {
     let message;
-    if (isLeftSleeve || !isLeftSleeve) {
-      message = (<span><div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div><br /></span>);
-    }
+    // if (isLeftSleeve || !isLeftSleeve) {
+    //   message = (<span><div style={styles.info}>Starting with the vertical grid lines that run down the length of the sleeve, from shoulder to wrist.</div><br /></span>);
+    // }
 
-    if ((isLeftSleeve && isContinuing) || (!isLeftSleeve && isContinuing)) {
-      message = <React.Fragment></React.Fragment>;
+    if (isLeftSleeve || !isLeftSleeve) {
+      if (this.props.sensorIdx === 1 || this.props.sensorIdx === 13) {
+        message = (<span><div style={styles.info}>Place your hand near the front side of your upper arm so it is touching the vertical lines closest to the center of your body.</div></span>);
+      }
+      
+      if (this.props.sensorIdx === 2 || this.props.sensorIdx === 14) {
+        message = (<span><div style={styles.info}>Again, place your hand near the front side of your upper arm so it is touching the vertical lines closest to the center of your body.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 3 || this.props.sensorIdx === 15) {
+        message = (<span><div style={styles.info}>One more time, place your hand near the front side of your upper arm so it is touching the vertical lines closest to the center of your body.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 4 || this.props.sensorIdx === 16) {
+        message = (<span><div style={styles.info}>Rotate your hand towards the back of your arm, so it is touching the vertical lines closest to the back of your body.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 5 || this.props.sensorIdx === 17) {
+        message = (<span><div style={styles.info}>Again, place your hand towards the back of your arm, so it is touching the vertical lines closest to the back of your body.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 6 || this.props.sensorIdx === 18) {
+        message = (<span><div style={styles.info}>One more time, place your hand towards the back of your arm, so it is touching the vertical lines closest to the back of your body.</div></span>);
+      }
+      
+      if (this.props.sensorIdx === 7 || this.props.sensorIdx === 19) {
+        message = (<span><div style={styles.info}>Now place your hand on the back of your shoulder so it is touching the horizontal line closest to the top of your arm.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 8 || this.props.sensorIdx === 20) {
+        message = (<span><div style={styles.info}>Now move your hand down the length of your arm, so it is touching the second horizontal line from the top.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 9 || this.props.sensorIdx === 21) {
+        message = (<span><div style={styles.info}>Now move your hand down the length of your arm a bit more, so it is touching the third horizontal line from the top.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 10 || this.props.sensorIdx === 22) {
+        message = (<span><div style={styles.info}>Now move your hand down the length of your arm below the elbow, so it is touching the fourth horizontal line from the top.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 11 || this.props.sensorIdx === 23) {
+        message = (<span><div style={styles.info}>Now move your hand a bit further down the length of your arm below the elbow, so it is touching the fifth horizontal line from the top.</div></span>);
+      }
+
+      if (this.props.sensorIdx === 12 || this.props.sensorIdx === 24) {
+        message = (<span><div style={styles.info}>Now move your hand a bit further down the length of your arm below the elbow, so it is touching the horizontal line closest to your elbow.</div></span>);
+      }
     } 
 
     return message; 
@@ -154,7 +200,7 @@ class Sensor extends React.Component {
 
   getCalibrationMsg() {
     if (this.state.calibration === CALIBRATIONSTATE.NOTSTARTED) {
-      return (<div style={styles.info}>Hold for about 5 seconds, then release.</div>);
+      return (<div style={styles.info}>Hold for 5 seconds as the counter counts down, then release.</div>);
     } else if (this.state.calibration === CALIBRATIONSTATE.STARTED) {
       return (<div style={styles.info}>Calibration in process...{this.state.time}</div>);
     } else if (this.state.calibration === CALIBRATIONSTATE.COMPLETED) {
