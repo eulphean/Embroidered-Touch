@@ -136,8 +136,6 @@ class Login extends React.Component {
         } else {
           console.error('Something wrong');
         }
-      }).then(response => {
-          console.debug(response);
       }).catch(error => {
           console.error(error);
       });

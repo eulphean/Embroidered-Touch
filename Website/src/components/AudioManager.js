@@ -44,7 +44,7 @@ class Audio {
     }
 
     release() {
-        // this.soundObject.stop();
+        //this.soundObject.stop();
         this.adsr.triggerRelease(this.soundObject);
         this.isActive = false; 
     }
@@ -134,7 +134,7 @@ var sketch = (s) => {
 
 
 
-const TimeInterval = 15 * 1000; // 3 minutes
+const TimeInterval = 3 * 60 * 1000; // 3 minutes
 // Keeps track of the current pallete and is responsible for cycling the palletes. 
 class AudioManager {
     constructor() {
@@ -211,16 +211,20 @@ class AudioManager {
     }
 
     trigger(idx, isChipA) {
-        // ChipA is left and ChipB is right. 
-        let audio = this.getAudioByPaletteIdx(idx, isChipA); 
-        if (!audio.isActive) {
-            audio.trigger(isChipA); 
+        if (!this.isIOSDevice()) {
+            // ChipA is left and ChipB is right. 
+            let audio = this.getAudioByPaletteIdx(idx, isChipA); 
+            if (!audio.isActive) {
+                audio.trigger(isChipA); 
+            }
         }
     }
 
     release(idx, isChipA) {
-        let audio = this.getAudioByPaletteIdx(idx, isChipA); 
-        audio.release(); 
+        if (!this.isIOSDevice()) {
+            let audio = this.getAudioByPaletteIdx(idx, isChipA); 
+            audio.release(); 
+        }
     }
 
     getAudioByPaletteIdx(idx, isChipA) {
