@@ -4,11 +4,14 @@
 	 viewBox="0 0 2002 741.5" style="enable-background:new 0 0 2002 741.5;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
-	.st1{clip-path:url(#SVGID_00000043458472226340525100000013144959001179285168_);}
-	.st2{clip-path:url(#SVGID_00000008858811980379235460000008228060566048787082_);}
+	.st1{clip-path:url(#SVGID_00000026862610367903558550000017251810911107889850_);}
+	.st2{clip-path:url(#SVGID_00000036951096052247817330000012677652361507437215_);}
 	.st3{fill:none;stroke:#849099;stroke-width:5;stroke-linecap:round;}
 	.st4{fill:none;stroke:#2BB673;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 	.st5{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+	.st6{fill:#FFFFFF;}
+	.st7{font-family:'MyriadPro-Regular';}
+	.st8{font-size:60px;}
 </style>
 <g id="_x32_sleeve_x5F_life_00000018943141870033162000000007647101247550529679_" transform="translate(2.5 2.5)">
 	<path id="Background" class="st0" d="M0-2.5h1997v739H0V-2.5z"/>
@@ -16,10 +19,10 @@
 		<defs>
 			<rect id="SVGID_1_" y="-2.5" width="1997" height="739"/>
 		</defs>
-		<clipPath id="SVGID_00000167364874632364621600000011939770839032654242_">
+		<clipPath id="SVGID_00000176002581654892946650000000432041544056991891_">
 			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
 		</clipPath>
-		<g style="clip-path:url(#SVGID_00000167364874632364621600000011939770839032654242_);">
+		<g style="clip-path:url(#SVGID_00000176002581654892946650000000432041544056991891_);">
 			<g id="_x32_sleeve_x5F_life" transform="translate(1.5 1.5)">
 				<path id="Background_00000173882592321222343150000004246985885810807994_" class="st0" d="M0-2.5h1993.5v735.3H0V-2.5L0-2.5z"
 					/>
@@ -27,13 +30,13 @@
 					<path id="path_1" class="st0" d="M0-2.5h1993.5v735.3H0V-2.5L0-2.5z"/>
 					<g>
 						<defs>
-							<polygon id="SVGID_00000164511754212433946320000002878077766967233436_" points="0,-2.5 1993.5,-2.5 1993.5,732.8 0,732.8 
+							<polygon id="SVGID_00000156563887918440424320000003203130511362943677_" points="0,-2.5 1993.5,-2.5 1993.5,732.8 0,732.8 
 								0,-2.5 							"/>
 						</defs>
-						<clipPath id="SVGID_00000005951709782386228080000005315453673676454542_">
-							<use xlink:href="#SVGID_00000164511754212433946320000002878077766967233436_"  style="overflow:visible;"/>
+						<clipPath id="SVGID_00000094617995224881875020000018175709432170917287_">
+							<use xlink:href="#SVGID_00000156563887918440424320000003203130511362943677_"  style="overflow:visible;"/>
 						</clipPath>
-						<g style="clip-path:url(#SVGID_00000005951709782386228080000005315453673676454542_);">
+						<g style="clip-path:url(#SVGID_00000094617995224881875020000018175709432170917287_);">
 							<g id="Group_00000000189926838629087470000006083160569609914556_" transform="translate(0 0.9992676)">
 								<g id="Group" transform="translate(1007.4702 311.30054)">
 									<path id="line24" class="st3" d="M859.9-2.5c71.2,114.8-86.5,131.2-68.9,238.3c8.4,51-73,60-119.9,45.8
@@ -289,6 +292,8 @@
 									<path id="Shape_00000076566567186862496450000007715465882490872491_" class="st5" d="M1899.8,275.6v-12.3h-22.2v-2.1
 										l22.8-27.7h2.5v27.2h7v2.7h-7v12.3H1899.8L1899.8,275.6z M1899.8,260.6v-18c0-1.6,0-3.2,0.1-4.7l-0.2-0.1
 										c-0.9,1.4-1.9,2.8-3,4.2l-15.3,18.6v0.1L1899.8,260.6L1899.8,260.6z"/>
+									<text transform="matrix(1 0 0 1 615.3983 559.4818)" class="st6 st7 st8">LEFT</text>
+									<text transform="matrix(1 0 0 1 1219.7659 563.2581)" class="st6 st7 st8">RIGHT</text>
 								</g>
 							</g>
 						</g>

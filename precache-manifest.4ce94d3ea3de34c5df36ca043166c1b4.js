@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "df8dbef98c42ababf775fe30def6922e",
+    "revision": "f7fdc2e8d743bc33cef6756432347883",
     "url": "/index.html"
   },
   {
-    "revision": "120f19ac06b39c88505b",
+    "revision": "a9ef3cd310328c81ee67",
     "url": "/static/css/main.11adac6d.chunk.css"
   },
   {
@@ -16,16 +16,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/js/2.0f253737.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "120f19ac06b39c88505b",
-    "url": "/static/js/main.e33eac19.chunk.js"
+    "revision": "a9ef3cd310328c81ee67",
+    "url": "/static/js/main.4337930e.chunk.js"
   },
   {
     "revision": "6bc7c55c6cc0715fb4a8",
     "url": "/static/js/runtime-main.1598067a.js"
   },
   {
-    "revision": "9835b0f8aabc58502bc42fb0bd9eeffd",
-    "url": "/static/media/2sleeve_life.9835b0f8.svg"
+    "revision": "89dd7c318647517354c87e7a8df8991e",
+    "url": "/static/media/2sleeve_life.89dd7c31.svg"
   },
   {
     "revision": "e9d180f7ef480152e77ec7eac7adb957",
