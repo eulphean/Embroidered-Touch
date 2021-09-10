@@ -7,6 +7,7 @@ import React from 'react'
 import Radium from 'radium'
 import { Redirect, HashRouter as Router, Route, Switch } from 'react-router-dom'
 
+import Product from './Product.js'
 import StaticSleeve from './StaticSleeve.js'
 import Title from './Title.js'
 import Setup from './Setup.js'
@@ -37,8 +38,9 @@ class App extends React.Component {
 
   render() {
     let calibrationPages = this.getSensorCalibrationPages(); 
-    let loginPage = this.state.isLoggedIn ? <Redirect to="/setup" /> : <React.Fragment><StaticSleeve /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
+    let loginPage = this.state.isLoggedIn ? <Redirect to="/product" /> : <React.Fragment><StaticSleeve /><Login onLogin={this.hasLoggedIn.bind(this)}/></React.Fragment>;
     // Redirect to test calibration page if we have already calibrated. 
+    let productPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Product /></React.Fragment> : <Redirect to="/" />; 
     let setupPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Setup /></React.Fragment> : <Redirect to="/" />; 
     let calibrationPage = this.state.isLoggedIn ? <React.Fragment><StaticSleeve /><Calibration /></React.Fragment> : <Redirect to="/" />
     let testCalPage = this.state.isLoggedIn ? <React.Fragment><TestCalibration /></React.Fragment> : <Redirect to="/" />;
@@ -56,6 +58,7 @@ class App extends React.Component {
               <Route path="/testcal">{testCalPage}</Route>
               <Route path="/calibration">{calibrationPage}</Route>
               <Route path="/setup">{setupPage}</Route>
+              <Route path="/product">{productPage}</Route>
               <Route path="/">{loginPage}</Route>
             </Switch>
         </Router>

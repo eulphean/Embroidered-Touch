@@ -17,6 +17,9 @@ export DATABASE_URL=postgresql://localhost/fabric_instrument?user=amaykataria&pa
 - This will ensure that server can access the database.
 - If the postgresql service is not running, start is manually with this command. sudo service postgresql start
 
+--- Start the postgresql service ---
+sudo service postgresql start
+
 0: To test the connection to the database. 
 psql -h localhost -U amaykataria -p 5432 fabric_instrument 
 It will prompt for password, add "abc123"

@@ -43,6 +43,8 @@ const styles = {
   }
 };
 
+// NOTE - Every visual component needs to know what product we are pairing to.
+// Use the Product store for that. 
 class Setup extends React.Component {
   constructor(props) {
     super(props);

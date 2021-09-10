@@ -5,20 +5,37 @@
 
 import Websocket from "../components/Websocket";
 
+const numSensorChildA = 5; 
+const numSensorChildB = 7; 
 class DatabaseParamStore {
     constructor() {
         // Cut off values for the entire system.
         // Filled with an initial set of values. 
         // Updated when new values are received from the database. 
-        this.cutoffVals = {
-            0: new Array(12).fill(0),
-            1: new Array(12).fill(0)
+        // Each of them goes to its own table. 
+
+        // Main sweater
+        this.cutoffValsSweater = {
+            0: new Array(12).fill(-1),
+            1: new Array(12).fill(-1)
         };
 
-        // Keep track if the user has calibrated the system. 
-        this.hasCalibrated = false; 
+        // Child sweater A.
+        this.cutoffValsChildA = {
+            0: new Array(numSensorChildA).fill(-1)
+        };
 
-        this.configName = '';
+        // Child sweater B.
+        this.cutoffValsChildB = {
+            0: new Array(numSensorChildB).fill(-1)
+        }
+
+        // Keeps track if all the products have been calibrated. 
+        this.hasCalibrated = [false, false, false]; 
+
+        // Current config. 
+        this.curConfigName = '';
+        this.curProduct = ''; 
 
         // Listeners for this database. 
         this.listeners = []; 
@@ -63,29 +80,50 @@ class DatabaseParamStore {
         Websocket.updateUserConfig(dbPayload);
     }
 
-    // Default JSON where everything is set to default 0. 
+    // Create a default JSON for each product and return it as an array. 
     getDefaultJson() {
-        let jsonObject = {}; 
+        let json = {}; 
+
+        // Create the JSON for main sweater
         for (let i = 0; i < 2; i++) { // Num chips = 2
             let chipsetData = []; 
             for (let j = 0; j < 12; j++) { // Num sensors = 12
                 chipsetData[j] = 0;
             }
 
-            jsonObject[i.toString()] = chipsetData; 
+            json[i.toString()] = chipsetData; 
         }
 
         // Save this flag in the config. 
-        jsonObject['hasCalibrated'] = false;
-        return jsonObject; 
+        json['hasCalibrated'] = this.hasCalibrated[0];
+
+        // JSON for child sweater A.
+        let jsonChildA = {}; let dataA = []; 
+        for (let i = 0; i < numSensorChildA; i++) {
+            dataA[i] = 0; 
+        }
+        jsonChildA['0'] = dataA; 
+        jsonChildA['hasCalibrated'] = this.hasCalibrated[1];
+
+
+        // JSON for child sweater B.
+        let jsonChildB = {}; let dataB = [];
+        for (let i = 0; i < numSensorChildB; i++) {
+            dataB[i] = 0; 
+        }
+        jsonChildB['0'] = dataB;
+        jsonChildB['hasCalibrated'] = this.hasCalibrated[2]; 
+        
+        let j = [json, jsonChildA, jsonChildB]; 
+        return j; 
     }
 
-    getConfigJson() {
+    getDefaultConfigs() {
         let jsonObject = {}; 
         for (let i = 0; i < 2; i++) { // Num chips = 2
             let chipsetData = []; 
             for (let j = 0; j < 12; j++) { // Num sensors = 12
-                chipsetData[j] = this.cutoffVals[i][j]; 
+                chipsetData[j] = this.cutoffValsSweater[i][j]; 
             }
 
             jsonObject[i.toString()] = chipsetData; 
@@ -97,16 +135,32 @@ class DatabaseParamStore {
     }
 
     // Assign fetched config values to the cut off values. 
-    setConfig(config) {
-        // Cut off values. 
+    setConfig(configs) {
+        // Cut off values for sweater
+        let sweater = configs[0]; 
         for (let i = 0; i < 2; i++) {
             for (let j = 0; j < 12; j++) {
-                this.cutoffVals[i][j] = config[i][j]; 
+                this.cutoffValsSweater[i][j] = sweater[i][j]; 
             }
         }
-
         // Has calibrated flag. 
-        this.hasCalibrated = config['hasCalibrated']; 
+        this.hasCalibrated[0] = sweater['hasCalibrated']; 
+
+        // Cut off values for childA 
+        let childa = configs[1];
+        for (let i = 0; i < numSensorChildA; i++) {
+            this.cutoffValsChildA[0][i] = childa[0][i];  
+        }
+        this.hasCalibrated[1] = childa['hasCalibrated'];
+        console.log(this.cutoffValsChildA); 
+
+        // Cut off values for childB
+        let childb = configs[2]; 
+        for (let i = 0; i < numSensorChildB; i++) {
+            this.cutoffValsChildB[0][i] = childb[0][i];
+        }
+        this.hasCalibrated[2] = childb['hasCalibrated'];
+        console.log(this.cutoffValsChildB);
     }
 
     setConfigName(configName) {
