@@ -13,6 +13,7 @@ export const PRODUCT = {
 class ProductStore {
     constructor() {
         this.product = PRODUCT.NONE; 
+        this.listeners = [];
     }
 
     // Returns the method to be called to remove itself as listener. 
@@ -44,21 +45,29 @@ class ProductStore {
             default: 
                 break; 
         }
+
+        // Alert all subscribers that the product has changed.
+        // Now all the components will have to update based on the new product. 
+        // Including App.js
+        for (let listener of this.listeners) {
+            listener(this.product);
+        }
     }
 
     getProductName() {
-        let name = ''; 
-        if (this.product === PRODUCT.SWEATER) {
-            name = 'sweater';
-        } else if (this.product === PRODUCT.CHILDA) {
-            name = 'childA';
-        } else if (this.product === PRODUCT.CHILDB) {
-            name = 'childB';
-        } else {
-            console.log('Unknown product.... WAIT and check');
-        }
+        // let name = ''; 
+        // if (this.product === PRODUCT.SWEATER) {
+        //     name = 'sweater';
+        // } else if (this.product === PRODUCT.CHILDA) {
+        //     name = 'childA';
+        // } else if (this.product === PRODUCT.CHILDB) {
+        //     name = 'childB';
+        // } else {
+        //     console.log('Unknown product.... WAIT and check');
+        // }
 
-        return name; 
+        // return name; 
+        return this.product; 
     }
 }
 

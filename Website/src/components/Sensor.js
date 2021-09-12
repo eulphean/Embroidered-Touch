@@ -14,6 +14,7 @@ import CustomButton from './CustomButton';
 import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore'
 import SensorDataStore from '../Stores/SensorDataStore';
+import {PRODUCT} from '../Stores/ProductStore'
 
 const RadiumLink = Radium(Link);
 const CALIBRATIONSTATE = {
@@ -56,7 +57,8 @@ const styles = {
 class Sensor extends React.Component {
   constructor(props) {
     super(props);
-    let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    //let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    let v = 0;
     this.state={
       sensorVal: v,
       time: calibrationTime,
@@ -71,16 +73,36 @@ class Sensor extends React.Component {
   }
 
   componentDidMount() {
-    this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this)); 
-    this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+    //this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this)); 
+    //this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
   }
 
   componentWillUnmount() {
-    this.removeSubscription();
-    this.appStoreRemover();
+    //this.removeSubscription();
+    //this.appStoreRemover();
   }
 
   render() {
+    if (this.props.product === PRODUCT.SWEATER) {
+      return this.renderSweater();
+    } else if (this.props.product === PRODUCT.CHILDA) {
+      return this.renderChild(true);
+    } else if (this.props.product === PRODUCT.CHILDB) {
+      return this.renderChild(false); 
+    } else {
+      return (<React.Fragment></React.Fragment>); // Just an empty fragment. 
+    }
+  }
+
+  renderChild(isChildA) {
+    return (
+      <div style={styles.container}>
+        Hello i'm a child. Who are you???
+      </div> 
+    )
+  }
+
+  renderSweater() {
     let nextPath = this.getNextPath(); 
     let calibrationMessage = this.getCalibrationMsg(); 
 

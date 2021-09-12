@@ -10,7 +10,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 import ProductStore, {PRODUCT} from '../Stores/ProductStore';
 import CustomButton from './CustomButton';
-const RadiumLink = Radium(Link);
+import AppStatusStore from '../Stores/AppStatusStore';
 
 const styles = {
   container: {
@@ -54,26 +54,29 @@ class Product extends React.Component {
     this.state = {
         redirect: false
     };
+
+    AppStatusStore.setShowLogout(true); 
   }
   
   render() {
-    return  this.state.redirect ? <Redirect to="/setup" /> : (
+    return  this.state.redirect ? <Redirect push to="/setup" /> : (
       <div style={styles.container}>
         <div style={styles.content}>
           <div style={styles.title}>Product</div>
           <br />
-          <div style={styles.info}>Welcome to Embroidered touch. Choose your product.</div>
+          <div style={styles.info}>Welcome to Embroidered touch.</div>
+          <div style={styles.info}>Choose your product.</div>
           <br />
           <div>
             <CustomButton onClick={this.onSweater.bind(this)}>SWEATER</CustomButton>
             <br />
           </div>
           <div>
-            <CustomButton onClick={this.onChildA.bind(this)}>CHILDREN A</CustomButton>
+            <CustomButton onClick={this.onChildA.bind(this)}>CHILD 4 LINE</CustomButton>
             <br />
           </div>
           <div>
-            <CustomButton onClick={this.onChildB.bind(this)}>CHILDREN B</CustomButton>
+            <CustomButton onClick={this.onChildB.bind(this)}>CHILD 7 LINE</CustomButton>
             <br />
           </div>
         </div>
@@ -82,24 +85,24 @@ class Product extends React.Component {
   }
 
   onSweater() {
-    ProductStore.setProduct(PRODUCT.SWEATER);
     console.log('Product Set: Sweater');
+    ProductStore.setProduct(PRODUCT.SWEATER);
     this.setState({
         redirect: true
     });
   }
 
   onChildA() {
-    ProductStore.setProduct(PRODUCT.CHILDA);
     console.log('Product Set: Child A');
+    ProductStore.setProduct(PRODUCT.CHILDA);
     this.setState({
         redirect: true
     });
   }
 
   onChildB() {
-    ProductStore.setProduct(PRODUCT.CHILDB);
     console.log('Product Set: Child B');
+    ProductStore.setProduct(PRODUCT.CHILDB);
     this.setState({
         redirect: true
     });

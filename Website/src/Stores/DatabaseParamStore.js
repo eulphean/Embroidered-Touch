@@ -4,8 +4,9 @@
 // Description: This data store is responsible to hold parameters, which will be saved onto the database.  
 
 import Websocket from "../components/Websocket";
+import {PRODUCT} from './ProductStore.js'
 
-const numSensorChildA = 5; 
+const numSensorChildA = 4; 
 const numSensorChildB = 7; 
 class DatabaseParamStore {
     constructor() {
@@ -84,7 +85,7 @@ class DatabaseParamStore {
     getDefaultJson() {
         let json = {}; 
 
-        // Create the JSON for main sweater
+       // Create the JSON for main sweater
         for (let i = 0; i < 2; i++) { // Num chips = 2
             let chipsetData = []; 
             for (let j = 0; j < 12; j++) { // Num sensors = 12
@@ -92,7 +93,7 @@ class DatabaseParamStore {
             }
 
             json[i.toString()] = chipsetData; 
-        }
+        } 
 
         // Save this flag in the config. 
         json['hasCalibrated'] = this.hasCalibrated[0];
@@ -116,6 +117,52 @@ class DatabaseParamStore {
         
         let j = [json, jsonChildA, jsonChildB]; 
         return j; 
+    }
+
+    // Based on the product we are using, pull the right config. 
+    getConfigJson(product) {
+        let json = {};
+        switch (product) {
+            case PRODUCT.SWEATER: {
+                for (let i = 0; i < 2; i++) { // Num chips = 2
+                    let chipsetData = []; 
+                    for (let j = 0; j < 12; j++) { // Num sensors = 12
+                        chipsetData[j] = this.cutoffValsSweater[i][j];
+                    }
+        
+                    json[i.toString()] = chipsetData; 
+                } 
+        
+                // Save this flag in the config. 
+                json['hasCalibrated'] = this.hasCalibrated[0];
+                break; 
+            }
+
+            case PRODUCT.CHILDA: {
+                let data = []; 
+                for (let i = 0; i < numSensorChildA; i++) {
+                    data[i] = this.cutoffValsChildA[0][i]; 
+                }
+                json['0'] = data; 
+                json['hasCalibrated'] = this.hasCalibrated[1];
+                break; 
+            }
+
+            case PRODUCT.CHILDB: {
+                let data = []; 
+                for (let i = 0; i < numSensorChildA; i++) {
+                    data[i] = this.cutoffValsChildB[0][i]; 
+                }
+                json['0'] = data; 
+                json['hasCalibrated'] = this.hasCalibrated[2];
+                break; 
+            }
+
+            default: 
+                break;
+        }
+
+        return json; 
     }
 
     getDefaultConfigs() {
