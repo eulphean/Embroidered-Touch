@@ -171,15 +171,58 @@ class SelectMode extends React.Component {
 
   handleChildSweaterAudio(isChildA) {
     if (isChildA) {
-      // Child A audio handling. 
-      // Only when solo mode is actually active. 
+      let childASensorData = SensorDataStore.getChildSweaterData(true)[0];
+      let cutoffVals = DatabaseParamStore.getConfigJson(PRODUCT.CHILDA)[0]; 
+      if (this.state.isSoloActive) {
+        for (let i = 0; i < childASensorData.length; i++) {
+          let cutoffVal = cutoffVals[i]; 
+          let data = childASensorData[i]; 
+          if (data < cutoffVal) {
+            AudioManager.trigger(i); 
+          } else {
+            AudioManager.release(i);
+          }
+        }
+      }
     } else {
-      // Child B audio handling. 
-      // Only when solo mode is actually active. 
+      let childBSensorData = SensorDataStore.getChildSweaterData(false)[0]; 
+      let cutoffVals = DatabaseParamStore.getConfigJson(PRODUCT.CHILDB)[0]; 
+      if (this.state.isSoloActive) {
+        for (let i = 0; i < childBSensorData.length; i++) {
+          if (i === 0 || i === 1 || i === 2) {
+            // Don't do anything
+          } else {
+            let cutoffVal = cutoffVals[i]; 
+            let data = childBSensorData[i]; 
+            if (data < cutoffVal) {
+              let newIdx = this.childBIndexMapper(i); 
+              AudioManager.trigger(newIdx); 
+            } else {
+              let newIdx = this.childBIndexMapper(i);
+              AudioManager.release(newIdx);
+            }
+          }
+        }
+      }
     }
   }
 
-  handleAdultSweaterAudio(product) {
+  childBIndexMapper(curIdx) {
+    let newIdx = 0; 
+    // Map 0 - 7 into 0-4
+    if (curIdx === 3) {
+      newIdx = 0; 
+    } else if (curIdx === 4) {
+      newIdx = 1;
+    } else if (curIdx === 5) {
+      newIdx = 2; 
+    } else if (curIdx === 6) {
+      newIdx = 3; 
+    } 
+    return newIdx; 
+  }
+
+  handleAdultSweaterAudio() {
     let config = DatabaseParamStore.getConfigJson(PRODUCT.SWEATER); 
     let chipASensorData = SensorDataStore.getAdultSweaterData(0)['f']; 
     let chipBSensorData = SensorDataStore.getAdultSweaterData(1)['f'];

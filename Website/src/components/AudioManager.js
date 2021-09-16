@@ -9,6 +9,7 @@
 // import 'p5/lib/addons/p5.sound'
 
 // Import all audio files and palettes. 
+import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 import {audioFiles, palettes, childPalettes} from './AudioPalettes';
 
 // NOTE: p5 library is now loaded through index.html
@@ -139,8 +140,12 @@ var sketch = (s) => {
         s.noLoop(); 
     };
 
-    s.getLoadedPalette = (idx) => {
-        return loadedPalettes[idx]; 
+    s.getLoadedPalette = (product, idx) => {
+        if (product === PRODUCT.SWEATER) {
+            return loadedPalettes[idx]; 
+        } else if (product === PRODUCT.CHILDA || product === PRODUCT.CHILDB) {
+            return loadedChildPalettes[idx]; 
+        }
     }
 
     s.emptyThisPalette = (idx) => {
@@ -149,7 +154,7 @@ var sketch = (s) => {
     }
 };
 
-const TimeInterval = 3 * 60 * 1000; // 3 minutes
+const TimeInterval = 1 * 60 * 1000; // 3 minutes
 // Keeps track of the current pallete and is responsible for cycling the palletes. 
 class AudioManager {
     constructor() {
@@ -157,11 +162,21 @@ class AudioManager {
         this.curPaletteIdx = 0;
         let isIOS = this.isIOSDevice(); 
         this.myP5.initialLoad(this.onAudioLoaded.bind(this), isIOS);
+        this.curProduct = ProductStore.getProductName(); 
+        ProductStore.subscribe(this.onProductUpdated.bind(this)); 
+    }
+
+    onProductUpdated(product) {
+        console.log('Product Updated: Setting new pallette.'); 
+        this.curProduct = product; 
+        this.setPallete(); 
     }
 
     onAudioLoaded() {
         console.log('All audio loaded... Setting first palette.');
-        this.setPallete();
+        
+        // Set the palette when a product is chosen. 
+        // this.setPallete();
     }
 
     startPalleteTimer() {
@@ -177,7 +192,11 @@ class AudioManager {
             this.curPaletteIdx = (this.curPaletteIdx + 1) % 2; 
         } else {
             // Set new palette index. 
-            this.curPaletteIdx = (this.curPaletteIdx + 1) % palettes.length; 
+            if (this.curProduct === PRODUCT.SWEATER) {
+                this.curPaletteIdx = (this.curPaletteIdx + 1) % palettes.length; 
+            } else if (this.curProduct === PRODUCT.CHILDA || this.curProduct === PRODUCT.CHILDB) {
+                this.curPaletteIdx = (this.curPaletteIdx + 1) % childPalettes.length; 
+            }
         }
 
         // Set ADSR vals in current palette. 
@@ -191,9 +210,15 @@ class AudioManager {
     }
 
     setPallete() {
-        let p = palettes[this.curPaletteIdx]; 
+        let p; 
+        if (this.curProduct === PRODUCT.SWEATER) {
+            p = palettes[this.curPaletteIdx]; 
+        } else if (this.curProduct === PRODUCT.CHILDA || this.curProduct === PRODUCT.CHILDB) {
+            p = childPalettes[this.curPaletteIdx]; 
+        }
+
         let keys = Object.keys(p); 
-        let loadedPalette = this.myP5.getLoadedPalette(this.curPaletteIdx); 
+        let loadedPalette = this.myP5.getLoadedPalette(this.curProduct, this.curPaletteIdx); 
         for (let i = 0; i < keys.length; i++) {
             let k = keys[i];  
             let a = loadedPalette[k];
@@ -224,17 +249,28 @@ class AudioManager {
     }
 
     getAudioByPaletteIdx(idx, isChipA) {
-        // Incoming index is always between 0 - 11. Offset it based on what chip is it. 
-        let newIdx = isChipA ? parseInt(idx) : parseInt(idx) + 12; 
-        let audio = this.myP5.getLoadedPalette(this.curPaletteIdx)[newIdx];
+        let newIdx; 
+        if (this.curProduct === PRODUCT.SWEATER) {
+            // Incoming index is always between 0 - 11. Offset it based on what chip is it. 
+            newIdx = isChipA ? parseInt(idx) : parseInt(idx) + 12; 
+        } else if (this.curProduct === PRODUCT.CHILDA || this.curProduct === PRODUCT.CHILDB) {
+            newIdx = parseInt(idx); 
+        }
+
+        let audio = this.myP5.getLoadedPalette(this.curProduct, this.curPaletteIdx)[newIdx];
         return audio; 
     }
 
     stopAllSounds() {
-        let p = palettes[this.curPaletteIdx]; 
+        let p;
+        if (this.curProduct === PRODUCT.SWEATER) {
+            p = palettes[this.curPaletteIdx]; 
+        } else if (this.curProduct === PRODUCT.CHILDA || this.curProduct === PRODUCT.CHILDB) {
+            p = childPalettes[this.curPaletteIdx]; 
+        }
         let keys = Object.keys(p); 
         for (let i = 0; i < keys.length; i++) {
-            let audio = this.myP5.getLoadedPalette(this.curPaletteIdx)[i];
+            let audio = this.myP5.getLoadedPalette(this.curProduct, this.curPaletteIdx)[i];
             audio.release(); 
         }
 
