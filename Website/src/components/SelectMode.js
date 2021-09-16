@@ -14,8 +14,10 @@ import CustomButton from './CustomButton';
 import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import SensorDataStore from '../Stores/SensorDataStore';
+import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 import AudioManager from './AudioManager';
 import BLE from './BLE';
+import ChildSleeve from './ChildSleeve';
 
 const RadiumLink = Radium(Link);
 
@@ -35,6 +37,7 @@ const styles = {
     alignItems: 'center',
     paddingLeft: padding.verySmall,
     paddingRight: padding.verySmall,
+    zIndex: 2,
     '@media (min-width: 1200px)': {
       display: 'flex',
       flexDirection: 'row',
@@ -72,7 +75,8 @@ class SelectMode extends React.Component {
     super(props);
     this.state={
       isSoloActive: false,
-      redirectToPair: false
+      redirectToPair: false,
+      curProduct: ProductStore.getProductName()
     };
 
     this.leftTriggerMap = [];
@@ -85,21 +89,24 @@ class SelectMode extends React.Component {
     // DatabaseParamStore (where the current configuration for calibration is stored.)
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this));
     this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+    this.productStoreRemover = ProductStore.subscribe(this.onProductUpdated.bind(this)); 
   }
 
   componentWillUnmount() {
     // Unsubscribe from the sensor data store.
     this.removeSubscription();  
     this.appStoreRemover();
+    this.productStoreRemover(); 
     // Stop all sounds when this component gets unmounted. 
     // User might try to leave the page without deactivating Solo mode.
     AudioManager.resetPallete();
   }
 
   render() {
+    let sleeve = this.getSleeve();
     return this.state.redirectToPair ? (<Redirect to="/setup" />) :
       (<div style={styles.container}>
-        <DoubleSleeve showLife={true} />
+        {sleeve}
         <div style={styles.content}>
           <div style={styles.buttonContainer}>
             <div style={styles.info}>Choose SOLO to send sound<div>to your own device.</div></div>
@@ -125,6 +132,22 @@ class SelectMode extends React.Component {
     );
   }
 
+  getSleeve() {
+    if (this.state.curProduct === PRODUCT.SWEATER) {
+      return (<DoubleSleeve showLife={true} />);
+    } else if (this.state.curProduct === PRODUCT.CHILDA) {
+      return (<ChildSleeve subscribeToStore={true} notFixed={true} showNumbers={false} isChildA={true} />); 
+    } else if (this.state.curProduct === PRODUCT.CHILDB) {
+      return (<ChildSleeve subscribeToStore={true} notFixed={true} showNumbers={false} isChildA={false} />);
+    }
+  }
+
+  onProductUpdated(product) {
+    this.setState({
+      curProduct: product
+    });
+  }
+
   onAppStatusUpdated() {
     let data = AppStatusStore.getData();
     if (data['bleStatus'] === false) {
@@ -136,9 +159,73 @@ class SelectMode extends React.Component {
   }
 
   onSensorData() {
-    let config = DatabaseParamStore.getConfigJson(); 
-    let chipASensorData = SensorDataStore.getChipData(0)['f']; 
-    let chipBSensorData = SensorDataStore.getChipData(1)['f'];
+    let product = ProductStore.getProductName(); 
+    if (product === PRODUCT.SWEATER) {
+      this.handleAdultSweaterAudio();
+    } else if (product === PRODUCT.CHILDA) {
+      this.handleChildSweaterAudio(true); 
+    } else if (product === PRODUCT.CHILDB) {
+      this.handleChildSweaterAudio(false); 
+    }
+  }
+
+  handleChildSweaterAudio(isChildA) {
+    if (isChildA) {
+      let childASensorData = SensorDataStore.getChildSweaterData(true)[0];
+      let cutoffVals = DatabaseParamStore.getConfigJson(PRODUCT.CHILDA)[0]; 
+      if (this.state.isSoloActive) {
+        for (let i = 0; i < childASensorData.length; i++) {
+          let cutoffVal = cutoffVals[i]; 
+          let data = childASensorData[i]; 
+          if (data < cutoffVal) {
+            AudioManager.trigger(i); 
+          } else {
+            AudioManager.release(i);
+          }
+        }
+      }
+    } else {
+      let childBSensorData = SensorDataStore.getChildSweaterData(false)[0]; 
+      let cutoffVals = DatabaseParamStore.getConfigJson(PRODUCT.CHILDB)[0]; 
+      if (this.state.isSoloActive) {
+        for (let i = 0; i < childBSensorData.length; i++) {
+          if (i === 0 || i === 1 || i === 2) {
+            // Don't do anything
+          } else {
+            let cutoffVal = cutoffVals[i]; 
+            let data = childBSensorData[i]; 
+            if (data < cutoffVal) {
+              let newIdx = this.childBIndexMapper(i); 
+              AudioManager.trigger(newIdx); 
+            } else {
+              let newIdx = this.childBIndexMapper(i);
+              AudioManager.release(newIdx);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  childBIndexMapper(curIdx) {
+    let newIdx = 0; 
+    // Map 0 - 7 into 0-4
+    if (curIdx === 3) {
+      newIdx = 0; 
+    } else if (curIdx === 4) {
+      newIdx = 1;
+    } else if (curIdx === 5) {
+      newIdx = 2; 
+    } else if (curIdx === 6) {
+      newIdx = 3; 
+    } 
+    return newIdx; 
+  }
+
+  handleAdultSweaterAudio() {
+    let config = DatabaseParamStore.getConfigJson(PRODUCT.SWEATER); 
+    let chipASensorData = SensorDataStore.getAdultSweaterData(0)['f']; 
+    let chipBSensorData = SensorDataStore.getAdultSweaterData(1)['f'];
 
     // Only when we are in solo mode. 
     if (this.state.isSoloActive) {

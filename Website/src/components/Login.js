@@ -114,7 +114,7 @@ class Login extends React.Component {
 
     // Make a HTTP request. 
     const request = new Request(this.loginUrl, { method: 'POST', headers: {'Content-Type': 'application/json'}, 
-      body: JSON.stringify({ username: this.state.username, password: this.state.password}) });    
+      body: JSON.stringify({ username: this.state.username, password: this.state.password}) });
 
     fetch(request).then(response => {
         if (response.status === 200) {
@@ -126,9 +126,9 @@ class Login extends React.Component {
                   message: 'Account not found'
                 });
               } else if (result === 'user_found') {
-                // Update the database store with this config. 
-                let config = data['config'];
-                DatabaseParamStore.setConfig(config); 
+                let configs = data['configs'];
+                console.log(configs);
+                DatabaseParamStore.setConfig(configs); 
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
               }
             });
@@ -147,12 +147,13 @@ class Login extends React.Component {
       // Make a post request with all these in a json
       let username = this.state.username;
       let password = this.state.password;
+
       // For first time sign up, this default config is sent to the DB. 
-      let defaultConfig = DatabaseParamStore.getDefaultJson(); 
+      let defaultConfigs = DatabaseParamStore.getDefaultJson(); 
       
       // Initial config is always sent as a HTTP request. 
-      const request = new Request(this.signupURL, { method: 'POST', headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify({ username: username, password: password, config: defaultConfig } ) });    
+      const request = new Request(this.signupURL, {method: 'POST', headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify({ username: username, password: password, configs: defaultConfigs })});    
     
       fetch(request).then(response => {
         if (response.status === 200) {

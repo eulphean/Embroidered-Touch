@@ -4,8 +4,9 @@
 // Description: New Bluetooth class, which is responsible to connect to bluetooth and parse the incoming data.
 // It also exposes function to write to the bluetooth service to send data to the arduinio. 
 
-import sensorDataStore from '../Stores/SensorDataStore';
+import SensorDataStore from '../Stores/SensorDataStore';
 import AppStatusStore from '../Stores/AppStatusStore';
+import ProductStore, {PRODUCT} from '../Stores/ProductStore';
 
 // UART service & characteristic description. 
 const serviceUuid = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
@@ -85,14 +86,31 @@ class BLE {
     let data = decoder.decode(event.target.value);
     // Clean the string with end of line characters. 
     data = data.replace(/\0[\s\S]*$/g,'');
-    
+
+    // Get product to make sure there is no mismatch. 
+    let product = ProductStore.getProductName(); 
+
+    if (data.includes('S') && product === PRODUCT.SWEATER) {
+      this.handleAdultSweater(data); 
+    } else if (data.includes('A') && product === PRODUCT.CHILDA) {
+      // ChildA - 4 line sweater
+      this.handleChildASweater(data); 
+    } else if (data.includes('B') && product === PRODUCT.CHILDB) {
+      // ChildB - 7 line sweater
+      this.handleChildBSweater(data); 
+    } else {
+      console.log('Product Mismatch between Physical and Software Product'); 
+    }
+  }
+
+  handleAdultSweater(data) {
     if (data.includes('C')) {
       // Is there any pending data that needs to be attended?
       if (this.sensorData.length > 0) {
-        //console.log('Chip Idx, Collected Sensor Data: ' + this.chipIdx + ", " + this.sensorData);
         // Set sensorData store
         if (this.chipIdx !== "" && this.sensorData.length === 12) {
-          sensorDataStore.setState(this.chipIdx, this.sensorData); 
+          //console.log('Chip Idx, Collected Sensor Data: ' + this.chipIdx + ", " + this.sensorData);
+          SensorDataStore.setAdultSweaterData(this.chipIdx, this.sensorData); 
         } else {
           // Ignore this data and move on.
         }
@@ -102,10 +120,55 @@ class BLE {
       }
 
       // This is the beginning of the chip data
-      this.chipIdx = parseInt(data[1]);
+      this.chipIdx = parseInt(data[2]); // SC[ChipIdx]
     } else {
-      // Keep pushing sensor data in here. 
-      this.sensorData.push(data); 
+      let vals = data.split('-'); // S-sensorVal
+      let v = parseInt(vals[1]); 
+      this.sensorData.push(v);     
+    }
+  }
+
+  handleChildASweater(data) {
+    if (data.includes('C')) {
+      if (this.sensorData.length > 0) {
+        // Set sensorData store
+        if (this.sensorData.length === 4) {
+          // console.log('ChildA, 4-Line Sweater: Collected Sensor Data: ' + this.sensorData);
+          //SensorDataStore.setState(this.chipIdx, this.sensorData); // Set data properly in the store. 
+          SensorDataStore.setChildSweaterData(true, this.sensorData);
+        } else {
+          // Ignore this data and move on.
+        }
+        
+        // Empty this data
+        this.sensorData = []; 
+      }
+    } else {
+        let vals = data.split('-'); 
+        let v = parseInt(vals[1]); 
+        this.sensorData.push(v);
+    }
+  }
+
+  handleChildBSweater(data) {
+    if (data.includes('C')) {
+      if (this.sensorData.length > 0) {
+        // Set sensorData store
+        if (this.sensorData.length === 7) {
+          // console.log('ChildB, 7-Line Sweater: Collected Sensor Data: ' + this.sensorData);
+          //SensorDataStore.setState(this.chipIdx, this.sensorData); // Set data properly in the store. 
+          SensorDataStore.setChildSweaterData(false, this.sensorData);
+        } else {
+          // Ignore this data and move on.
+        }
+        
+        // Empty this data
+        this.sensorData = []; 
+      }
+    } else {
+        let vals = data.split('-'); 
+        let v = parseInt(vals[1]); 
+        this.sensorData.push(v);
     }
   }
 

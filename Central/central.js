@@ -35,8 +35,8 @@ app.post('/login', (req, res) => {
 app.post('/signup', (req, res) => {
     let user = req.body.username; 
     let password = req.body.password; 
-    let config = req.body.config;
-    database.createUser(user, password, config, res); 
+    let configs = req.body.configs;
+    database.createUser(user, password, configs, res); 
 });
 
 // Ping the main server. 

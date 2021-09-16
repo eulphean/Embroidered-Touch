@@ -12,6 +12,7 @@ import CustomButton from './CustomButton';
 import BLE from './BLE';
 import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import ProductStore from '../Stores/ProductStore';
 
 const styles = {
   container: {
@@ -43,6 +44,8 @@ const styles = {
   }
 };
 
+// NOTE - Every visual component needs to know what product we are pairing to.
+// Use the Product store for that. 
 class Setup extends React.Component {
   constructor(props) {
     super(props);
@@ -83,7 +86,11 @@ class Setup extends React.Component {
   }
 
   hasPaired() {
-    let config = DatabaseParamStore.getConfigJson(); 
+    // Get the product
+    // Request for that product's config json
+    // Check if that has been calibrated. 
+    let product = ProductStore.getProductName(); 
+    let config = DatabaseParamStore.getConfigJson(product); 
     this.setState({
       hasPaired: true,
       hasCalibrated: config['hasCalibrated']

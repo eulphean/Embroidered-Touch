@@ -13,8 +13,8 @@
 
 const uint8_t numChipsets = 2; // # of MR121 chipsets. 
 const uint8_t numSensorLines = 12; // # of touch sensors in each chipset. 
-const uint8_t minSensorIdx = 0; 
-const uint8_t maxSensorIdx = 11; 
+const uint8_t minSensorIdx = 3; // Only 4 lines are active.
+const uint8_t maxSensorIdx = 6; // Only 4 lines are active. 
 const uint8_t maxBleDataSize = 20; 
 
 class Touch {
@@ -62,7 +62,7 @@ class Touch {
         void transmitSensorData(uint8_t chipsetIdx, BLE gridBle) { 
           // Prepare and send chipset index. 
           String data; uint8_t dataLength; 
-          data = "SC" + String(chipsetIdx); // S - Adult sweater
+          data = "AC"; // C denotes the start / end of current data. 
           dataLength = data.length() + 1; 
           data.toCharArray(bleBuffer, dataLength);
           gridBle.transmit(bleBuffer, dataLength);  
@@ -71,61 +71,13 @@ class Touch {
           // Send each sensor data.  
           if (chipsetIdx == 0) {
             for (uint8_t i = minSensorIdx; i <= maxSensorIdx; i++) {
-              data = "S-" + String(chipsets[chipsetIdx].filteredData(i)); // S - Adult sweater
+              data = "A-" + String(chipsets[chipsetIdx].filteredData(i));
               dataLength = data.length() + 1; 
               data.toCharArray(bleBuffer, dataLength); 
               gridBle.transmit(bleBuffer, dataLength); 
-              // Serial.println(bleBuffer); 
-            }
-          }
-
-          if (chipsetIdx == 1) {
-            for (int i = maxSensorIdx; i >= minSensorIdx; i--) {
-              data = "S-" + String(chipsets[chipsetIdx].filteredData(i)); // S - Adult sweater
-              dataLength = data.length() + 1; 
-              data.toCharArray(bleBuffer, dataLength); 
-              gridBle.transmit(bleBuffer, dataLength);
-              // Serial.println(bleBuffer);
             }
           }
         }
-
-//        // NT-V,V,V,V,V....V
-//        // N - sensor index, T - data type, V - line value
-//        char *getSensorData(uint8_t chipsetIdx, char sensorDataType) {
-//          String dataString = ""; 
-//          dataString = dataString + String(chipsetIdx) + sensorDataType + "-"; 
-//          uint8_t v; 
-//          if (chipsetIdx == 0) { // For the first chip, go from 0 - 11.
-//            for (uint8_t i = minSensorIdx; i <= maxSensorIdx; i++) {
-//              if (sensorDataType == 'f') {
-//                v = chipsets[chipsetIdx].filteredData(i);  
-//              } else {
-//                v = chipsets[chipsetIdx].baselineData(i); 
-//              }
-//              dataString += v; 
-//              if (i != maxSensorIdx) {
-//                dataString += ","; 
-//              }
-//            }
-//          } else if (chipsetIdx == 1) { // For second chip, go from 11 - 0.
-//            for (int i = maxSensorIdx; i >= minSensorIdx; i--) {
-//              if (sensorDataType == 'f') {
-//                v = chipsets[chipsetIdx].filteredData(i);  
-//              } else {
-//                v = chipsets[chipsetIdx].baselineData(i); 
-//              }
-//              dataString += v; 
-//              if (i != minSensorIdx) {
-//                dataString += ","; 
-//              }
-//            }
-//          }
-//          
-//          bleBufferLength = dataString.length() + 1; 
-//          dataString.toCharArray(bleBuffer, bleBufferLength); 
-//          return bleBuffer; 
-//        }
 
         uint8_t bleBufferSize() {
           return bleBufferLength;

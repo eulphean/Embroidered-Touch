@@ -14,6 +14,7 @@ import CustomButton from './CustomButton';
 import AppStatusStore from '../Stores/AppStatusStore';
 import DatabaseParamStore from '../Stores/DatabaseParamStore'
 import SensorDataStore from '../Stores/SensorDataStore';
+import ProductStore, {PRODUCT} from '../Stores/ProductStore'
 
 const RadiumLink = Radium(Link);
 const CALIBRATIONSTATE = {
@@ -56,12 +57,14 @@ const styles = {
 class Sensor extends React.Component {
   constructor(props) {
     super(props);
-    let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    let product = ProductStore.getProductName(); 
+    let v = SensorDataStore.getSensorData(product, this.props.chipsetId, this.props.sensorIdx); 
     this.state={
       sensorVal: v,
       time: calibrationTime,
       calibration: CALIBRATIONSTATE.NOTSTARTED,
-      redirectToPair: false
+      redirectToPair: false,
+      curProduct: product
     };
 
     // Calibration parameters. 
@@ -73,14 +76,48 @@ class Sensor extends React.Component {
   componentDidMount() {
     this.removeSubscription = SensorDataStore.subscribe(this.onSensorData.bind(this)); 
     this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+    this.productStoreRemover = ProductStore.subscribe(this.onProductChanged.bind(this)); 
   }
 
   componentWillUnmount() {
     this.removeSubscription();
     this.appStoreRemover();
+    this.productStoreRemover(); 
   }
 
   render() {
+    if (this.state.curProduct === PRODUCT.SWEATER) {
+      return this.renderSweater();
+    } else if (this.state.curProduct === PRODUCT.CHILDA) {
+      return this.renderChild(true);
+    } else if (this.state.curProduct === PRODUCT.CHILDB) {
+      return this.renderChild(false); 
+    } else {
+      return (<React.Fragment></React.Fragment>); // Just an empty fragment. 
+    }
+  }
+
+  renderChild(isChildA) {
+    let firstMessage = this.getFirstMessageChild(); 
+    let calibrationMsg = this.getCalibrationMsg(); 
+    let nextPath = this.getNextChildPath(isChildA); 
+    return (
+      <div style={styles.container} >
+        <div style={styles.title}>Calibration</div>
+        <br />
+        {firstMessage}
+        <br />
+        {calibrationMsg}
+        <br />
+        <div style={styles.info}>Then click NEXT below.</div>
+        <div style={styles.info}>Sensor Value: {this.state.sensorVal}</div>
+        <br />
+        <CustomButton><RadiumLink to={nextPath}>NEXT</RadiumLink></CustomButton>   
+      </div>
+    );
+  }
+
+  renderSweater() {
     let nextPath = this.getNextPath(); 
     let calibrationMessage = this.getCalibrationMsg(); 
 
@@ -109,6 +146,12 @@ class Sensor extends React.Component {
     );
   }
 
+  onProductChanged(newProduct) {
+    this.setState({
+      curProduct: newProduct
+    }); 
+  }
+
   onAppStatusUpdated() {
     let data = AppStatusStore.getData();
     if (data['bleStatus'] === false) {
@@ -117,6 +160,38 @@ class Sensor extends React.Component {
         redirectToPair: true
       });
     }
+  }
+
+  getNextChildPath(isChildA) {
+    let path = ''; 
+    let sensorIdx = this.props.sensorIdx;
+    if (isChildA) {
+      sensorIdx = sensorIdx + 1; 
+      if (sensorIdx <= 4) {
+        path = '/a-' + sensorIdx;
+      } else {
+        path = '/testcal'; 
+      }
+    } else {
+      sensorIdx = sensorIdx + 1; 
+      if (sensorIdx <=7) {
+        path = '/b-' + sensorIdx; 
+      } else {
+        path = '/testcal';
+      }
+    }
+    return path; 
+  }
+
+  getFirstMessageChild() {
+    let message; 
+    if (this.props.sensorIdx === 1) {
+      message = (<span><div style={styles.info}>Place your hand on your shirt on the line that is blue in this drawing.</div></span>);
+    } else {
+      message = (<span><div style={styles.info}>Again place your hand on your shirt on the line that is blue in this drawing.</div></span>);
+    }
+    
+    return message; 
   }
 
   getFirstMessage(isLeftSleeve, isContinuing) {
@@ -249,7 +324,7 @@ class Sensor extends React.Component {
   }
 
   onSensorData() {
-    let v = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+    let v = SensorDataStore.getSensorData(this.state.curProduct, this.props.chipsetId, this.props.sensorIdx); 
     this.setState({
       sensorVal: v
     });
@@ -281,9 +356,9 @@ class Sensor extends React.Component {
     if (curTime < 0) {
       curTime = 0; 
       clearInterval(this.interval);
-      let curSensorValue = SensorDataStore.getSensorData(this.props.chipsetId, this.props.sensorIdx); 
+      let curSensorValue = SensorDataStore.getSensorData(this.state.curProduct, this.props.chipsetId, this.props.sensorIdx); 
       let cutoffVal = curSensorValue + this.initialThreshold; 
-      DatabaseParamStore.setCutOffVal(this.props.chipsetId, this.props.sensorIdx, cutoffVal);
+      DatabaseParamStore.setCutOffVal(this.state.curProduct, this.props.chipsetId, this.props.sensorIdx, cutoffVal);
       // Register the cutoff value to the database param store. 
       // Cut off value is 10 points more than this. 
       // Commit this cutoff value to the db.
