@@ -52,30 +52,53 @@ class DatabaseParamStore {
     }
 
     // Update the data in memory. 
-    setCutOffVal(chipsetId, sensorIdx, cutoffVal) {
-        if (sensorIdx >=1 && sensorIdx <= 12) {
-            sensorIdx = sensorIdx - 1;
-        } else {
-            sensorIdx = sensorIdx - 12 - 1; 
+    setCutOffVal(product, chipsetId, sensorIdx, cutoffVal) {
+        if (product === PRODUCT.SWEATER) {
+            if (sensorIdx >=1 && sensorIdx <= 12) {
+                sensorIdx = sensorIdx - 1;
+            } else {
+                sensorIdx = sensorIdx - 12 - 1; 
+            }
+            // Update chipset data. 
+            this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
+        } else if (product === PRODUCT.CHILDA) {
+            sensorIdx = sensorIdx - 1; 
+            this.cutoffValsChildA[0][sensorIdx] = cutoffVal; 
+        } else if (product === PRODUCT.CHILDB) {
+            sensorIdx = sensorIdx - 1; 
+            this.cutoffValsChildB[0][sensorIdx] = cutoffVal; 
         }
-        // Update chipset data. 
-        this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
     }
 
     getCutOffVal(chipsetId, sensorIdx) {
         return this.cutoffVals[chipsetId][sensorIdx];
     }
 
-    commitConfig() {
+    commitConfig(product) {
         // Create the payload with the config name and sensor values. 
         // Both the chip params will be stored to the database. 
         // [name - text, config - json] (Database Payload)
         // JSON object, which gets stringified and goes to the database.
-        this.hasCalibrated = true; // We have calibrated the dress. 
-        let jsonObject = this.getConfigJson();
+        let jsonObject; let pString = ""; 
+        if (product === PRODUCT.SWEATER) {
+            this.hasCalibrated[0] = true; // We have calibrated the dress. 
+            jsonObject = this.getConfigJson(product);
+            pString = 'adult';
+        } else if (product === PRODUCT.CHILDA) {
+            this.hasCalibrated[1] = true; 
+            jsonObject = this.getConfigJson(product); 
+            pString = 'childa';
+        } else if (product === PRODUCT.CHILDB) {
+            this.hasCalibrated[2] = true; 
+            jsonObject = this.getConfigJson(product); 
+            pString = 'childb';
+        }
+
+        // We add a product so we know which database to commit the data to. 
         let dbPayload = {
             'name' : this.configName,
-            'config' : JSON.stringify(jsonObject)
+            'config' : JSON.stringify(jsonObject),
+            'product' : pString
         };
         console.log(dbPayload);
         Websocket.updateUserConfig(dbPayload);
@@ -150,7 +173,7 @@ class DatabaseParamStore {
 
             case PRODUCT.CHILDB: {
                 let data = []; 
-                for (let i = 0; i < numSensorChildA; i++) {
+                for (let i = 0; i < numSensorChildB; i++) {
                     data[i] = this.cutoffValsChildB[0][i]; 
                 }
                 json['0'] = data; 

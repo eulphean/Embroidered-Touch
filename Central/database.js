@@ -61,16 +61,36 @@ function onWriteDatabase(data, socket) {
 function onUpdateDatabase(data, socket) {
     let name = data['name'];
     let config = data['config'];
+    let product = data['product'];
 
     console.log(data);
 
-    pool.query('UPDATE configs SET config=$1 WHERE name=$2', [config, name], (error, result) => {
-        if (error) {
-            throw error;
-        }
+    if (product === 'adult') {
+        pool.query('UPDATE configs SET config=$1 WHERE name=$2', [config, name], (error, result) => {
+            if (error) {
+                throw error;
+            }
+    
+            console.log('Success: Updated entry in the adult database.');        
+        });
+    } else if (product === 'childa') {
+        pool.query('UPDATE childa SET config=$1 WHERE name=$2', [config, name], (error, result) => {
+            if (error) {
+                throw error;
+            }
+    
+            console.log('Success: Updated entry in the childa database.');        
+        });
+    } else if (product === 'childb') {
+        pool.query('UPDATE childb SET config=$1 WHERE name=$2', [config, name], (error, result) => {
+            if (error) {
+                throw error;
+            }
+    
+            console.log('Success: Updated entry in the childb database.');        
+        });
+    }
 
-        console.log('Success: Updated entry in the database.');        
-    });
 }
 
 function onDeleteEntryFromDatabase(configName, socket) {

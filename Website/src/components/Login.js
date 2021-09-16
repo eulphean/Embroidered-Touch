@@ -127,6 +127,7 @@ class Login extends React.Component {
                 });
               } else if (result === 'user_found') {
                 let configs = data['configs'];
+                console.log(configs);
                 DatabaseParamStore.setConfig(configs); 
                 this.props.onLogin(true); // Send back a token to decide if we should move forward.
               }

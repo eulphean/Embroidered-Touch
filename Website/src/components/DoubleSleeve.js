@@ -11,6 +11,7 @@ import { color } from './CommonStyles.js'
 
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
 import SensorDataStore from '../Stores/SensorDataStore';
+import ProductStore from '../Stores/ProductStore';
 
 const lifeId = 'life'; 
 const numbersId = 'numbers'; 
@@ -65,12 +66,14 @@ class DoubleSleeve extends React.Component {
   }
 
   onSensorData() {
+    let product = ProductStore.getProductName();
+
     // Cutoff values. 
-    let config = DatabaseParamStore.getConfigJson(); 
+    let config = DatabaseParamStore.getConfigJson(product); 
 
     // Sensor data. 
-    let chipASensorData = SensorDataStore.getChipData(0)['f']; 
-    let chipBSensorData = SensorDataStore.getChipData(1)['f'];
+    let chipASensorData = SensorDataStore.getAdultSweaterData(0)['f']; 
+    let chipBSensorData = SensorDataStore.getAdultSweaterData(1)['f'];
 
     // Chip A sensor lines. 
     let chipACutoffVal = config[0]; 

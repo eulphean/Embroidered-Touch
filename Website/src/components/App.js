@@ -135,13 +135,13 @@ class App extends React.Component {
         let path = pathPrefix + i; 
         let component = this.state.isLoggedIn ? (
           <React.Fragment>
-            <ChildSleeve isChildA={true} />
-            <Sensor 
-              product={this.state.curProduct}
-              sensorIdx={i}
+            <ChildSleeve 
+              isChildA={true}
+              sensorIdx={i} 
             />
+            <Sensor sensorIdx={i}/>
           </React.Fragment> 
-        ) : (<Redirect key={'a-' + i} tp='/' />); 
+        ) : (<Redirect key={'a-' + i} to='/' />); 
 
         let route = <Route key={'keyA:' + i} path={path}>{component}</Route>;
         pages.push(route); 
@@ -152,13 +152,12 @@ class App extends React.Component {
         let path = pathPrefix + i; 
         let component = this.state.isLoggedIn ? (
           <React.Fragment>
-            <ChildSleeve isChildA={false} />
-            <Sensor 
-              product={this.state.curProduct}
-              sensorIdx={i}
-            />
+            <ChildSleeve 
+              isChildA={false} 
+              sensorIdx={i}/>
+            <Sensor sensorIdx={i}/>
           </React.Fragment> 
-        ) : (<Redirect key={'b-' + i} tp='/' />); 
+        ) : (<Redirect key={'b-' + i} to='/' />); 
 
         let route = <Route key={'keyB:' + i} path={path}>{component}</Route>;
         pages.push(route); 

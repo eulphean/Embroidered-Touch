@@ -1,7 +1,7 @@
-// sweatshirt_arduino.h
+// child4_arduino.h
 // Author: Amay Kataria
 // Date: 06/21/2021
-// Description: Entry file for arudino code on the sweatshirt. 
+// Description: Entry file for arduino code for the 4-line sweater. 
 
 #include "BLE.h"
 #include "Touch.h"
@@ -9,6 +9,8 @@
 Touch touchChipsets;
 BLE gridBle; 
 
+const uint8_t RESET_COMMAND = 0; 
+const uint8_t SENSITIVITY_COMMAND = 1;
 const uint8_t LEFT_LIFE_PIN = 10; 
 const uint8_t RIGHT_LIFE_PIN = 2; 
 
@@ -30,9 +32,7 @@ void setup()
 
 void loop() {
   if (BLE::isConnected) { // Start transmitting only when a connection is developed. 
-    for (int i = 0; i < touchChipsets.length(); i++) {
-      touchChipsets.transmitSensorData(i, gridBle); 
-    } 
+    touchChipsets.transmitSensorData(0, gridBle); 
   }
 
   // Handle the logic for life. 

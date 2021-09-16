@@ -12,6 +12,8 @@ import AppStatusStore from '../Stores/AppStatusStore';
 import CustomButton from './CustomButton';
 import DoubleSleeve from './DoubleSleeve';
 import DatabaseParamStore from '../Stores/DatabaseParamStore';
+import ProductStore, { PRODUCT } from '../Stores/ProductStore';
+import ChildSleeve from './ChildSleeve';
 
 const styles = {
   container: {
@@ -26,7 +28,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: padding.big
+    padding: padding.big,
+    zIndex: 2
   },
 
   title: {
@@ -80,22 +83,26 @@ class TestCalibration extends React.Component {
     this.state={
       sensorNum: '',
       redirectPath: '',
-      redirectToPair: false
+      redirectToPair: false,
+      curProduct: ProductStore.getProductName()
     };
   }
 
   componentDidMount() {
-    let config = JSON.stringify(DatabaseParamStore.getConfigJson());
+    let config = JSON.stringify(DatabaseParamStore.getConfigJson(this.state.curProduct));
     console.log("Config: " + config);
     this.appStoreRemover = AppStatusStore.subscribe(this.onAppStatusUpdated.bind(this));
+    this.productStoreRemover = ProductStore.subscribe(this.onProductChanged.bind(this)); 
   }
 
   componentWillUnmount() {
     // Remove the app status store subscription.
     this.appStoreRemover();
+    this.productStoreRemover(); 
   }
 
   render() {
+    let sleeve = this.getSleeve(); 
     if (this.state.redirectToPair) {
       return (<Redirect to="/setup" />);
     } else if (this.state.redirectPath !== '') { // Push a new path on to the history, so I can come back here. 
@@ -103,7 +110,7 @@ class TestCalibration extends React.Component {
     } else {
       return (
         <div style={styles.container}>
-          <DoubleSleeve showLife={false} />
+          {sleeve}
           <div style={styles.content}>
             <div style={styles.title}>Testing Calibration</div>
             <br />
@@ -125,6 +132,22 @@ class TestCalibration extends React.Component {
     }
   }
 
+  onProductChanged(newProduct) {
+    this.setState({
+      curProduct: newProduct
+    }); 
+  }
+
+  getSleeve() {
+    if (this.state.curProduct === PRODUCT.SWEATER) {
+      return (<DoubleSleeve showLife={false} />); 
+    } else if (this.state.curProduct === PRODUCT.CHILDA) {
+      return (<ChildSleeve subscribeToStore={true} notFixed={true} showNumbers={true} isChildA={true} />); 
+    } else if (this.state.curProduct === PRODUCT.CHILDB) {
+      return (<ChildSleeve subscribeToStore={true} notFixed={true} showNumbers={true} isChildA={false} />); 
+    }
+  }
+
   onAppStatusUpdated() {
     let data = AppStatusStore.getData();
     if (data['bleStatus'] === false) {
@@ -140,10 +163,17 @@ class TestCalibration extends React.Component {
     // How do I navigate to the sensor line for calibration???
     let sensorNum = this.state.sensorNum; 
     let newPath = ''; 
-    if (sensorNum >= 1 && sensorNum <= 12) {
-      newPath = '/l-' + sensorNum;
-    } else if (sensorNum >=13 && sensorNum <= 24) {
-      newPath = '/r-' + sensorNum;
+
+    if (this.state.curProduct === PRODUCT.SWEATER) {
+      if (sensorNum >= 1 && sensorNum <= 12) {
+        newPath = '/l-' + sensorNum;
+      } else if (sensorNum >=13 && sensorNum <= 24) {
+        newPath = '/r-' + sensorNum;
+      }
+    } else if (this.state.curProduct === PRODUCT.CHILDA) {
+      newPath = '/a-' + sensorNum; 
+    } else if (this.state.curProduct === PRODUCT.CHILDB) {
+      newPath = '/b-' + sensorNum; 
     }
 
     this.setState({
@@ -152,7 +182,7 @@ class TestCalibration extends React.Component {
   }
 
   onSave() {
-    DatabaseParamStore.commitConfig(); 
+    DatabaseParamStore.commitConfig(this.state.curProduct); 
     this.setState({
       redirectPath: '/selectmode'
     });

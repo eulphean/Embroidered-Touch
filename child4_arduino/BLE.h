@@ -16,9 +16,6 @@
 const uint8_t buffSize = 2; 
 
 const char* bleName = "TOUCH"; 
-
-
-
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
@@ -100,7 +97,7 @@ class BLE {
 
       Serial.print("BLE: Connected to... ");
       Serial.println(central_name);
-      
+
       BLE::isConnected = true; 
     }
 
