@@ -167,7 +167,7 @@ class Sensor extends React.Component {
     let sensorIdx = this.props.sensorIdx;
     if (isChildA) {
       sensorIdx = sensorIdx + 1; 
-      if (this.props.sensorIdx <= 4) {
+      if (sensorIdx <= 4) {
         path = '/a-' + sensorIdx;
       } else {
         path = '/testcal'; 
