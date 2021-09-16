@@ -109,7 +109,7 @@ class BLE {
       if (this.sensorData.length > 0) {
         // Set sensorData store
         if (this.chipIdx !== "" && this.sensorData.length === 12) {
-          console.log('Chip Idx, Collected Sensor Data: ' + this.chipIdx + ", " + this.sensorData);
+          //console.log('Chip Idx, Collected Sensor Data: ' + this.chipIdx + ", " + this.sensorData);
           SensorDataStore.setState(this.chipIdx, this.sensorData); 
         } else {
           // Ignore this data and move on.
@@ -133,7 +133,7 @@ class BLE {
       if (this.sensorData.length > 0) {
         // Set sensorData store
         if (this.sensorData.length === 4) {
-          console.log('ChildA, 4-Line Sweater: Collected Sensor Data: ' + this.sensorData);
+          // console.log('ChildA, 4-Line Sweater: Collected Sensor Data: ' + this.sensorData);
           //SensorDataStore.setState(this.chipIdx, this.sensorData); // Set data properly in the store. 
         } else {
           // Ignore this data and move on.
@@ -154,7 +154,7 @@ class BLE {
       if (this.sensorData.length > 0) {
         // Set sensorData store
         if (this.sensorData.length === 7) {
-          console.log('ChildB, 7-Line Sweater: Collected Sensor Data: ' + this.sensorData);
+          // console.log('ChildB, 7-Line Sweater: Collected Sensor Data: ' + this.sensorData);
           //SensorDataStore.setState(this.chipIdx, this.sensorData); // Set data properly in the store. 
         } else {
           // Ignore this data and move on.
