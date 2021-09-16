@@ -9,7 +9,7 @@
 // import 'p5/lib/addons/p5.sound'
 
 // Import all audio files and palettes. 
-import {audioFiles, palettes} from './AudioPalettes';
+import {audioFiles, palettes, childPalettes} from './AudioPalettes';
 
 // NOTE: p5 library is now loaded through index.html
 // We assign it to a variable that we want to use. 
@@ -52,25 +52,38 @@ class Audio {
 
 // Use this p5 sketch to load all audio. 
 var sketch = (s) => {
-    // We have 3 palettes, so three arrays for it. 
+    // Adult palettes. 
     let loadedPalettes = [[], [], []]; 
+    // Child palettes. 
+    let loadedChildPalettes = [[], []]; 
 
     s.preload = () => {
 
     }
 
-    s.loadPalette = (idx) => {
+    s.loadPalette = (isChildPalette, idx) => {
         const promise = new Promise( (resolve, reject) => {
-            console.log('Loading palette: ' + idx);
-            let p = palettes[idx]; 
-            let keys = Object.keys(p);
-            // Empty out the array, then start loading the files. 
-            let pAudio = loadedPalettes[idx]; 
-            pAudio.length = 0; 
-            s.loadSoundRecursive(0, keys, p, pAudio, resolve); 
-    
-            // Set the populated palette. 
-            loadedPalettes[idx] = pAudio; 
+            if (isChildPalette) {
+                console.log('Loading child palette: ' + idx);
+                let p = childPalettes[idx]; 
+                let keys = Object.keys(p);
+                // Empty out the array, then start loading the files. 
+                let pAudio = loadedChildPalettes[idx]; 
+                pAudio.length = 0; 
+                s.loadSoundRecursive(0, keys, p, pAudio, resolve); 
+                loadedChildPalettes[idx] = pAudio; 
+                console.log(loadedChildPalettes[idx]);
+            } else {
+                console.log('Loading adult palette: ' + idx); 
+                let p = palettes[idx]; 
+                let keys = Object.keys(p);
+                // Empty out the array, then start loading the files. 
+                let pAudio = loadedPalettes[idx]; 
+                pAudio.length = 0; 
+                s.loadSoundRecursive(0, keys, p, pAudio, resolve); 
+                // Set the populated palette. 
+                loadedPalettes[idx] = pAudio; 
+            }
         });
         return promise; 
     }
@@ -97,7 +110,8 @@ var sketch = (s) => {
     };
     
     s.initialLoad = (onAudioLoaded, isIOS) => {
-        let p1, p2, p3; 
+        let p1, p2, p3; // Adult palette promises
+        let cp1, cp2; // Child palette promises. 
 
         if (isIOS) {
             console.log('IOS Device Detected... Only 2 palettes loaded.')
@@ -108,14 +122,17 @@ var sketch = (s) => {
             });
         } else {
             console.log('Non-IOS Device Detected... All palettes loaded.');
-            p1 = s.loadPalette(0); 
-            p2 = s.loadPalette(1); 
-            p3 = s.loadPalette(2); 
-            Promise.all([p1, p2, p3]).then(() => {
+            // Adult palettes. 
+            p1 = s.loadPalette(false, 0); 
+            p2 = s.loadPalette(false, 1); 
+            p3 = s.loadPalette(false, 2); 
+            // Child palettes. 
+            cp1 = s.loadPalette(true, 0);
+            cp2 = s.loadPalette(true, 1); 
+            Promise.all([p1, p2, p3, cp1, cp2]).then(() => {
                 onAudioLoaded();
             });
         }
-
     }
 
     s.draw = () => {
@@ -131,8 +148,6 @@ var sketch = (s) => {
         loadedPalettes[idx] = []; 
     }
 };
-
-
 
 const TimeInterval = 3 * 60 * 1000; // 3 minutes
 // Keeps track of the current pallete and is responsible for cycling the palletes. 
@@ -165,33 +180,14 @@ class AudioManager {
             this.curPaletteIdx = (this.curPaletteIdx + 1) % palettes.length; 
         }
 
-        // Calculate the previous palette index and empty it. 
-        // let prevPaletteIdx = (this.curPaletteIdx - 1); 
-        // if (prevPaletteIdx < 0) {
-        //     prevPaletteIdx = palettes.length - 1; 
-        // }
-        // this.myP5.emptyThisPalette(prevPaletteIdx);
-
         // Set ADSR vals in current palette. 
         this.setPallete(); 
-
-        // Load audio for next palette. 
-        // let nextPaletteIdx = (this.curPaletteIdx + 1) % palettes.length; 
-        // this.myP5.loadPalette(nextPaletteIdx).then(() => {
-        //     console.log('Palette Loaded: ' + nextPaletteIdx);
-        // });
     }
 
     resetPallete() {
         clearInterval(this.palleteInterval); 
         // Stop all sounds from the current pallete. 
         this.stopAllSounds(); 
-
-        // Do we want to do this now???
-        // Reset it back because then we need to reload all the files again. 
-        // Maybe we start back at the same palette where we were at. 
-        // Reset the pallete back to beginning.
-        // this.curPaletteIdx = 0; 
     }
 
     setPallete() {

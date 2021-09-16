@@ -70,10 +70,15 @@ import a67 from '../Audio/underwater.mp3';
 import a68 from '../Audio/words1.mp3';
 import a69 from '../Audio/musicbox.mp3';
 import a70 from '../Audio/cheer.mp3';
+import a71 from '../Audio/spider.m4a';
+import a72 from '../Audio/nightingale.mp3';
+import a73 from '../Audio/meow.mp3';
+import a74 from '../Audio/rooster.mp3';
+import a75 from '../Audio/cow.mp3';
 // Add new audio pointer here. 
 
 // Update this array if adding a new file. 
-export let audioFiles = [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, a43, a44, a45, a46, a47, a48, a49, a50, a51, a52, a53, a54, a55, a56, a57, a58, a59, a60, a61, a62, a63, a64, a65, a66, a67, a68, a69, a70]; 
+export let audioFiles = [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, a31, a32, a33, a34, a35, a36, a37, a38, a39, a40, a41, a42, a43, a44, a45, a46, a47, a48, a49, a50, a51, a52, a53, a54, a55, a56, a57, a58, a59, a60, a61, a62, a63, a64, a65, a66, a67, a68, a69, a70, a71, a72, a73, a74, a75]; 
 
 // Create these palletes in another file.
 let ap1 = {
@@ -373,5 +378,44 @@ let ap3 = {
     }
 };
 
+let cp1 = {
+    0: {
+        'sound': 71,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    1: {
+        'sound': 72,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    2: {
+        'sound': 73,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    3: {
+        'sound': 74,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    }
+};
+
+let cp2 = {
+    0: {
+        'sound': 75,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    1: {
+        'sound': 71,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    2: {
+        'sound': 72,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    },
+    3: {
+        'sound': 73,
+        'adsr': [5.0, 0.5, 1.0, 0.5, 2.0, 0.0]
+    }
+}
+
 // Export all the palettes. 
 export let palettes = [ap1, ap2, ap3]; 
+export let childPalettes = [cp1, cp2]; 

@@ -18,7 +18,6 @@ import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 import AudioManager from './AudioManager';
 import BLE from './BLE';
 import ChildSleeve from './ChildSleeve';
-import Product from './Product';
 
 const RadiumLink = Radium(Link);
 
@@ -143,7 +142,6 @@ class SelectMode extends React.Component {
     }
   }
 
-
   onProductUpdated(product) {
     this.setState({
       curProduct: product
@@ -163,68 +161,86 @@ class SelectMode extends React.Component {
   onSensorData() {
     let product = ProductStore.getProductName(); 
     if (product === PRODUCT.SWEATER) {
-      let config = DatabaseParamStore.getConfigJson(product); 
-      let chipASensorData = SensorDataStore.getAdultSweaterData(0)['f']; 
-      let chipBSensorData = SensorDataStore.getAdultSweaterData(1)['f'];
-  
-      // Only when we are in solo mode. 
-      if (this.state.isSoloActive) {
-        // Chip A sensor lines. 
-        let chipACutoffVal = config[0]; 
-        for (let i = 0; i < chipASensorData.length; i++) {
-          let cutoffVal = chipACutoffVal[i]; 
-          let data = chipASensorData[i]; 
-          if (data < cutoffVal) {
-            if (!this.leftTriggerMap.includes(i)) {
-              this.leftTriggerMap.push(i); 
-              AudioManager.trigger(i, true); 
-              if (BLE.getLife(0) === 0) { // 0: left chip.
-                BLE.activateLife(0); // chip, signal (active)
-              }
+      this.handleAdultSweaterAudio();
+    } else if (product === PRODUCT.CHILDA) {
+      this.handleChildSweaterAudio(true); 
+    } else if (product === PRODUCT.CHILDB) {
+      this.handleChildSweaterAudio(false); 
+    }
+  }
+
+  handleChildSweaterAudio(isChildA) {
+    if (isChildA) {
+      // Child A audio handling. 
+      // Only when solo mode is actually active. 
+    } else {
+      // Child B audio handling. 
+      // Only when solo mode is actually active. 
+    }
+  }
+
+  handleAdultSweaterAudio(product) {
+    let config = DatabaseParamStore.getConfigJson(PRODUCT.SWEATER); 
+    let chipASensorData = SensorDataStore.getAdultSweaterData(0)['f']; 
+    let chipBSensorData = SensorDataStore.getAdultSweaterData(1)['f'];
+
+    // Only when we are in solo mode. 
+    if (this.state.isSoloActive) {
+      // Chip A sensor lines. 
+      let chipACutoffVal = config[0]; 
+      for (let i = 0; i < chipASensorData.length; i++) {
+        let cutoffVal = chipACutoffVal[i]; 
+        let data = chipASensorData[i]; 
+        if (data < cutoffVal) {
+          if (!this.leftTriggerMap.includes(i)) {
+            this.leftTriggerMap.push(i); 
+            AudioManager.trigger(i, true); 
+            if (BLE.getLife(0) === 0) { // 0: left chip.
+              BLE.activateLife(0); // chip, signal (active)
             }
-          } else {
-            if (this.leftTriggerMap.includes(i)) {
-              AudioManager.release(i, true); 
-              // Remove that value from the map. 
-              let idx = this.leftTriggerMap.indexOf(i); 
-              this.leftTriggerMap.splice(idx, 1);
-            }
-  
-            // Nothing is triggered on this side, so deactivate life. 
-            if (this.leftTriggerMap.length === 0) {
-              if (BLE.getLife(0) === 1) {
-                BLE.deactivateLife(0); 
-              }
+          }
+        } else {
+          if (this.leftTriggerMap.includes(i)) {
+            AudioManager.release(i, true); 
+            // Remove that value from the map. 
+            let idx = this.leftTriggerMap.indexOf(i); 
+            this.leftTriggerMap.splice(idx, 1);
+          }
+
+          // Nothing is triggered on this side, so deactivate life. 
+          if (this.leftTriggerMap.length === 0) {
+            if (BLE.getLife(0) === 1) {
+              BLE.deactivateLife(0); 
             }
           }
         }
-  
-        // Chip B sensor lines. 
-        let chipBCutoffVal = config[1]; 
-        for (let i = 0; i < chipBSensorData.length; i++) {
-          let cutoffVal = chipBCutoffVal[i]; 
-          let data = chipBSensorData[i]; 
-          if (data < cutoffVal) {
-            if (!this.rightTriggerMap.includes(i)) {
-              this.rightTriggerMap.push(i); 
-              AudioManager.trigger(i, false); 
-              if (BLE.getLife(1) === 0) { // 1: right chip.
-                BLE.activateLife(1); // chip, signal (active)
-              }
+      }
+
+      // Chip B sensor lines. 
+      let chipBCutoffVal = config[1]; 
+      for (let i = 0; i < chipBSensorData.length; i++) {
+        let cutoffVal = chipBCutoffVal[i]; 
+        let data = chipBSensorData[i]; 
+        if (data < cutoffVal) {
+          if (!this.rightTriggerMap.includes(i)) {
+            this.rightTriggerMap.push(i); 
+            AudioManager.trigger(i, false); 
+            if (BLE.getLife(1) === 0) { // 1: right chip.
+              BLE.activateLife(1); // chip, signal (active)
             }
-          } else {
-            // Remove that value from the map.
-            if (this.rightTriggerMap.includes(i)) {
-              AudioManager.release(i, false); 
-              let idx = this.rightTriggerMap.indexOf(i); 
-              this.rightTriggerMap.splice(idx, 1); 
-            }
-  
-            // Nothing is triggered on this side, so deactivate life. 
-            if (this.rightTriggerMap.length === 0) {
-              if (BLE.getLife(1) === 1) {
-                BLE.deactivateLife(1); 
-              }
+          }
+        } else {
+          // Remove that value from the map.
+          if (this.rightTriggerMap.includes(i)) {
+            AudioManager.release(i, false); 
+            let idx = this.rightTriggerMap.indexOf(i); 
+            this.rightTriggerMap.splice(idx, 1); 
+          }
+
+          // Nothing is triggered on this side, so deactivate life. 
+          if (this.rightTriggerMap.length === 0) {
+            if (BLE.getLife(1) === 1) {
+              BLE.deactivateLife(1); 
             }
           }
         }
