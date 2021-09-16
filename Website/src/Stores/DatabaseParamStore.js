@@ -60,7 +60,7 @@ class DatabaseParamStore {
                 sensorIdx = sensorIdx - 12 - 1; 
             }
             // Update chipset data. 
-            this.cutoffVals[chipsetId][sensorIdx] = cutoffVal; 
+            this.cutoffValsSweater[chipsetId][sensorIdx] = cutoffVal; 
         } else if (product === PRODUCT.CHILDA) {
             sensorIdx = sensorIdx - 1; 
             this.cutoffValsChildA[0][sensorIdx] = cutoffVal; 
@@ -71,7 +71,7 @@ class DatabaseParamStore {
     }
 
     getCutOffVal(chipsetId, sensorIdx) {
-        return this.cutoffVals[chipsetId][sensorIdx];
+        return this.cutoffValsSweater[chipsetId][sensorIdx];
     }
 
     commitConfig(product) {

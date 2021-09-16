@@ -76,11 +76,12 @@ class ChildSleeve extends React.Component {
     // Based on the current product, these are the cut off values. 
     let cutoffVals = config[0]; 
     let childSensorData; 
-    if (product === PRODUCT.Child4Sleeve) {
+    if (product === PRODUCT.CHILDA) {
       childSensorData = SensorDataStore.getChildSweaterData(true)[0]; // Store the entire array of chilA data. 
     } else {
       childSensorData = SensorDataStore.getChildSweaterData(false)[0];
     }
+    
     for (let i = 0; i < childSensorData.length; i++) {
       let cutoffVal = cutoffVals[i]; 
       let data = childSensorData[i]; 

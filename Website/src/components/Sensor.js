@@ -100,7 +100,7 @@ class Sensor extends React.Component {
   renderChild(isChildA) {
     let firstMessage = this.getFirstMessageChild(); 
     let calibrationMsg = this.getCalibrationMsg(); 
-    let nextPath = this.getNextChildPath(); 
+    let nextPath = this.getNextChildPath(isChildA); 
     return (
       <div style={styles.container} >
         <div style={styles.title}>Calibration</div>
