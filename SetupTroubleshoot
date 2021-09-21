@@ -68,5 +68,5 @@ cd C:\Users\eulphean\Documents\Arduino\Fabric_Instrument\Adafruit
 - Run this command after checking the COM port for the board. 
 adafruit-nrfutil.exe --verbose dfu serial --package .\feather_nrf52840_express_bootloader-0.6.0_s140_6.1.1.zip --port COM4 -b 115200 --singlebank --touch 1200
 
-
-
+sudo pkill -u postgres
+- Kill the postgres service on mac

@@ -67,17 +67,25 @@ class Websocket {
 
     // Called from ConnectionMode
     broadcastAdultData(sensorNum, adsr, chipSide, lifeSignal) {
+        let prod = ProductStore.getProductName();
+        let pData = prod === PRODUCT.SWEATER ? 'adult' : 'child'; 
         let msg = sensorNum + '-' + adsr + '-' + chipSide + '-' + lifeSignal;
+        let payload = {'product': pData, 'msg': msg};
+
         if (this.canBroadcast) {
-            this.socket.emit('sensorData', msg); 
+            this.socket.emit('sensorData', payload); 
         }
     }
 
     // Called from ConnectionMode
     broadcastChildData(product, sensorIdx, adsr) {
+        let prod = ProductStore.getProductName();
+        let pData = prod === PRODUCT.SWEATER ? 'adult' : 'child'; 
         let msg = product + '-' + sensorIdx + '-' + adsr; 
+        let payload = {'product': pData, 'msg': msg};
+
         if (this.canBroadcast) {
-            this.socket.emit('sensorData', msg);
+            this.socket.emit('sensorData', payload);
         }
     }
 

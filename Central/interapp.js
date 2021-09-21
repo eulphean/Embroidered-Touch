@@ -7,9 +7,13 @@ let adultRoom = 'fabric';
 let childRoom = 'child'; 
 module.exports = {
     broadcastSensorData: function(socket, data) {
+        let msg = data['msg'];
+        let product = data['product']; 
+        let curRoom = product === 'adult' ? adultRoom : childRoom; 
+
         // if it's here, it's already in the room. 
         // Don't check again, just emit data to everybody in the room except itself. 
-        socket.to(roomName).emit('receiveSensorData', data);
+        socket.to(curRoom).emit('receiveSensorData', msg);
     },
 
     // User messages (figure out first). 
