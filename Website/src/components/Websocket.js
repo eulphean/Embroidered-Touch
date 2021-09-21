@@ -8,14 +8,14 @@
 import io  from 'socket.io-client'
 import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 
-const localhostURL = "http://localhost:5000";
-//const herokuURL = "https://fabric-backend.herokuapp.com";
+//const localhostURL = "http://localhost:5000";
+const herokuURL = "https://fabric-backend.herokuapp.com";
 
 class Websocket {
     constructor() {
-        this.siteURL = localhostURL + '/app'; 
-        this.loginURL = localhostURL + '/login';
-        this.signupURL = localhostURL + '/signup';
+        this.siteURL = herokuURL + '/app'; 
+        this.loginURL = herokuURL + '/login';
+        this.signupURL = herokuURL + '/signup';
 
         this.socket = io(this.siteURL, {
             reconnection: true,

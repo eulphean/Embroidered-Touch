@@ -119,7 +119,7 @@ class DatabaseParamStore {
         } 
 
         // Save this flag in the config. 
-        json['hasCalibrated'] = this.hasCalibrated[0];
+        json['hasCalibrated'] = false;
 
         // JSON for child sweater A.
         let jsonChildA = {}; let dataA = []; 
@@ -127,7 +127,7 @@ class DatabaseParamStore {
             dataA[i] = 0; 
         }
         jsonChildA['0'] = dataA; 
-        jsonChildA['hasCalibrated'] = this.hasCalibrated[1];
+        jsonChildA['hasCalibrated'] = false;
 
 
         // JSON for child sweater B.
@@ -136,7 +136,7 @@ class DatabaseParamStore {
             dataB[i] = 0; 
         }
         jsonChildB['0'] = dataB;
-        jsonChildB['hasCalibrated'] = this.hasCalibrated[2]; 
+        jsonChildB['hasCalibrated'] = false; 
         
         let j = [json, jsonChildA, jsonChildB]; 
         return j; 
