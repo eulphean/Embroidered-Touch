@@ -33,6 +33,11 @@ const styles = {
     }
   },
 
+  outerContent: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+
   content: {
     alignItems: 'center',
     paddingLeft: padding.verySmall,
@@ -111,28 +116,26 @@ class SelectMode extends React.Component {
     return this.state.redirectToPair ? (<Redirect to="/setup" />) :
       (<div style={styles.container}>
         {sleeve}
-        <div style={styles.title}>MODE</div>
-        <br />
         <div style={contentStyle}>
-          <div style={styles.buttonContainer}>
-            <div style={styles.info}>Choose SOLO to send sound<div>to your own device.</div></div>
-            <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>
-            <br />
-          </div>
-          <div style={styles.buttonContainer}>
-            <div style={styles.info}>Choose CONNECTION to send and receive<div>sound with a friend.</div></div>
-            <CustomButton>
-              <RadiumLink to='/connection'>CONNECTION</RadiumLink>
-            </CustomButton>
-            <br />
-          </div>
-          <div style={styles.buttonContainer}>
-            <div style={styles.info}>Choose SETUP to recalibrate<div>your device.</div></div>
-            <CustomButton>
-              <RadiumLink to="/testcal">SETUP</RadiumLink>
-            </CustomButton>
-            <br />
-          </div>
+            <div style={styles.buttonContainer}>
+              <div style={styles.info}>Choose SOLO to send sound<div>to your own device.</div></div>
+              <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>
+              <br />
+            </div>
+            <div style={styles.buttonContainer}>
+              <div style={styles.info}>Choose CONNECTION to send and receive<div>sound with a friend.</div></div>
+              <CustomButton>
+                <RadiumLink to='/connection'>CONNECTION</RadiumLink>
+              </CustomButton>
+              <br />
+            </div>
+            <div style={styles.buttonContainer}>
+              <div style={styles.info}>Choose SETUP to recalibrate<div>your device.</div></div>
+              <CustomButton>
+                <RadiumLink to="/testcal">SETUP</RadiumLink>
+              </CustomButton>
+              <br />
+            </div>
         </div>
       </div>
     );

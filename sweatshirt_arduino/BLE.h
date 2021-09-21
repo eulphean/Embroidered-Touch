@@ -15,10 +15,7 @@
 // Size of the RX buffer from p5.js [chipsetIdx, command, val, val]
 const uint8_t buffSize = 2; 
 
-const char* bleName = "TOUCH"; 
-
-
-
+const char* bleName = "BTouch"; 
 class BLE {
   private: 
     // DIS (Device Information Service) helper class instance.
