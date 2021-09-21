@@ -47,8 +47,8 @@ function onWebClient(socket) {
     console.log('New Web Client connection: ' + socket.id); 
 
     // ------------------- Interapp communication -------------------- //
-    socket.on('room', () => {
-        interapp.updateRoom(io, socket); 
+    socket.on('room', (data) => {
+        interapp.updateRoom(io, socket, data); 
     });
 
     socket.on('sensorData', (data) => {

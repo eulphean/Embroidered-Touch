@@ -6,6 +6,7 @@
 // server over websockets.
 
 import io  from 'socket.io-client'
+import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 
 const localhostURL = "http://localhost:5000";
 //const herokuURL = "https://fabric-backend.herokuapp.com";
@@ -41,14 +42,22 @@ class Websocket {
 
     // ----------------------- SENSOR DATA BROADCAST--------------------- //
     joinRoom(roomDataCbk, sensorDataCbk) {
-        this.socket.emit('room');
+        let product = ProductStore.getProductName();
+        let pData = product === PRODUCT.SWEATER ? 'adult' : 'child'; 
+        let data = {'product': pData}; 
+
+        this.socket.emit('room', data);
         this.canBroadcast = true; 
         this.sensorDataCallback = sensorDataCbk; 
         this.roomDataCallback = roomDataCbk; 
     }
 
     leaveRoom() {
-        this.socket.emit('room');
+        let product = ProductStore.getProductName();
+        let pData = product === PRODUCT.SWEATER ? 'adult' : 'child'; 
+        let data = {'product': pData}; 
+
+        this.socket.emit('room', data);
         this.canBroadcast = false; 
     }
 
@@ -57,10 +66,18 @@ class Websocket {
     }
 
     // Called from ConnectionMode
-    broadcastSensorData(sensorNum, adsr, chipSide, lifeSignal) {
+    broadcastAdultData(sensorNum, adsr, chipSide, lifeSignal) {
         let msg = sensorNum + '-' + adsr + '-' + chipSide + '-' + lifeSignal;
         if (this.canBroadcast) {
             this.socket.emit('sensorData', msg); 
+        }
+    }
+
+    // Called from ConnectionMode
+    broadcastChildData(product, sensorIdx, adsr) {
+        let msg = product + '-' + sensorIdx + '-' + adsr; 
+        if (this.canBroadcast) {
+            this.socket.emit('sensorData', msg);
         }
     }
 

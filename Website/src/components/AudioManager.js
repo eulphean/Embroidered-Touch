@@ -73,7 +73,6 @@ var sketch = (s) => {
                 pAudio.length = 0; 
                 s.loadSoundRecursive(0, keys, p, pAudio, resolve); 
                 loadedChildPalettes[idx] = pAudio; 
-                console.log(loadedChildPalettes[idx]);
             } else {
                 console.log('Loading adult palette: ' + idx); 
                 let p = palettes[idx]; 

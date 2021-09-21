@@ -222,7 +222,6 @@ class DatabaseParamStore {
             this.cutoffValsChildA[0][i] = childa[0][i];  
         }
         this.hasCalibrated[1] = childa['hasCalibrated'];
-        console.log(this.cutoffValsChildA); 
 
         // Cut off values for childB
         let childb = configs[2]; 
@@ -230,7 +229,6 @@ class DatabaseParamStore {
             this.cutoffValsChildB[0][i] = childb[0][i];
         }
         this.hasCalibrated[2] = childb['hasCalibrated'];
-        console.log(this.cutoffValsChildB);
     }
 
     setConfigName(configName) {
