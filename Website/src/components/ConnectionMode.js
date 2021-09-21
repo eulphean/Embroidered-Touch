@@ -300,9 +300,12 @@ class ConnectionMode extends React.Component {
     let chipSide = msg[2]; 
     let lifeSignal = parseInt(msg[3]);
 
+    // console.log('Adult Sensor Data Callback: ' + data); 
+
     // Parse the message and trigger the signal on this side. 
     if (chipSide === 'L') {
       if (adsr === 'T') {
+        // console.log('Audio Trigger L: ' + sensorIdx); 
         AudioManager.trigger(sensorIdx, true); 
         if (!this.leftCallbackMap.includes(sensorIdx)) {
           this.leftCallbackMap.push(sensorIdx);
@@ -316,6 +319,7 @@ class ConnectionMode extends React.Component {
         if (this.leftCallbackMap.includes(sensorIdx)) {
           let idx = this.leftCallbackMap.indexOf(sensorIdx); 
           this.leftCallbackMap.splice(idx, 1); 
+          // console.log('Audio Release L: ' + sensorIdx); 
           AudioManager.release(sensorIdx, true); 
         }
       }
@@ -338,6 +342,7 @@ class ConnectionMode extends React.Component {
       if (adsr === 'T') {
         if (!this.rightCallbackMap.includes(sensorIdx)) {
           this.rightCallbackMap.push(sensorIdx);
+          // console.log('Audio Trigger R: ' + sensorIdx); 
           AudioManager.trigger(sensorIdx, false);
           if (!this.state.isAnimating) {
             // Trigger the animation. 
@@ -351,6 +356,7 @@ class ConnectionMode extends React.Component {
           let idx = this.rightCallbackMap.indexOf(sensorIdx);
           this.rightCallbackMap.splice(idx, 1);
           AudioManager.release(sensorIdx, false);
+          // console.log('Audio Release R: ' + sensorIdx); 
         }
       }
 
@@ -458,11 +464,13 @@ class ConnectionMode extends React.Component {
           this.leftTriggerMap.push(i); 
           // Turn on life. 
           lifeSignal = 1; 
+          console.log('Broadcast Adult Trigger L'); 
           Websocket.broadcastAdultData(i, 'T', 'L', lifeSignal); 
         }
       } else {
         // N-R-L (left release)
         if (this.leftTriggerMap.includes(i)) {
+          console.log('Broadcast Adult Release L'); 
           Websocket.broadcastAdultData(i, 'R', 'L', lifeSignal); 
           // Remove that value from the map. 
           let idx = this.leftTriggerMap.indexOf(i); 
@@ -487,6 +495,7 @@ class ConnectionMode extends React.Component {
           this.rightTriggerMap.push(i); 
           // Turn on life. 
           lifeSignal = 1; 
+          console.log('Broadcast Adult Trigger R'); 
           Websocket.broadcastAdultData(i, 'T', 'R', lifeSignal); 
         }
       } else {
@@ -496,6 +505,7 @@ class ConnectionMode extends React.Component {
           Websocket.broadcastAdultData(i, 'R', 'R', lifeSignal); 
           let idx = this.rightTriggerMap.indexOf(i); 
           this.rightTriggerMap.splice(idx, 1); 
+          console.log('Broadcast Adult Release R'); 
         } 
 
         if (this.rightTriggerMap.length === 0) {

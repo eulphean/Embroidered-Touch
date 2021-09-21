@@ -21,7 +21,7 @@ module.exports = {
         console.log('Update Room.');
         // NOTE: MAYBE BLOCK the third user to join this room. 
         // How will the third user join the room? 
-        let curRoom = data['product'] === 'adult ' ? adultRoom : childRoom; 
+        let curRoom = data['product'] === 'adult' ? adultRoom : childRoom; 
         console.log('Current Room: ' + curRoom);
     
         // Returns a set of members in the room already.

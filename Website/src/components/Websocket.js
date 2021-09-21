@@ -43,7 +43,7 @@ class Websocket {
     // ----------------------- SENSOR DATA BROADCAST--------------------- //
     joinRoom(roomDataCbk, sensorDataCbk) {
         let product = ProductStore.getProductName();
-        let pData = product === PRODUCT.SWEATER ? 'adult' : 'child'; 
+        let pData = (product === PRODUCT.SWEATER) ? 'adult' : 'child'; 
         let data = {'product': pData}; 
 
         this.socket.emit('room', data);
@@ -68,7 +68,7 @@ class Websocket {
     // Called from ConnectionMode
     broadcastAdultData(sensorNum, adsr, chipSide, lifeSignal) {
         let prod = ProductStore.getProductName();
-        let pData = prod === PRODUCT.SWEATER ? 'adult' : 'child'; 
+        let pData = (prod === PRODUCT.SWEATER) ? 'adult' : 'child'; 
         let msg = sensorNum + '-' + adsr + '-' + chipSide + '-' + lifeSignal;
         let payload = {'product': pData, 'msg': msg};
 
@@ -80,7 +80,7 @@ class Websocket {
     // Called from ConnectionMode
     broadcastChildData(product, sensorIdx, adsr) {
         let prod = ProductStore.getProductName();
-        let pData = prod === PRODUCT.SWEATER ? 'adult' : 'child'; 
+        let pData = (prod === PRODUCT.SWEATER) ? 'adult' : 'child'; 
         let msg = product + '-' + sensorIdx + '-' + adsr; 
         let payload = {'product': pData, 'msg': msg};
 
