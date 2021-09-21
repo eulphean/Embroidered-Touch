@@ -15,7 +15,7 @@
 //     }
 // ]
 
-import ProductStore, { PRODUCT } from "./ProductStore";
+import { PRODUCT } from "./ProductStore";
 
 const numSensorChildA = 4; 
 const numSensorChildB = 7;

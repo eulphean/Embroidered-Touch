@@ -6,7 +6,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { color, padding, fontSize } from './CommonStyles';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import ProductStore, {PRODUCT} from '../Stores/ProductStore';
 import CustomButton from './CustomButton';

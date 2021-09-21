@@ -90,6 +90,9 @@ class App extends React.Component {
 
       case PRODUCT.CHILDB: 
         return <ChildSleeve isChildA={false} />;
+
+      default: 
+        return <React.Fragment></React.Fragment>;
     }
   }
 

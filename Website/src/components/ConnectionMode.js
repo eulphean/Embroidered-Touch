@@ -18,7 +18,6 @@ import Websocket from './Websocket';
 import AudioManager from './AudioManager';
 import BLE from './BLE';
 import CustomButton from './CustomButton';
-import Product from './Product';
 import ProductStore, { PRODUCT } from '../Stores/ProductStore';
 import ChildSleeve from './ChildSleeve';
 
