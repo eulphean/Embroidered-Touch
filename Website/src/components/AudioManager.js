@@ -29,10 +29,14 @@ class Audio {
     }
 
     trigger(isLeft) {
-        if (isLeft) {
-            this.soundObject.pan(1); 
-        } else {
-            this.soundObject.pan(-1); 
+        // Only pan the sound if it's a sweater. 
+        let p = ProductStore.getProductName(); 
+        if (p === PRODUCT.SWEATER) {
+            if (isLeft) {
+                this.soundObject.pan(1); 
+            } else {
+                this.soundObject.pan(-1); 
+            }
         }
 
         if (this.soundObject.isPlaying()) {

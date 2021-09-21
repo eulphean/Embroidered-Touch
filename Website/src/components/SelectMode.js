@@ -44,9 +44,12 @@ const styles = {
       paddingLeft: '20%',
       paddingRight: '20%',
       alignSelf: 'stretch',
-      justifyContent: 'space-between',
-      marginTop: '-100px'
+      justifyContent: 'space-between'
     }
+  },
+
+  topMargin: {
+    marginTop: '-100px'
   },
 
   title: {
@@ -104,10 +107,13 @@ class SelectMode extends React.Component {
 
   render() {
     let sleeve = this.getSleeve();
+    let contentStyle = this.state.curProduct === PRODUCT.SWEATER ? [styles.content, styles.topMargin] : styles.content;
     return this.state.redirectToPair ? (<Redirect to="/setup" />) :
       (<div style={styles.container}>
         {sleeve}
-        <div style={styles.content}>
+        <div style={styles.title}>MODE</div>
+        <br />
+        <div style={contentStyle}>
           <div style={styles.buttonContainer}>
             <div style={styles.info}>Choose SOLO to send sound<div>to your own device.</div></div>
             <CustomButton isActive={this.state.isSoloActive} onClick={this.onClickSolo.bind(this)}>SOLO</CustomButton>

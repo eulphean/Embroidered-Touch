@@ -228,7 +228,7 @@ class ConnectionMode extends React.Component {
     // Message is coming from childA
     if (product === 'A') {
       if (adsr === 'T') {
-        console.log('Audio Trigger A: ' + sensorIdx); 
+        // console.log('Audio Trigger A: ' + sensorIdx); 
         AudioManager.trigger(sensorIdx);
         if (!this.childCallbackMap.includes(sensorIdx)) {
           this.childCallbackMap.push(sensorIdx); 
@@ -243,13 +243,13 @@ class ConnectionMode extends React.Component {
           let idx = this.childCallbackMap.indexOf(sensorIdx);
           this.childCallbackMap.splice(idx, 1); 
           AudioManager.release(sensorIdx); 
-          console.log('Audio Trigger A: ' + sensorIdx); 
+          // console.log('Audio Trigger A: ' + sensorIdx); 
         }
       }
     } else {
       let newIdx = this.childBIndexMapper(sensorIdx); 
       if (adsr === 'T') {
-        console.log('Audio Trigger B: ' + sensorIdx); 
+        // console.log('Audio Trigger B: ' + sensorIdx); 
         AudioManager.trigger(newIdx); 
         if (!this.childCallbackMap.includes(sensorIdx)) {
           this.childCallbackMap.push(sensorIdx);
@@ -261,7 +261,7 @@ class ConnectionMode extends React.Component {
         }
       } else {
         if (this.childCallbackMap.includes(sensorIdx)) {
-          console.log('Audio Trigger B: ' + sensorIdx); 
+          // console.log('Audio Trigger B: ' + sensorIdx); 
           let idx = this.childCallbackMap.indexOf(sensorIdx);
           this.childCallbackMap.splice(idx, 1); 
           AudioManager.release(newIdx);
@@ -403,14 +403,14 @@ class ConnectionMode extends React.Component {
         let cutoffVal = cutoffVals[i]; 
         let data = childSensorData[i]; 
         if (data < cutoffVal) {
-          console.log('Broadcasting Trigger data: A');
+          // console.log('Broadcasting Trigger data: A');
           if (!this.childTriggerMap.includes(i)) {
             this.childTriggerMap.push(i); 
             Websocket.broadcastChildData('A', i, 'T'); // product (A-childA), sensorIdx, adsrAction (Trigger)
           }
         } else {
           if (this.childTriggerMap.includes(i)) {
-            console.log('Broadcasting Release data: A');
+            // console.log('Broadcasting Release data: A');
             Websocket.broadcastChildData('A', i, 'R'); // product (A-childA), sensorIdx, adsrAction (Trigger)
             let idx = this.childTriggerMap.indexOf(i); 
             this.childTriggerMap.splice(idx, 1); 
@@ -425,13 +425,13 @@ class ConnectionMode extends React.Component {
         let data = childSensorData[i]; 
         if (data < cutoffVal) {
           if (!this.childTriggerMap.includes(i)) {
-            console.log('Broadcasting Trigger data: B');
+            // console.log('Broadcasting Trigger data: B');
             this.childTriggerMap.push(i); 
             Websocket.broadcastChildData('B', i, 'T'); // product (B-childB), sensorIdx, adsrAction (Trigger)
           }
         } else {
           if (this.childTriggerMap.includes(i)) {
-            console.log('Broadcasting Release data: B');
+            // console.log('Broadcasting Release data: B');
             Websocket.broadcastChildData('B', i, 'R'); // product (B-childB), sensorIdx, adsrAction (Release)
             let idx = this.childTriggerMap.indexOf(i); 
             this.childTriggerMap.splice(idx, 1); 
