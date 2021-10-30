@@ -112,6 +112,13 @@ class Login extends React.Component {
   onClickLogin(e) {
     e.preventDefault(); 
 
+    if (this.state.password === '' || this.state.username === '') {
+      this.setState({
+        message: 'Something is missing. Try again.'
+      });
+      return;
+    }
+
     // Make a HTTP request. 
     const request = new Request(this.loginUrl, { method: 'POST', headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({ username: this.state.username, password: this.state.password}) });
@@ -143,6 +150,14 @@ class Login extends React.Component {
 
     onClickSignUp(e) {
       e.preventDefault();
+
+      if (this.state.password === '' || this.state.username === '') {
+        this.setState({
+          message: 'Something is missing. Try again.'
+        });
+
+        return;
+      }
 
       // Make a post request with all these in a json
       let username = this.state.username;

@@ -19,6 +19,7 @@ import ConnectionMode from './ConnectionMode.js'
 import Sensor from './Sensor.js'
 import ProductStore, {PRODUCT} from '../Stores/ProductStore.js'
 import ChildSleeve from './ChildSleeve.js'
+import Footer from './Footer.js'
 
 const styles = {
   container: {
@@ -76,6 +77,7 @@ class App extends React.Component {
               <Route path="/">{loginPage}</Route>
             </Switch>
         </Router>
+        <Footer />
       </div>
     );
   }
