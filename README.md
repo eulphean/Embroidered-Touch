@@ -1,10 +1,2 @@
-# Fabric Instrument
-This repository contains the Arduino and P5 code for the grid instrument developed for Anke Loh.
-
-**P5 Code**
-
-The development environment for P5 is setup with gulp and browser-sync for fast and seamless development. After cloning the repo, switch to code_p5 directory using git bash (windows) or terminal (mac) and type the following commands. 
-* **npm install** - (If you don't have npm, install npm from [here](https://www.npmjs.com/get-npm))
-* **gulp** - (This will start a webserver on localhost:8080, which will serve the index.html)
-
-Now, any changes you make to the javascript will be hot realoaded in the browser. 
+# Embroidered Touch
+This repository contains all the software engineering commission work for fashion artist [Anke Loh](http://ankeloh.net/) for her research project [RE-FREAM](http://ankeloh.net/2021/10/re-fream-embroidered-touch-life-space/#4). Custom arduino architecture is developed to enable a bi-directional bluetooth communication protocol between a piece of clothing embroidered with touch sensors and a web-application. The user can calibrate the sensors from the web-app and their interaction with the clothing produces a soundscape. A custom backend architecture is developed using web sockets and node.js to allow multiple garments to send sound signals to each other over the internet and engage in a bi-directional communication between each other. 
